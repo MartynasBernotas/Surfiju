@@ -1,0 +1,59 @@
+﻿@page "/register"
+@using DevKnowledgeBase.UI.Services
+@inject IAuthenticationService AuthService
+@inject NavigationManager Navigation
+
+<PageTitle>Register</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-5">
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h5" Class="mb-4">Register</MudText>
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <MudAlert Severity="Severity.Error">@ErrorMessage</MudAlert>
+        }
+        <MudForm @ref="form">
+            <MudTextField @bind-Value="Username" Label="Username" Required="true" />
+            <MudTextField @bind-Value="Email" Label="Email" Required="true" />
+            <MudTextField @bind-Value="Password" Label="Password" InputType="InputType.Password" Required="true" />
+            <MudTextField @bind-Value="ConfirmPassword" Label="Confirm Password" InputType="InputType.Password" Required="true" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="@(async ()=> await RegisterUser())">Register</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private MudForm form;
+    private string Email = "";
+    private string Password = "";
+    private string ConfirmPassword = "";
+    private string Username = "";
+    private string? ErrorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var isAuthenticated = await AuthService.IsAuthenticatedAsync();
+        if (isAuthenticated)
+        {
+            Navigation.NavigateTo("/");  // Redirect to the main page if not authenticated
+        }
+    }
+
+    private async Task RegisterUser()
+    {
+        if (Password != ConfirmPassword)
+        {
+            ErrorMessage = "Passwords do not match.";
+            return;
+        }
+
+        var result = await AuthService.RegisterAsync(Username, Email, Password);
+        if (!result.Success)
+        {
+            ErrorMessage = "Registration failed. " + result.ErrorMessage;
+            return;
+        }
+
+        Navigation.NavigateTo("/login");
+    }
+}

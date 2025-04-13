@@ -1,0 +1,30 @@
+﻿@page "/confirm-email"
+@using DevKnowledgeBase.UI.Common
+
+@inject NavigationManager Navigation
+@inject IAuthenticationService AuthService
+
+<PageTitle>Email Confirmation</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-5">
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h6" Class="mb-4">Email confirmation</MudText>
+        @if (Message != null)
+        {
+            <MudText Typo="Typo.h6" Class="mb-4">@Message</MudText>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string UserId = string.Empty;
+    private string Token = string.Empty;
+    private string Message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Navigation.TryGetQueryString<string>("userId", out UserId);
+        Navigation.TryGetQueryString<string>("token", out Token);
+        Message = await AuthService.ConfirmEmail(UserId, Token);
+    }
+}

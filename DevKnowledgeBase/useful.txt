@@ -1,0 +1,3 @@
+dotnet ef migrations add InitialCreate --project .\DevKnowledgeBase.Infrastructure\DevKnowledgeBase.Infrastructure.csproj --startup-project .\DevKnowledgeBase\DevKnowledgeBase.API.csproj
+
+dotnet ef database update --project .\DevKnowledgeBase.Infrastructure\DevKnowledgeBase.Infrastructure.csproj --startup-project .\DevKnowledgeBase\DevKnowledgeBase.API.csproj

@@ -1,0 +1,6 @@
+@DevKnowledgeBase_HostAddress = http://localhost:5107
+
+GET {{DevKnowledgeBase_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

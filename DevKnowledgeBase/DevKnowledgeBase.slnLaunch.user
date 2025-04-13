@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "DevKnowledgeBase\\DevKnowledgeBase.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "DevKnowledgeBase.UI\\DevKnowledgeBase.UI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

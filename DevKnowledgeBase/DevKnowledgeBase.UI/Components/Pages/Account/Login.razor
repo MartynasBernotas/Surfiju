@@ -1,0 +1,66 @@
+﻿@page "/login"
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+@using DevKnowledgeBase.UI.Services
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject NavigationManager Navigation
+@inject IAuthenticationService AuthenticationService
+@inject ISnackbar Snackbar
+
+<PageTitle>Login</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-5">
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h4" Class="mb-4">Login</MudText>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">@errorMessage</MudAlert>
+        }
+        <MudForm @ref="form">
+            <MudTextField @bind-Value="loginModel.Email" Label="Email" Required="true" />
+            <MudTextField @bind-Value="loginModel.Password" Label="Password" InputType="InputType.Password" Required="true" />
+            <MudButton OnClick="@(async () => await HandleLogin())" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">Login</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private MudForm form;
+    private LoginModel loginModel = new LoginModel();
+    private string errorMessage = string.Empty;
+    private string ReturnUrl = string.Empty; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        Navigation.TryGetQueryString("returnUrl", out ReturnUrl);
+        var isAuthenticated = await AuthenticationService.IsAuthenticatedAsync();
+        if (isAuthenticated)
+        {
+            Navigation.NavigateTo(string.IsNullOrWhiteSpace(ReturnUrl) ? "/" : ReturnUrl);  // Redirect to the main page if authenticated
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        var result = await AuthenticationService.LoginAsync(loginModel.Email, loginModel.Password);
+        if (result.Success)
+        {
+            Snackbar.Add("Login successful!", Severity.Success);
+            Navigation.NavigateTo(string.IsNullOrWhiteSpace(ReturnUrl) ? "/" : ReturnUrl); // Redirect to home page after login
+        }
+        else
+        {
+            errorMessage = result.ErrorMessage;
+            Snackbar.Add(result.ErrorMessage, Severity.Error); // Show error if login fails
+        }
+    }
+
+    public class LoginModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

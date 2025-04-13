@@ -1,0 +1,143 @@
+﻿@using DevKnowledgeBase.UI.Models
+
+@inject ITripService TripService
+
+<MudDialog FullWidth="true" MaxWidth="MaxWidth.Medium">
+    <DialogContent>
+        <MudForm @ref="form" Model="@Trip">
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Trip.Name" Label="Name" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Trip.Location" Label="Location" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudDatePicker @bind-Date="Trip.StartDate" Label="Start Date" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudDatePicker @bind-Date="Trip.EndDate" Label="End Date" Required="true" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="Trip.Description" Label="Description" Lines="3" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudNumericField @bind-Value="Trip.MaxParticipants" Label="Max Participants" Min="1" Required="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudNumericField @bind-Value="Trip.Price" Label="Price ($)" Min="0" Required="true" />
+                </MudItem>
+                <MudItem xs="3">
+                    <MudSwitch T="bool" Label="Public Trip" @bind-Checked="Trip.IsPublic"  Color="Color.Primary" UncheckedColor="Color.Dark"/>
+                </MudItem>
+                <!-- File upload remains full width -->
+                <MudItem xs="12">
+                    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+                                   @ref="@_fileUpload"
+                                   OnFilesChanged="OnInputFileChanged"
+                                   AppendMultipleFiles
+                                   Hidden="@false"
+                                   InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
+                                   InputStyle="opacity:0"
+                                   tabindex="-1"
+                                   @ondrop="@ClearDragClass"
+                                   @ondragenter="@SetDragClass"
+                                   @ondragleave="@ClearDragClass"
+                                   @ondragend="@ClearDragClass">
+                        <ActivatorContent>
+                            <MudPaper Height="10%"
+                                      Outlined="true"
+                                      Class="@_dragClass">
+                                <MudText Typo="Typo.h6">
+                                    Drag and drop files here or click
+                                </MudText>
+                                @foreach (var file in UploadedPhotos)
+                                {
+                                    <MudChip T="string"
+                                             Color="Color.Dark"
+                                             Text="@file.Name"
+                                             tabindex="-1" />
+                                }
+                            </MudPaper>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
+                                Upload Photos
+                            </MudButton>
+                        </ActivatorContent>
+                    </MudFileUpload>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                @foreach (var photo in Trip.PhotoUrls)
+                {
+                    <MudItem xs="6" sm="4" md="3">
+                        <MudCard>
+                            <MudCardMedia Image="@("https://localhost:7046/api/files/photos/" + photo)" Height="100" />
+                            <MudCardActions>
+                                <MudButton Color="Color.Error" OnClick="@(() => RemovePhoto(photo))">Remove</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = null!;
+    private MudForm form = null!;
+
+    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
+    private string _dragClass = DefaultDragClass;
+    private List<IBrowserFile> UploadedPhotos = new();
+    private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
+
+    [Parameter] public TripModel Trip { get; set; } = new TripModel
+    {
+        StartDate = DateTime.Today,
+        EndDate = DateTime.Today.AddDays(7),
+        IsPublic = true
+    };
+
+    private void OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        ClearDragClass();
+        var files = e.GetMultipleFiles();
+        foreach (var file in files)
+        {
+            UploadedPhotos.Add(file);
+        }
+    }
+
+    private void RemovePhoto(string photo)
+    { // Save uploaded photo URLs
+        var deletablePhoto = UploadedPhotos.FirstOrDefault(x => x.Name == photo);
+        if(deletablePhoto is not null)
+        {
+            UploadedPhotos.Remove(deletablePhoto);
+        }
+
+        Trip.PhotoUrls.Remove(photo);
+    }
+
+    private async Task Submit()
+    {
+        foreach (var file in UploadedPhotos)
+        {
+            var photoUrl = await TripService.UploadPhotoAsync(file);
+            Trip.PhotoUrls.Add(photoUrl);
+        }
+        await TripService.UpdateTripAsync(Trip);
+        MudDialog.Close(DialogResult.Ok(Trip));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private void SetDragClass() => _dragClass = $"{DefaultDragClass} mud-border-primary";
+
+    private void ClearDragClass() => _dragClass = DefaultDragClass;
+}

@@ -1,0 +1,150 @@
+﻿@page "/organizers"
+@using DevKnowledgeBase.UI.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+
+@inject IUserService UserService
+@inject IAuthenticationService AuthService
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<AuthorizeView Roles="Admin" Context="authContext">
+    <Authorized>
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
+            <MudPaper Class="pa-4">
+                <MudText Typo="Typo.h5" Class="mb-4">Admin Dashboard</MudText>
+
+                <MudText Typo="Typo.h6" Class="mb-2">Add Organizer User</MudText>
+                <MudForm @ref="form">
+                    <MudTextField @bind-Value="newUser.Email" Label="Email" Required="true" />
+                    <MudTextField @bind-Value="newUser.FullName" Label="Full Name" Required="true" />
+                    <MudButton Variant="Variant.Filled" OnClick="@(async()=> await HandleAddUser())" Color="Color.Primary" Class="mt-4">Add Organizer</MudButton>
+                </MudForm>
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <MudAlert Severity="Severity.Error" Class="mt-2" Variant="Variant.Filled" Dense="true">@errorMessage</MudAlert>
+                }
+
+                <MudText Typo="Typo.h6" Class="mt-4 mb-2">Organizer List</MudText>
+                <MudTable Items="@organizers" Hover="true" Dense="true">
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Email</MudTh>
+                        <MudTh>Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.FullName</MudTd>
+                        <MudTd DataLabel="Email">@context.Email</MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => OpenEditDialog(context))" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(context))" />
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudPaper>
+        </MudContainer>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized to view this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private MudForm form;
+    private UserProfileModel newUser = new();
+    private UserProfileModel editingUser = new();
+    private List<UserProfileModel> organizers = new();
+    private string errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadOrganizers();
+    }
+
+    private async Task LoadOrganizers()
+    {
+        organizers = await UserService.GetAllOrganizers();
+    }
+
+    private async Task HandleAddUser()
+    {
+        // Create the user and assign the 'Organizer' role
+        var user = new UserProfileModel { FullName = newUser.FullName, Email = newUser.Email };
+        var result = await UserService.CreateOrganizerUser(user);
+
+        if (result.Success)
+        {
+            await LoadOrganizers(); // Reload the list of organizers
+            newUser = new(); // Reset the form
+            Snackbar.Add("Organizer added successfully", Severity.Success);
+        }
+        else
+        {
+            errorMessage = result.ErrorMessage;
+        }
+    }
+
+    private async Task OpenEditDialog(UserProfileModel user)
+    {
+        // Create a deep copy of the user to edit
+        editingUser = new UserProfileModel
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                ProfilePicture = user.ProfilePicture
+            };
+
+        var parameters = new DialogParameters
+        {
+            { "User", editingUser }
+        };
+
+        var dialog = await DialogService.ShowAsync<EditOrganizerDialog>("Edit Organizer", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var updateResult = await UserService.UpdateOrganizerUserAsync(editingUser);
+            if (updateResult.Success)
+            {
+                await LoadOrganizers();
+                Snackbar.Add("Organizer updated successfully", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add($"Failed to update organizer: {updateResult.ErrorMessage}", Severity.Error);
+            }
+        }
+    }
+
+    private async Task OpenDeleteDialog(UserProfileModel user)
+    {
+        var parameters = new DialogParameters
+        {
+            { "ContentText", $"Are you sure you want to delete the organizer '{user.FullName}'?" },
+            { "ButtonText", "Delete" },
+            { "Color", Color.Error }
+        };
+
+        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Confirm Delete", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var deleteResult = await UserService.DeleteOrganizerUserAsync(user.Id);
+            if (deleteResult.Success)
+            {
+                await LoadOrganizers();
+                Snackbar.Add("Organizer deleted successfully", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add($"Failed to delete organizer: {deleteResult.ErrorMessage}", Severity.Error);
+            }
+        }
+    }
+}

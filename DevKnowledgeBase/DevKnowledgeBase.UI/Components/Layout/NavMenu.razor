@@ -1,0 +1,56 @@
+﻿@using DevKnowledgeBase.UI.Services
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject NavigationManager Navigation
+@inject IAuthenticationService AuthService
+
+
+<MudDrawerHeader>
+    <MudText Typo="Typo.h6">DevKnowledgeBase</MudText>
+</MudDrawerHeader>
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    <MudNavLink Href="notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <MudNavLink Href="organizers" Icon="@Icons.Material.Filled.VerifiedUser">Organizers</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView>
+        <MudNavLink Href="profile" Icon="@Icons.Material.Filled.Propane">Profile</MudNavLink>
+    </AuthorizeView> 
+    <MudNavLink Href="trips" Icon="@Icons.Material.Filled.Surfing">Surf Camps</MudNavLink>
+    <AuthorizeView Roles="Admin,Organizer">
+        <MudNavLink Href="organizer/trips" Icon="@Icons.Material.Filled.Dashboard">
+            My Camps
+        </MudNavLink>
+    </AuthorizeView>
+</MudNavMenu>
+<MudSpacer />
+<AuthorizeView>
+    <Authorized>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(async () => await Logout())">Logout</MudButton>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="NavigateToLogin">Login</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="NavigateToRegister">Register</MudButton>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private async Task Logout()
+    {
+        await AuthService.LogoutAsync();
+        Navigation.NavigateTo("/");
+    }
+
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+
+    private void NavigateToRegister()
+    {
+        Navigation.NavigateTo("/register");
+    }
+}

@@ -1,0 +1,75 @@
+﻿@page "/notes"
+@using DevKnowledgeBase.UI.Services
+@using Microsoft.AspNetCore.Authorization
+@inject INoteService NoteService
+
+@attribute [Authorize(Roles = "Admin, Organizer")]
+
+<h3>Notes</h3>
+
+@if (notes == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var note in notes)
+        {
+            <li>
+                <strong>@note.Title</strong> - @note.Content
+                <button @onclick="() => EditNote(note)">Edit</button>
+                <button @onclick="() => DeleteNote(note.Id)">Delete</button>
+            </li>
+        }
+    </ul>
+
+    <h4>@(isEditing ? "Edit Note" : "Add New Note")</h4>
+    <input @bind="currentNote.Title" placeholder="Title" />
+    <textarea @bind="currentNote.Content" placeholder="Content"></textarea>
+    <button @onclick="SaveNote">Save</button>
+}
+
+@code {
+    private List<NoteDto>? notes;
+    private NoteDto currentNote = new NoteDto();
+    private bool isEditing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadNotes();
+    }
+
+    private void EditNote(NoteDto note)
+    {
+        currentNote = new NoteDto { Id = note.Id, Title = note.Title, Content = note.Content };
+        isEditing = true;
+    }
+
+    private async Task SaveNote()
+    {
+        if (isEditing)
+        {
+            await NoteService.UpdateNoteAsync(currentNote.Id, currentNote);
+        }
+        else
+        {
+            currentNote.Id = Guid.NewGuid();
+            await NoteService.CreateNoteAsync(currentNote);
+        }
+        isEditing = false;
+        currentNote = new NoteDto();
+        await LoadNotes();
+    }
+
+    private async Task DeleteNote(Guid id)
+    {
+        await NoteService.DeleteNoteAsync(id);
+        await LoadNotes();
+    }
+
+    private async Task LoadNotes()
+    {
+        notes = await NoteService.GetNotesAsync();
+    }
+}

@@ -1,0 +1,580 @@
+2025-03-18 22:19:41.372 +02:00 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 22:19:41.761 +02:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2025-03-18 22:19:41.775 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-03-18 22:19:41.779 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2025-03-18 22:19:41.783 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 22:19:41.792 +02:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-18 22:19:42.224 +02:00 [INF] Now listening on: https://localhost:7046
+2025-03-18 22:19:42.227 +02:00 [INF] Now listening on: http://localhost:5107
+2025-03-18 22:19:42.386 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-18 22:19:42.388 +02:00 [INF] Hosting environment: Development
+2025-03-18 22:19:42.389 +02:00 [INF] Content root path: D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase
+2025-03-18 22:19:44.557 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger - null null
+2025-03-18 22:19:44.711 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger - 301 0 null 161.218ms
+2025-03-18 22:19:44.718 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 22:19:44.787 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 68.9835ms
+2025-03-18 22:19:44.811 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/swagger-ui.css - null null
+2025-03-18 22:19:44.813 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/swagger-ui-bundle.js - null null
+2025-03-18 22:19:44.814 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 22:19:44.813 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 22:19:44.811 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.css - null null
+2025-03-18 22:19:44.813 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/swagger-ui-standalone-preset.js - null null
+2025-03-18 22:19:44.832 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 18.43ms
+2025-03-18 22:19:44.847 +02:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2025-03-18 22:19:44.848 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 33.8313ms
+2025-03-18 22:19:44.849 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.css - 200 202 text/css 37.9737ms
+2025-03-18 22:19:44.902 +02:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-03-18 22:19:44.904 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/swagger-ui.css - 200 154948 text/css 93.887ms
+2025-03-18 22:19:44.935 +02:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-03-18 22:19:44.942 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/swagger-ui-standalone-preset.js - 200 229223 text/javascript 128.5392ms
+2025-03-18 22:19:44.978 +02:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-03-18 22:19:44.980 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/swagger-ui-bundle.js - 200 1466324 text/javascript 166.6351ms
+2025-03-18 22:19:45.240 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 22:19:45.359 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 118.7943ms
+2025-03-18 22:19:45.399 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/favicon-32x32.png - null null
+2025-03-18 22:19:45.403 +02:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-03-18 22:19:45.405 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/favicon-32x32.png - 200 628 image/png 5.6249ms
+2025-03-18 22:19:45.456 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 22:19:45.470 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 14.454ms
+2025-03-18 22:19:57.892 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/api/Notes?page=1&pageSize=10 - null null
+2025-03-18 22:19:57.907 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 22:19:57.942 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 22:20:03.589 +02:00 [INF] Executed DbCommand (130ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 22:20:03.765 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 22:20:03.783 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 5833.7137ms
+2025-03-18 22:20:03.786 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 22:20:03.788 +02:00 [INF] HTTP GET /api/Notes responded 200 in 5884.6863 ms
+2025-03-18 22:20:03.795 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/api/Notes?page=1&pageSize=10 - 200 null application/json; charset=utf-8 5903.6518ms
+2025-03-18 22:29:40.377 +02:00 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 22:29:40.771 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2025-03-18 22:29:40.783 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-03-18 22:29:40.786 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2025-03-18 22:29:40.789 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 22:29:40.797 +02:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-18 22:29:41.084 +02:00 [INF] Now listening on: https://localhost:7046
+2025-03-18 22:29:41.086 +02:00 [INF] Now listening on: http://localhost:5107
+2025-03-18 22:29:41.249 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-18 22:29:41.253 +02:00 [INF] Hosting environment: Development
+2025-03-18 22:29:41.254 +02:00 [INF] Content root path: D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase
+2025-03-18 22:29:41.863 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 22:29:42.093 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 242.0632ms
+2025-03-18 22:29:42.123 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 22:29:42.123 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 22:29:42.129 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 5.7351ms
+2025-03-18 22:29:42.141 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 17.8122ms
+2025-03-18 22:29:42.607 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 22:29:42.674 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 67.775ms
+2025-03-18 22:29:42.828 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 22:29:42.852 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 23.9855ms
+2025-03-18 23:34:11.565 +02:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:34:12.144 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2025-03-18 23:34:12.162 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-03-18 23:34:12.164 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2025-03-18 23:34:12.168 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:34:12.192 +02:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-18 23:34:12.613 +02:00 [INF] Now listening on: https://localhost:7046
+2025-03-18 23:34:12.615 +02:00 [INF] Now listening on: http://localhost:5107
+2025-03-18 23:34:12.712 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-18 23:34:12.714 +02:00 [INF] Hosting environment: Development
+2025-03-18 23:34:12.716 +02:00 [INF] Content root path: D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase
+2025-03-18 23:34:13.642 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:34:13.914 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 283.7795ms
+2025-03-18 23:34:13.953 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:34:13.953 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:34:13.966 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 12.4723ms
+2025-03-18 23:34:13.980 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 26.986ms
+2025-03-18 23:34:14.401 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:34:14.456 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 54.8576ms
+2025-03-18 23:34:14.552 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:34:14.582 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 30.4097ms
+2025-03-18 23:34:18.628 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:34:18.637 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:34:18.668 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:34:19.131 +02:00 [INF] Executed DbCommand (20ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:34:19.269 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:34:19.285 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 610.929ms
+2025-03-18 23:34:19.288 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:34:19.293 +02:00 [INF] HTTP GET /api/notes responded 200 in 654.4990 ms
+2025-03-18 23:34:19.301 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 674.5461ms
+2025-03-18 23:34:42.400 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:34:42.405 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:34:42.407 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:34:42.498 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:34:42.503 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:34:42.504 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 93.955ms
+2025-03-18 23:34:42.506 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:34:42.507 +02:00 [INF] HTTP GET /api/notes responded 200 in 102.2173 ms
+2025-03-18 23:34:42.510 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 109.7796ms
+2025-03-18 23:38:30.100 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:38:30.113 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 13.2317ms
+2025-03-18 23:38:30.472 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:38:30.477 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 4.5817ms
+2025-03-18 23:38:30.537 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:38:30.538 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:38:30.541 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 4.905ms
+2025-03-18 23:38:30.566 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 27.709ms
+2025-03-18 23:38:30.661 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:38:30.672 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 11.3271ms
+2025-03-18 23:38:30.743 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:38:30.746 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:38:30.751 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:38:30.759 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:38:30.762 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:38:30.765 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 11.3706ms
+2025-03-18 23:38:30.766 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:38:30.768 +02:00 [INF] HTTP GET /api/notes responded 200 in 22.0310 ms
+2025-03-18 23:38:30.770 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 27.7968ms
+2025-03-18 23:39:23.995 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:39:24.002 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:39:24.003 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:39:24.085 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:39:24.089 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:39:24.091 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 85.667ms
+2025-03-18 23:39:24.093 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:39:24.095 +02:00 [INF] HTTP GET /api/notes responded 200 in 93.0935 ms
+2025-03-18 23:39:24.097 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 106.8469ms
+2025-03-18 23:40:15.113 +02:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:40:15.500 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2025-03-18 23:40:15.512 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-03-18 23:40:15.514 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2025-03-18 23:40:15.518 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:40:15.524 +02:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-18 23:40:16.016 +02:00 [INF] Now listening on: https://localhost:7046
+2025-03-18 23:40:16.017 +02:00 [INF] Now listening on: http://localhost:5107
+2025-03-18 23:40:16.168 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-18 23:40:16.169 +02:00 [INF] Hosting environment: Development
+2025-03-18 23:40:16.170 +02:00 [INF] Content root path: D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase
+2025-03-18 23:40:16.829 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:40:17.099 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 285.3647ms
+2025-03-18 23:40:17.141 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:40:17.141 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:40:17.160 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 18.4686ms
+2025-03-18 23:40:17.168 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 28.4541ms
+2025-03-18 23:40:17.594 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:40:17.662 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 68.0429ms
+2025-03-18 23:40:17.863 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:40:17.894 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 31.2928ms
+2025-03-18 23:40:48.779 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:40:48.788 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:40:48.812 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:40:49.217 +02:00 [INF] Executed DbCommand (15ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:40:49.351 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:40:49.366 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 547.786ms
+2025-03-18 23:40:49.370 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:40:49.375 +02:00 [INF] HTTP GET /api/notes responded 200 in 585.3406 ms
+2025-03-18 23:40:49.385 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 606.7548ms
+2025-03-18 23:43:00.566 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:43:00.579 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 12.9263ms
+2025-03-18 23:43:00.919 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:43:00.923 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 4.2207ms
+2025-03-18 23:43:00.963 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:43:00.967 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 4.9447ms
+2025-03-18 23:43:00.972 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:43:00.988 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 15.7001ms
+2025-03-18 23:43:01.215 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:43:01.216 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:43:01.219 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:43:01.231 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:43:01.233 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 17.8737ms
+2025-03-18 23:43:01.299 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:43:01.304 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:43:01.307 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 68.6031ms
+2025-03-18 23:43:01.309 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:43:01.310 +02:00 [INF] HTTP GET /api/notes responded 200 in 91.2188 ms
+2025-03-18 23:43:01.313 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 98.3464ms
+2025-03-18 23:46:12.460 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:46:12.471 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 12.1803ms
+2025-03-18 23:46:12.506 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:46:12.511 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 5.3557ms
+2025-03-18 23:46:12.740 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:46:12.744 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:46:12.749 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:46:12.833 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:46:12.837 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:46:12.841 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 89.3435ms
+2025-03-18 23:46:12.843 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:46:12.844 +02:00 [INF] HTTP GET /api/notes responded 200 in 100.5536 ms
+2025-03-18 23:46:12.847 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 106.7353ms
+2025-03-18 23:46:13.039 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:46:13.043 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 4.9075ms
+2025-03-18 23:46:13.106 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:46:13.132 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 26.6137ms
+2025-03-18 23:46:13.170 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:46:13.179 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 9.1915ms
+2025-03-18 23:46:21.946 +02:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:46:22.294 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2025-03-18 23:46:22.305 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-03-18 23:46:22.307 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2025-03-18 23:46:22.310 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:46:22.318 +02:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-18 23:46:22.609 +02:00 [INF] Now listening on: https://localhost:7046
+2025-03-18 23:46:22.612 +02:00 [INF] Now listening on: http://localhost:5107
+2025-03-18 23:46:22.708 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-18 23:46:22.711 +02:00 [INF] Hosting environment: Development
+2025-03-18 23:46:22.712 +02:00 [INF] Content root path: D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase
+2025-03-18 23:46:23.214 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:46:23.469 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 265.9642ms
+2025-03-18 23:46:23.512 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:46:23.512 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:46:23.528 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 15.8173ms
+2025-03-18 23:46:23.579 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 67.6277ms
+2025-03-18 23:46:24.037 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:46:24.142 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 105.5422ms
+2025-03-18 23:46:24.212 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:46:24.238 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 26.0382ms
+2025-03-18 23:46:28.427 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:46:28.437 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:46:28.462 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:46:28.835 +02:00 [INF] Executed DbCommand (14ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:46:28.966 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:46:28.980 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 513.2445ms
+2025-03-18 23:46:28.983 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:46:28.986 +02:00 [INF] HTTP GET /api/notes responded 200 in 549.3030 ms
+2025-03-18 23:46:28.994 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 568.1232ms
+2025-03-18 23:49:40.162 +02:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:49:40.483 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2025-03-18 23:49:40.494 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-03-18 23:49:40.496 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2025-03-18 23:49:40.498 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-03-18 23:49:40.505 +02:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-18 23:49:40.800 +02:00 [INF] Now listening on: https://localhost:7046
+2025-03-18 23:49:40.802 +02:00 [INF] Now listening on: http://localhost:5107
+2025-03-18 23:49:40.928 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-18 23:49:40.929 +02:00 [INF] Hosting environment: Development
+2025-03-18 23:49:40.930 +02:00 [INF] Content root path: D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase
+2025-03-18 23:49:41.333 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:49:41.583 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 263.7378ms
+2025-03-18 23:49:41.621 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:49:41.621 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:49:41.635 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 14.4495ms
+2025-03-18 23:49:41.643 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 21.8256ms
+2025-03-18 23:49:42.241 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:49:42.328 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 87.0504ms
+2025-03-18 23:49:42.426 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:49:42.491 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 65.3836ms
+2025-03-18 23:49:49.112 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:49:49.122 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:49:49.146 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:49:49.552 +02:00 [INF] Executed DbCommand (16ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:49:49.685 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:49:49.700 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 548.8155ms
+2025-03-18 23:49:49.703 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:49:49.707 +02:00 [INF] HTTP GET /api/notes responded 200 in 584.9453 ms
+2025-03-18 23:49:49.714 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 602.9597ms
+2025-03-18 23:51:53.332 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:51:53.341 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:51:53.343 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:51:53.412 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:51:53.416 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:51:53.418 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 72.1337ms
+2025-03-18 23:51:53.420 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:51:53.421 +02:00 [INF] HTTP GET /api/notes responded 200 in 79.6275 ms
+2025-03-18 23:51:53.423 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 91.3552ms
+2025-03-18 23:51:53.649 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:51:53.652 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:51:53.653 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:51:53.664 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:51:53.668 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:51:53.670 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 13.2246ms
+2025-03-18 23:51:53.672 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:51:53.673 +02:00 [INF] HTTP GET /api/notes responded 200 in 21.3994 ms
+2025-03-18 23:51:53.676 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 27.5171ms
+2025-03-18 23:51:53.836 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.html - null null
+2025-03-18 23:51:53.853 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.html - 200 null text/html;charset=utf-8 16.8548ms
+2025-03-18 23:51:53.924 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/index.js - null null
+2025-03-18 23:51:53.928 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/index.js - 200 null application/javascript;charset=utf-8 4.4153ms
+2025-03-18 23:51:54.421 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-18 23:51:54.425 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_framework/aspnetcore-browser-refresh.js - 200 16525 application/javascript; charset=utf-8 4.7726ms
+2025-03-18 23:51:54.461 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/_vs/browserLink - null null
+2025-03-18 23:51:54.485 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/_vs/browserLink - 200 null text/javascript; charset=UTF-8 24.4793ms
+2025-03-18 23:51:54.525 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - null null
+2025-03-18 23:51:54.536 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7046/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 11.7654ms
+2025-03-18 23:52:57.152 +02:00 [INF] Request starting HTTP/1.1 PUT https://localhost:7046/api/notes/c08c5a72-22f5-45c8-bb0e-954fb53b0ba3 - application/json; charset=utf-8 null
+2025-03-18 23:52:57.156 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.Update (DevKnowledgeBase.API)'
+2025-03-18 23:52:57.161 +02:00 [INF] Route matched with {action = "Update", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Update(System.Guid, DevKnowledgeBase.Application.Commands.UpdateNoteCommand) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:52:57.339 +02:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-03-18 23:52:57.384 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.Update (DevKnowledgeBase.API) in 219.848ms
+2025-03-18 23:52:57.387 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.Update (DevKnowledgeBase.API)'
+2025-03-18 23:52:57.389 +02:00 [INF] HTTP PUT /api/notes/c08c5a72-22f5-45c8-bb0e-954fb53b0ba3 responded 400 in 233.1811 ms
+2025-03-18 23:52:57.394 +02:00 [INF] Request finished HTTP/1.1 PUT https://localhost:7046/api/notes/c08c5a72-22f5-45c8-bb0e-954fb53b0ba3 - 400 null application/problem+json; charset=utf-8 242.0277ms
+2025-03-18 23:52:57.400 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:52:57.403 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:52:57.407 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:52:57.413 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:52:57.426 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:52:57.429 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 19.3307ms
+2025-03-18 23:52:57.430 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:52:57.432 +02:00 [INF] HTTP GET /api/notes responded 200 in 28.6905 ms
+2025-03-18 23:52:57.434 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 33.3132ms
+2025-03-18 23:53:00.570 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:53:00.575 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:00.577 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:53:00.581 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:53:00.585 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:53:00.587 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 7.3886ms
+2025-03-18 23:53:00.588 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:00.590 +02:00 [INF] HTTP GET /api/notes responded 200 in 15.4552 ms
+2025-03-18 23:53:00.593 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 23.2399ms
+2025-03-18 23:53:01.032 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:53:01.036 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:01.038 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:53:01.048 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:53:01.052 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:53:01.054 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 9.6372ms
+2025-03-18 23:53:01.055 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:01.056 +02:00 [INF] HTTP GET /api/notes responded 200 in 20.0303 ms
+2025-03-18 23:53:01.059 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 27.0356ms
+2025-03-18 23:53:46.003 +02:00 [INF] Request starting HTTP/1.1 PUT https://localhost:7046/api/notes/c08c5a72-22f5-45c8-bb0e-954fb53b0ba3 - application/json; charset=utf-8 null
+2025-03-18 23:53:46.012 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.Update (DevKnowledgeBase.API)'
+2025-03-18 23:53:46.013 +02:00 [INF] Route matched with {action = "Update", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Update(System.Guid, DevKnowledgeBase.Application.Commands.UpdateNoteCommand) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:53:46.018 +02:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2025-03-18 23:53:46.025 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.Update (DevKnowledgeBase.API) in 10.448ms
+2025-03-18 23:53:46.027 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.Update (DevKnowledgeBase.API)'
+2025-03-18 23:53:46.028 +02:00 [INF] HTTP PUT /api/notes/c08c5a72-22f5-45c8-bb0e-954fb53b0ba3 responded 400 in 15.8668 ms
+2025-03-18 23:53:46.030 +02:00 [INF] Request finished HTTP/1.1 PUT https://localhost:7046/api/notes/c08c5a72-22f5-45c8-bb0e-954fb53b0ba3 - 400 null application/problem+json; charset=utf-8 27.4131ms
+2025-03-18 23:53:46.035 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:53:46.037 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:46.038 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:53:46.042 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:53:46.046 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:53:46.047 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 6.778ms
+2025-03-18 23:53:46.049 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:46.050 +02:00 [INF] HTTP GET /api/notes responded 200 in 12.9774 ms
+2025-03-18 23:53:46.053 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 18.1624ms
+2025-03-18 23:53:49.775 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:53:49.779 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:49.781 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:53:49.785 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:53:49.789 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:53:49.790 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 7.1158ms
+2025-03-18 23:53:49.792 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:49.793 +02:00 [INF] HTTP GET /api/notes responded 200 in 14.6427 ms
+2025-03-18 23:53:49.797 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 21.4324ms
+2025-03-18 23:53:50.078 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:53:50.087 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:50.088 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:53:50.092 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:53:50.095 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:53:50.097 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 6.8668ms
+2025-03-18 23:53:50.098 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:53:50.100 +02:00 [INF] HTTP GET /api/notes responded 200 in 13.0116 ms
+2025-03-18 23:53:50.102 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 23.7919ms
+2025-03-18 23:54:43.324 +02:00 [INF] Request starting HTTP/1.1 POST https://localhost:7046/api/notes - application/json; charset=utf-8 null
+2025-03-18 23:54:43.333 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API)'
+2025-03-18 23:54:43.336 +02:00 [INF] Route matched with {action = "CreateNote", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateNote(DevKnowledgeBase.Application.Commands.CreateNoteCommand) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:54:43.648 +02:00 [INF] Executed DbCommand (101ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Object), @p4='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "Tags", "Title")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2025-03-18 23:54:43.663 +02:00 [INF] ✅ New note created with ID: 2f888702-e906-496a-9b54-ec033cd25324
+2025-03-18 23:54:43.666 +02:00 [INF] Executing CreatedAtActionResult, writing value of type 'System.Guid'.
+2025-03-18 23:54:43.682 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API) in 342.6825ms
+2025-03-18 23:54:43.685 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API)'
+2025-03-18 23:54:43.686 +02:00 [INF] HTTP POST /api/notes responded 201 in 353.9106 ms
+2025-03-18 23:54:43.688 +02:00 [INF] Request finished HTTP/1.1 POST https://localhost:7046/api/notes - 201 null application/json; charset=utf-8 364.7242ms
+2025-03-18 23:54:56.233 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:54:56.238 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:54:56.239 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:54:56.324 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:54:56.327 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:54:56.328 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 87.2336ms
+2025-03-18 23:54:56.330 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:54:56.332 +02:00 [INF] HTTP GET /api/notes responded 200 in 93.8105 ms
+2025-03-18 23:54:56.334 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 100.9069ms
+2025-03-18 23:55:18.571 +02:00 [INF] Request starting HTTP/1.1 POST https://localhost:7046/api/notes - application/json; charset=utf-8 null
+2025-03-18 23:55:18.574 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API)'
+2025-03-18 23:55:18.577 +02:00 [INF] Route matched with {action = "CreateNote", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateNote(DevKnowledgeBase.Application.Commands.CreateNoteCommand) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:55:18.585 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Object), @p4='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "Tags", "Title")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2025-03-18 23:55:18.590 +02:00 [INF] ✅ New note created with ID: e8c24a3d-366b-40ce-b63e-1f6b71539a26
+2025-03-18 23:55:18.591 +02:00 [INF] Executing CreatedAtActionResult, writing value of type 'System.Guid'.
+2025-03-18 23:55:18.593 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API) in 13.0743ms
+2025-03-18 23:55:18.594 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API)'
+2025-03-18 23:55:18.595 +02:00 [INF] HTTP POST /api/notes responded 201 in 20.8609 ms
+2025-03-18 23:55:18.598 +02:00 [INF] Request finished HTTP/1.1 POST https://localhost:7046/api/notes - 201 null application/json; charset=utf-8 27.2921ms
+2025-03-18 23:55:19.084 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:55:19.088 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:55:19.089 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:55:19.095 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:55:19.103 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:55:19.104 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 11.8708ms
+2025-03-18 23:55:19.106 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:55:19.107 +02:00 [INF] HTTP GET /api/notes responded 200 in 19.3180 ms
+2025-03-18 23:55:19.109 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 25.8213ms
+2025-03-18 23:55:34.108 +02:00 [INF] Request starting HTTP/1.1 POST https://localhost:7046/api/notes - application/json; charset=utf-8 null
+2025-03-18 23:55:34.112 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API)'
+2025-03-18 23:55:34.113 +02:00 [INF] Route matched with {action = "CreateNote", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateNote(DevKnowledgeBase.Application.Commands.CreateNoteCommand) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:55:34.121 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Object), @p4='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Notes" ("Id", "Content", "CreatedAt", "Tags", "Title")
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2025-03-18 23:55:34.126 +02:00 [INF] ✅ New note created with ID: 539aba6b-c31d-44d8-b1b6-056bb833720b
+2025-03-18 23:55:34.127 +02:00 [INF] Executing CreatedAtActionResult, writing value of type 'System.Guid'.
+2025-03-18 23:55:34.129 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API) in 12.8957ms
+2025-03-18 23:55:34.130 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.CreateNote (DevKnowledgeBase.API)'
+2025-03-18 23:55:34.132 +02:00 [INF] HTTP POST /api/notes responded 201 in 19.6480 ms
+2025-03-18 23:55:34.134 +02:00 [INF] Request finished HTTP/1.1 POST https://localhost:7046/api/notes - 201 null application/json; charset=utf-8 26.1202ms
+2025-03-18 23:55:34.139 +02:00 [INF] Request starting HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - null null
+2025-03-18 23:55:34.142 +02:00 [INF] Executing endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:55:34.143 +02:00 [INF] Route matched with {action = "GetAllNotes", controller = "Notes"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllNotes(Int32, Int32, System.String) on controller DevKnowledgeBase.API.Controllers.NotesController (DevKnowledgeBase.API).
+2025-03-18 23:55:34.147 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT n."Id", n."Content", n."CreatedAt", n."Tags", n."Title"
+FROM "Notes" AS n
+ORDER BY n."Title"
+LIMIT @__p_1 OFFSET @__p_0
+2025-03-18 23:55:34.153 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DevKnowledgeBase.Domain.Dtos.NoteDto, DevKnowledgeBase.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-18 23:55:34.157 +02:00 [INF] Executed action DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API) in 11.9171ms
+2025-03-18 23:55:34.159 +02:00 [INF] Executed endpoint 'DevKnowledgeBase.API.Controllers.NotesController.GetAllNotes (DevKnowledgeBase.API)'
+2025-03-18 23:55:34.160 +02:00 [INF] HTTP GET /api/notes responded 200 in 18.3458 ms
+2025-03-18 23:55:34.164 +02:00 [INF] Request finished HTTP/1.1 GET https://localhost:7046/api/notes?page=1&pageSize=10&search= - 200 null application/json; charset=utf-8 24.2215ms

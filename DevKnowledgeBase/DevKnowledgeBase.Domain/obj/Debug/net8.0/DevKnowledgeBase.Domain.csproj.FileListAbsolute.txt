@@ -1,0 +1,13 @@
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\bin\Debug\net8.0\DevKnowledgeBase.Domain.deps.json
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\bin\Debug\net8.0\DevKnowledgeBase.Domain.dll
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\bin\Debug\net8.0\DevKnowledgeBase.Domain.pdb
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.csproj.AssemblyReference.cache
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.AssemblyInfoInputs.cache
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.AssemblyInfo.cs
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.csproj.CoreCompileInputs.cache
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.sourcelink.json
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.dll
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\refint\DevKnowledgeBase.Domain.dll
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\DevKnowledgeBase.Domain.pdb
+D:\Projects\DevKnowledgeBase\DevKnowledgeBase\DevKnowledgeBase.Domain\obj\Debug\net8.0\ref\DevKnowledgeBase.Domain.dll

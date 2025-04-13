@@ -1,0 +1,120 @@
+﻿@using DevKnowledgeBase.UI.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<MudLayout>
+    <MudAppBar Color="Color.Secondary" Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Tertiary" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudSpacer />
+        <MudText Typo="Typo.h6" Color="Color.Dark">DevKnowledgeBase</MudText>
+    </MudAppBar>
+    <MudDrawerContainer>
+        <MudDrawer @bind-Open="@_open" Class="mud-drawer-fixed">
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent>
+            @Body
+        </MudMainContent>
+    </MudDrawerContainer>
+</MudLayout>
+
+<LoadingSpinner />
+
+@* Required *@
+<MudThemeProvider Theme="@theme" />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+@code {
+    private MudTheme theme = new MudTheme
+        {
+            PaletteLight = new PaletteLight
+            {
+                Primary = "#0077B6", // Deep ocean blue for primary actions
+                Secondary = "#00B4D8", // Bright turquoise for secondary actions
+                Tertiary = "#90E0EF", // Light aqua for accents
+                Background = "#CAF0F8", // Soft sky blue for the background
+                AppbarBackground = "#023E8A", // Dark navy blue for the app bar
+                DrawerBackground = "#E1EEDD", // Sandy beige for the drawer background
+                DrawerText = "#023E8A", // Dark navy blue for drawer text
+                DrawerIcon = "#0077B6", // Deep ocean blue for drawer icons
+                TextPrimary = "#03045E", // Dark blue for primary text
+                TextSecondary = "#0077B6", // Ocean blue for secondary text
+                Surface = "#FFFFFF", // White for surfaces like cards
+                ActionDefault = "#0077B6", // Default action color
+                ActionDisabled = "#B0C4DE", // Light steel blue for disabled actions
+                ActionDisabledBackground = "#E0F7FA", // Light aqua background for disabled actions
+                Divider = "#90E0EF", // Subtle aqua for dividers
+                LinesDefault = "#90E0EF", // Light aqua for lines
+                TableLines = "#90E0EF", // Light aqua for table lines
+                Success = "#52B788", // Green for success messages (like seaweed)
+                Error = "#FF6F61", // Coral red for error messages
+                Warning = "#FFD166", // Sandy yellow for warnings
+                Info = "#00B4D8" // Bright turquoise for informational messages
+            },
+            Typography = new Typography
+            {
+                Default = new DefaultTypography
+                {
+                    FontFamily = new[] { "Roboto", "Arial", "sans-serif" },
+                    FontSize = "0.875rem", // Default font size
+                    FontWeight = "400" // Normal weight
+                },
+                H1 = new H1Typography
+                {
+                    FontSize = "2.25rem",
+                    FontWeight = "500",
+                    LineHeight = "1.5"
+                },
+                H2 = new H2Typography
+                {
+                    FontSize = "2rem",
+                    FontWeight = "500",
+                    LineHeight = "1.5"
+                },
+                H3 = new H3Typography
+                {
+                    FontSize = "1.75rem",
+                    FontWeight = "500",
+                    LineHeight = "1.5"
+                },
+                H4 = new H4Typography
+                {
+                    FontSize = "1.5rem",
+                    FontWeight = "500",
+                    LineHeight = "1.5"
+                },
+                H5 = new H5Typography
+                {
+                    FontSize = "1.25rem",
+                    FontWeight = "500",
+                    LineHeight = "1.5"
+                },
+                H6 = new H6Typography
+                {
+                    FontSize = "1rem",
+                    FontWeight = "500",
+                    LineHeight = "1.5"
+                },
+                Button = new ButtonTypography
+                {
+                    FontSize = "0.875rem",
+                    FontWeight = "600",
+                    TextTransform = "uppercase"
+                }
+            }
+        };
+
+    private bool _open = true;
+
+    private void ToggleDrawer()
+    {
+        _open = !_open;
+    }
+}

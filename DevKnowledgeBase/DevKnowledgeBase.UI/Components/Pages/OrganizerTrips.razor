@@ -1,0 +1,150 @@
+﻿@page "/organizer/trips"
+@using DevKnowledgeBase.UI.Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject ITripService TripService
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+@attribute [Authorize(Roles = "Admin, Organizer")]
+
+<PageTitle>My Surf Camps</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="pa-4">
+                <MudText Typo="Typo.h4" Class="mb-4">My Surf Camps</MudText>
+                
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenCreateDialog" Class="mb-4">
+                    Create New Surf Camp
+                </MudButton>
+                
+                @if (trips.Count == 0)
+                {
+                    <MudText>You haven't created any surf camps yet.</MudText>
+                }
+                else
+                {
+                    <MudTable Items="@trips" Hover="true" Striped="true" Bordered="true">
+                        <HeaderContent>
+                            <MudTh>Name</MudTh>
+                            <MudTh>Location</MudTh>
+                            <MudTh>Date</MudTh>
+                            <MudTh>Participants</MudTh>
+                            <MudTh>Status</MudTh>
+                            <MudTh>Actions</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Name">@context.Name</MudTd>
+                            <MudTd DataLabel="Location">@context.Location</MudTd>
+                            <MudTd DataLabel="Date">@context.StartDate.Value.ToString("MMM dd") - @context.EndDate.Value.ToString("MMM dd, yyyy")</MudTd>
+                            <MudTd DataLabel="Participants">@context.CurrentParticipants/@context.MaxParticipants</MudTd>
+                            <MudTd DataLabel="Status">
+                                <MudChip T="string" Color="@(context.IsPublic ? Color.Success : Color.Error)">
+                                    @(context.IsPublic ? "Public" : "Not Public")
+                                </MudChip>
+                            </MudTd>
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => OpenEditDialog(context))" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(context))" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Info" OnClick="@(() => ViewDetails(context.Id))" />
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private List<TripModel> trips = new();
+    private readonly DialogOptions _dialogOptions = new() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true };
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTrips();
+    }
+
+    private async Task LoadTrips()
+    {
+        trips = await TripService.GetOrganizerTripsAsync();
+    }
+
+    private void ViewDetails(Guid tripId)
+    {
+        Navigation.NavigateTo($"/trips/{tripId}");
+    }
+
+    private async Task OpenCreateDialog()
+    {
+
+        var dialog = await DialogService.ShowAsync<TripDialog>("Create Surf Camp", _dialogOptions);
+        var result = await dialog.Result;
+        
+        if (!result.Canceled && result.Data is TripModel newTrip)
+        {
+            var createResult = await TripService.CreateTripAsync(newTrip);
+            if (createResult.Success)
+            {
+                Snackbar.Add("Surf camp created successfully.", Severity.Success);
+                await LoadTrips();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to create surf camp: {createResult.ErrorMessage}", Severity.Error);
+            }
+        }
+    }
+
+    private async Task OpenEditDialog(TripModel trip)
+    {
+        var parameters = new DialogParameters { ["Trip"] = trip };
+        var dialog = await DialogService.ShowAsync<TripDialog>("Edit Surf Camp", parameters, _dialogOptions);
+        var result = await dialog.Result;
+        
+        if (!result.Canceled && result.Data is TripModel updatedTrip)
+        {
+            var updateResult = await TripService.UpdateTripAsync(updatedTrip);
+            if (updateResult.Success)
+            {
+                Snackbar.Add("Surf camp updated successfully.", Severity.Success);
+                await LoadTrips();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to update surf camp: {updateResult.ErrorMessage}", Severity.Error);
+            }
+        }
+    }
+
+    private async Task OpenDeleteDialog(TripModel trip)
+    {
+        var parameters = new DialogParameters
+        {
+            ["ContentText"] = $"Are you sure you want to delete the surf camp '{trip.Name}'?",
+            ["ButtonText"] = "Delete",
+            ["Color"] = Color.Error
+        };
+
+        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Delete Surf Camp", parameters);
+        var result = await dialog.Result;
+        
+        if (!result.Canceled)
+        {
+            var deleteResult = await TripService.DeleteTripAsync(trip.Id);
+            if (deleteResult.Success)
+            {
+                Snackbar.Add("Surf camp deleted successfully.", Severity.Success);
+                await LoadTrips();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to delete surf camp: {deleteResult.ErrorMessage}", Severity.Error);
+            }
+        }
+    }
+}

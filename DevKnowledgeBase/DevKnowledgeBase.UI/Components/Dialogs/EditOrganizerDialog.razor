@@ -1,0 +1,28 @@
+﻿@using DevKnowledgeBase.UI.Models
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form">
+            <MudTextField @bind-Value="User.Email" Label="Email" Required="true" />
+            <MudTextField @bind-Value="User.FullName" Label="Full Name" Required="true" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public UserProfileModel User { get; set; }
+
+    private MudForm form;
+
+    private void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(User));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

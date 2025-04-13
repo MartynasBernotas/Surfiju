@@ -1,0 +1,106 @@
+﻿@page "/trips/{Id:guid}"
+
+@using DevKnowledgeBase.UI.Models
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject ITripService TripService
+@inject NavigationManager Navigation
+@inject ISnackbar Snackbar
+
+<PageTitle>Surf Camp Details</PageTitle>
+
+@if (trip == null)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
+        <MudCard>
+            @* @if (!string.IsNullOrEmpty(trip.ImageUrl))
+            {
+                <MudCardMedia Image="@trip.ImageUrl" Height="400" />
+            } *@
+            <MudCardContent>
+                <MudText Typo="Typo.h3">@trip.Name</MudText>
+                <MudText Typo="Typo.h6">@trip.Location</MudText>
+                
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-3 mud-theme-primary">
+                            <MudText Typo="Typo.subtitle1"><b>Date:</b>@GetDatesString()</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-3 mud-theme-secondary">
+                            <MudText Typo="Typo.subtitle1"><b>Price:</b> @trip.Price.ToString("C")</MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+                
+                <MudText Typo="Typo.body1" Class="mt-4">@trip.Description</MudText>
+                
+                <MudDivider Class="mt-4 mb-4" />
+                
+                <MudText Typo="Typo.subtitle2">Participants: @trip.CurrentParticipants/@trip.MaxParticipants</MudText>
+                <MudText Typo="Typo.subtitle2">Organized by: @trip.OrganizerName</MudText>
+                
+                <MudDivider Class="mt-4 mb-4" />
+                
+                <AuthorizeView>
+                    <Authorized>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Disabled="@(trip.CurrentParticipants >= trip.MaxParticipants || !trip.IsPublic)">
+                            Book Now
+                        </MudButton>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="RedirectToLogin">
+                            Login to Book
+                        </MudButton>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </MudCardContent>
+        </MudCard>
+        
+        <MudButton OnClick="GoBack" Class="mt-4" Variant="Variant.Text" Color="Color.Primary">
+            Back to List
+        </MudButton>
+    </MudContainer>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    private TripModel trip;
+    private string GetDatesString()
+    {
+        return $"{trip.StartDate.Value.ToString("MMM dd")} - {trip.EndDate.Value.ToString("MMM dd, yyyy")}";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTrip();
+    }
+
+    private async Task LoadTrip()
+    {
+        try
+        {
+            trip = await TripService.GetTripByIdAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("Error loading surf camp details:" + ex.Message, Severity.Error);
+            Navigation.NavigateTo("/trips");
+        }
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/trips");
+    }
+
+    private void RedirectToLogin()
+    {
+        Navigation.NavigateTo($"/login?returnUrl=/trips/{Id}");
+    }
+}
