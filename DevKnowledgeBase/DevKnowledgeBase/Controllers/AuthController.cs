@@ -39,6 +39,17 @@ namespace DevKnowledgeBase.API.Controllers
                 return BadRequest(new { message = "Invalid model", errors = ModelState });
             }
 
+            var existingUser = await _userManager.FindByNameAsync(model.Username);
+            if (existingUser != null)
+            {
+                return BadRequest(new { message = $"Registration failed. Username {model.Username} already exists" });
+            }
+            existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
+            {
+                return BadRequest(new { message = $"Registration failed. User with email {model.Email} already exists" });
+            }
+
 
             var user = new User { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);

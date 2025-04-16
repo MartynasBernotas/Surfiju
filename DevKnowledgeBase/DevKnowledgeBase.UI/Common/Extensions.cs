@@ -30,7 +30,10 @@ namespace DevKnowledgeBase.UI.Common
                 if (response.Content != null) // Ensure Content is not null
                 {
                     var error = await response.Content.ReadFromJsonAsync<HttpErrorMessage>();
-                    return new ResponseMessage(false, error?.Message ?? "An unknown error occurred.");
+                    var message = error is null ? 
+                        "An unknown error occurred." :
+                        error?.Message + ". " + string.Join(", ", error?.Errors) + ".";
+                    return new ResponseMessage(false, message);
                 }
                 else
                 {

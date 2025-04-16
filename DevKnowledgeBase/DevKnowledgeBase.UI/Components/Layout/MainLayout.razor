@@ -2,119 +2,240 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
 
 <MudLayout>
-    <MudAppBar Color="Color.Secondary" Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Tertiary" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+    <MudAppBar Color="Color.Primary" Elevation="4" Fixed="true">
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudText Typo="Typo.h6" Class="mr-4">Surfiju</MudText>
+        </MudHidden>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleMobileMenu" />
+            <MudText Typo="Typo.h6" Class="ml-2">Surfiju</MudText>
+        </MudHidden>
+        
         <MudSpacer />
-        <MudText Typo="Typo.h6" Color="Color.Dark">DevKnowledgeBase</MudText>
+        
+        <!-- Desktop Navigation -->
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+                <AuthorizeView Context="authContext">
+                    <Authorized>
+                        <TopNavMenu />
+                        
+                        <!-- User Profile Menu -->
+                        <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                            <ActivatorContent>
+                                <MudAvatar Color="Color.Secondary" Class="ml-2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Person" />
+                                </MudAvatar>
+                            </ActivatorContent>
+                            <ChildContent>
+                                <MudMenuItem Href="/profile" Icon="@Icons.Material.Filled.Person">Profile</MudMenuItem>
+                                <AuthorizeView Roles="Admin,Organizer">
+                                    <MudMenuItem Href="/organizer/camps" Icon="@Icons.Material.Filled.Dashboard">My Camps</MudMenuItem>
+                                </AuthorizeView>
+                                <AuthorizeView Roles="Admin">
+                                    <MudMenuItem Href="/organizers" Icon="@Icons.Material.Filled.VerifiedUser">Organizers</MudMenuItem>
+                                </AuthorizeView>
+                                <MudDivider />
+                                <MudMenuItem Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudMenuItem>
+                            </ChildContent>
+                        </MudMenu>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudButton Href="/camps" Variant="Variant.Text" Color="Color.Inherit">Browse Camps</MudButton>
+                        <MudButton Href="/about" Variant="Variant.Text" Color="Color.Inherit">About</MudButton>
+                        <MudButton Href="/contact" Variant="Variant.Text" Color="Color.Inherit">Contact</MudButton>
+                        <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="/login">Login</MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Inherit" Href="/register" Class="ml-2">Register</MudButton>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </MudStack>
+        </MudHidden>
     </MudAppBar>
-    <MudDrawerContainer>
-        <MudDrawer @bind-Open="@_open" Class="mud-drawer-fixed">
-            <NavMenu />
-        </MudDrawer>
-        <MudMainContent>
-            @Body
-        </MudMainContent>
-    </MudDrawerContainer>
+    
+    <!-- Mobile Navigation Drawer -->
+    <MudDrawer @bind-Open="_mobileDrawerOpen" Elevation="1" Variant="DrawerVariant.Temporary" Anchor="Anchor.Left">
+        <MudDrawerHeader>
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.WaterDamage" Size="Size.Large" />
+                <MudText Typo="Typo.h6">Surfiju</MudText>
+            </MudStack>
+        </MudDrawerHeader>
+        <AuthorizeView Context="authContext">
+            <Authorized>
+                <MudNavMenu>
+                    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+                    <MudNavLink Href="/notes" Icon="@Icons.Material.Filled.Note">Notes</MudNavLink>
+                    <MudNavLink Href="/camps" Icon="@Icons.Material.Filled.Surfing">Surf Camps</MudNavLink>
+                    <AuthorizeView Roles="Admin,Organizer">
+                        <MudNavLink Href="/organizer/camps" Icon="@Icons.Material.Filled.Dashboard">My Camps</MudNavLink>
+                    </AuthorizeView>
+                    <AuthorizeView Roles="Admin">
+                        <MudNavLink Href="/organizers" Icon="@Icons.Material.Filled.VerifiedUser">Organizers</MudNavLink>
+                    </AuthorizeView>
+                    <MudNavLink Href="/profile" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>
+                </MudNavMenu>
+                <div class="mud-drawer-footer">
+                     <MudStack Spacing="2" Class="mx-4 mb-4">
+                        <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary" OnClick="Logout">Logout</MudButton>
+                     </MudStack>
+                    
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <MudNavMenu>
+                    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+                    <MudNavLink Href="/camps" Icon="@Icons.Material.Filled.Surfing">Surf Camps</MudNavLink>
+                    <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About Us</MudNavLink>
+                    <MudNavLink Href="/contact" Icon="@Icons.Material.Filled.Email">Contact</MudNavLink>
+                </MudNavMenu>
+                <div class="mud-drawer-footer">
+                    <MudStack Spacing="2" Class="mx-4 mb-4">
+                        <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Href="/login">Login</MudButton>
+                        <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Secondary" Href="/register">Register</MudButton>
+                    </MudStack>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudDrawer>
+    
+    <MudMainContent Class="pt-16 pb-6">
+        @Body
+    </MudMainContent>
+    
+    <MudScrollToTop TopOffset="400">
+        <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.KeyboardArrowUp" />
+    </MudScrollToTop>
 </MudLayout>
 
 <LoadingSpinner />
 
-@* Required *@
-<MudThemeProvider Theme="@theme" />
+<MudThemeProvider Theme="@_currentTheme" />
 <MudPopoverProvider />
-
-@* Needed for dialogs *@
-<MudDialogProvider />
-
-@* Needed for snackbars *@
+<MudDialogProvider CloseButton="true" />
 <MudSnackbarProvider />
 
 @code {
-    private MudTheme theme = new MudTheme
-        {
-            PaletteLight = new PaletteLight
-            {
-                Primary = "#0077B6", // Deep ocean blue for primary actions
-                Secondary = "#00B4D8", // Bright turquoise for secondary actions
-                Tertiary = "#90E0EF", // Light aqua for accents
-                Background = "#CAF0F8", // Soft sky blue for the background
-                AppbarBackground = "#023E8A", // Dark navy blue for the app bar
-                DrawerBackground = "#E1EEDD", // Sandy beige for the drawer background
-                DrawerText = "#023E8A", // Dark navy blue for drawer text
-                DrawerIcon = "#0077B6", // Deep ocean blue for drawer icons
-                TextPrimary = "#03045E", // Dark blue for primary text
-                TextSecondary = "#0077B6", // Ocean blue for secondary text
-                Surface = "#FFFFFF", // White for surfaces like cards
-                ActionDefault = "#0077B6", // Default action color
-                ActionDisabled = "#B0C4DE", // Light steel blue for disabled actions
-                ActionDisabledBackground = "#E0F7FA", // Light aqua background for disabled actions
-                Divider = "#90E0EF", // Subtle aqua for dividers
-                LinesDefault = "#90E0EF", // Light aqua for lines
-                TableLines = "#90E0EF", // Light aqua for table lines
-                Success = "#52B788", // Green for success messages (like seaweed)
-                Error = "#FF6F61", // Coral red for error messages
-                Warning = "#FFD166", // Sandy yellow for warnings
-                Info = "#00B4D8" // Bright turquoise for informational messages
-            },
-            Typography = new Typography
-            {
-                Default = new DefaultTypography
-                {
-                    FontFamily = new[] { "Roboto", "Arial", "sans-serif" },
-                    FontSize = "0.875rem", // Default font size
-                    FontWeight = "400" // Normal weight
-                },
-                H1 = new H1Typography
-                {
-                    FontSize = "2.25rem",
-                    FontWeight = "500",
-                    LineHeight = "1.5"
-                },
-                H2 = new H2Typography
-                {
-                    FontSize = "2rem",
-                    FontWeight = "500",
-                    LineHeight = "1.5"
-                },
-                H3 = new H3Typography
-                {
-                    FontSize = "1.75rem",
-                    FontWeight = "500",
-                    LineHeight = "1.5"
-                },
-                H4 = new H4Typography
-                {
-                    FontSize = "1.5rem",
-                    FontWeight = "500",
-                    LineHeight = "1.5"
-                },
-                H5 = new H5Typography
-                {
-                    FontSize = "1.25rem",
-                    FontWeight = "500",
-                    LineHeight = "1.5"
-                },
-                H6 = new H6Typography
-                {
-                    FontSize = "1rem",
-                    FontWeight = "500",
-                    LineHeight = "1.5"
-                },
-                Button = new ButtonTypography
-                {
-                    FontSize = "0.875rem",
-                    FontWeight = "600",
-                    TextTransform = "uppercase"
-                }
-            }
-        };
-
-    private bool _open = true;
-
-    private void ToggleDrawer()
+    private bool _mobileDrawerOpen;
+    private bool _isDarkMode = false;
+    private bool _isDesktop = true;
+    
+    private static Typography _typography = new Typography
     {
-        _open = !_open;
+        Default = new DefaultTypography
+        {
+            FontFamily = new[] { "Inter", "Roboto", "Arial", "sans-serif" },
+            FontSize = "0.875rem",
+            FontWeight = "400",
+            LineHeight = "1.5"
+        },
+        H1 = new H1Typography { FontWeight = "600" },
+        H2 = new H2Typography { FontWeight = "600" },
+        H3 = new H3Typography { FontWeight = "600" },
+        H4 = new H4Typography { FontWeight = "600" },
+        H5 = new H5Typography { FontWeight = "600" },
+        H6 = new H6Typography { FontWeight = "600" },
+        Button = new ButtonTypography
+        {
+            FontSize = "0.875rem",
+            FontWeight = "600"
+        }
+    };
+
+    private static LayoutProperties _layoutProperties = new LayoutProperties
+    {
+        DefaultBorderRadius = "8px",
+        DrawerWidthLeft = "260px"
+    };
+
+    private MudTheme _lightTheme = new MudTheme
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#0077B6",
+            PrimaryDarken = "#023E8A",
+            PrimaryLighten = "#90E0EF",
+            Secondary = "#00B4D8",
+            Tertiary = "#90E0EF",
+            Background = "#F9FDFE",
+            AppbarBackground = "#0077B6",
+            DrawerBackground = "#FFFFFF",
+            DrawerText = "#023E8A",
+            DrawerIcon = "#0077B6",
+            Surface = "#FFFFFF",
+            TextPrimary = "#03045E",
+            TextSecondary = "#0077B6",
+            Success = "#52B788",
+            Error = "#FF6F61",
+            Warning = "#FFD166",
+            Info = "#00B4D8"
+        },
+        Typography = _typography,
+        LayoutProperties = _layoutProperties,
+        Shadows = new Shadow()
+    };
+
+    private MudTheme _darkTheme = new MudTheme
+    {
+        PaletteDark = new PaletteDark
+        {
+            Primary = "#90E0EF",
+            PrimaryDarken = "#CAF0F8",
+            PrimaryLighten = "#0077B6",
+            Secondary = "#00B4D8",
+            Tertiary = "#0077B6",
+            Background = "#121212",
+            AppbarBackground = "#1E1E1E",
+            DrawerBackground = "#1E1E1E",
+            DrawerText = "#CAF0F8",
+            DrawerIcon = "#90E0EF",
+            Surface = "#242424",
+            TextPrimary = "#CAF0F8",
+            TextSecondary = "#90E0EF",
+            Success = "#52B788",
+            Error = "#FF6F61",
+            Warning = "#FFD166",
+            Info = "#00B4D8"
+        },
+        Typography = _typography,
+        LayoutProperties = _layoutProperties,
+        Shadows = new Shadow()
+    };
+
+    private MudTheme _currentTheme => _isDarkMode ? _darkTheme : _lightTheme;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            AdjustForScreenSize();
+        }
+    }
+
+    private void AdjustForScreenSize()
+    {
+        // In a real implementation, you would use JS interop to check window size
+        _isDesktop = true;
+    }
+
+    private void ToggleMobileMenu()
+    {
+        _mobileDrawerOpen = !_mobileDrawerOpen;
+    }
+
+    private void ToggleDarkMode()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+    private async Task Logout()
+    {
+        // This would call your authentication service
+        var authService = (CustomAuthStateProvider)AuthStateProvider;
+        await authService.Logout();
+        Navigation.NavigateTo("/login");
     }
 }
+

@@ -82,7 +82,7 @@
     private async Task OpenCreateDialog()
     {
 
-        var dialog = await DialogService.ShowAsync<TripDialog>("Create Surf Camp", _dialogOptions);
+        var dialog = await DialogService.ShowAsync<CampDialog>("Create Surf Camp", _dialogOptions);
         var result = await dialog.Result;
         
         if (!result.Canceled && result.Data is TripModel newTrip)
@@ -103,7 +103,7 @@
     private async Task OpenEditDialog(TripModel trip)
     {
         var parameters = new DialogParameters { ["Trip"] = trip };
-        var dialog = await DialogService.ShowAsync<TripDialog>("Edit Surf Camp", parameters, _dialogOptions);
+        var dialog = await DialogService.ShowAsync<CampDialog>("Edit Surf Camp", parameters, _dialogOptions);
         var result = await dialog.Result;
         
         if (!result.Canceled && result.Data is TripModel updatedTrip)
