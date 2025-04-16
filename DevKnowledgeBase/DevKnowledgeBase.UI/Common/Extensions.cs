@@ -8,6 +8,7 @@ namespace DevKnowledgeBase.UI.Common
     public class HttpErrorMessage
     {
         public string Message { get; set; } = string.Empty;
+        public List<string> Errors { get; set; } = new();
     }
 
     public static class NavigationManagerExtensions

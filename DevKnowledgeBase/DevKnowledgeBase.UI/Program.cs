@@ -1,10 +1,10 @@
 using DevKnowledgeBase.UI.Components;
+using DevKnowledgeBase.UI.Models;
 using DevKnowledgeBase.UI.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.IdentityModel.Tokens;
-using MudBlazor;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +52,7 @@ builder.Services.AddHttpClient("API", httpClient =>
 builder.Services.AddCircuitServicesAccessor();
 
 builder.Services.AddMudServices();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterModelValidator>();
 
 var app = builder.Build();
 

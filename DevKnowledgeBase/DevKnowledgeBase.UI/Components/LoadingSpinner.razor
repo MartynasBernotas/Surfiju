@@ -1,12 +1,12 @@
 ﻿@inject LoadingService LoadingService
 
-<MudOverlay Visible="_visible" DarkBackground="true" Absolute="true" ZIndex="9999">
+<MudOverlay Visible="Visible" DarkBackground="true" Absolute="true" ZIndex="9999">
         <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
 </MudOverlay>
 
 
 @code {
-    private bool _visible = false;
+    [Parameter] public bool Visible { get; set; } = false;
 
     protected override void OnInitialized()
     {
@@ -16,13 +16,13 @@
 
     private void ShowSpinner()
     {
-        _visible = true;
+        Visible = true;
         StateHasChanged();
     }
 
     private void HideSpinner()
     {
-        _visible = false;
+        Visible = false;
         StateHasChanged();
     }
 
