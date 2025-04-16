@@ -2,58 +2,91 @@
 @using DevKnowledgeBase.UI.Services
 @inject IAuthenticationService AuthService
 @inject NavigationManager Navigation
+@inject ISnackbar Snackbar
+@inject LoadingService LoadingService
 
 <PageTitle>Register</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-5">
     <MudPaper Class="pa-4">
         <MudText Typo="Typo.h5" Class="mb-4">Register</MudText>
-        @if (!string.IsNullOrEmpty(ErrorMessage))
+        @if (ErrorMessages?.Any() == true)
         {
-            <MudAlert Severity="Severity.Error">@ErrorMessage</MudAlert>
+            <MudAlert Severity="Severity.Error">
+                <ul>
+                    @foreach (var error in ErrorMessages)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            </MudAlert>
         }
-        <MudForm @ref="form">
-            <MudTextField @bind-Value="Username" Label="Username" Required="true" />
-            <MudTextField @bind-Value="Email" Label="Email" Required="true" />
-            <MudTextField @bind-Value="Password" Label="Password" InputType="InputType.Password" Required="true" />
-            <MudTextField @bind-Value="ConfirmPassword" Label="Confirm Password" InputType="InputType.Password" Required="true" />
+        <MudForm Model="@Model" @ref="form" Spacing="2" Validation="@(modelValidator.ValidateValue)" ValidationDelay="0">
+            <MudTextField @bind-Value="Model.Username" Label="Username"  Immediate="true" For="@(() => Model.Username)" />
+            <MudTextField @bind-Value="Model.Email" Label="Email" Immediate="true" For="@(() => Model.Email)" />
+            <MudTextField @bind-Value="Model.Password" Label="Password" InputType="PasswordInputType" Immediate="true" For="@(() => Model.Password)" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Visibility" OnAdornmentClick="TogglePasswordVisibility" />
+            <MudTextField @bind-Value="Model.ConfirmPassword" Label="Confirm Password" InputType="InputType.Password" Immediate="true" For="@(() => Model.ConfirmPassword)" />
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="@(async ()=> await RegisterUser())">Register</MudButton>
         </MudForm>
     </MudPaper>
 </MudContainer>
 
+
+
 @code {
+    //TODO: Add validation for email format and password strength
+    //TODO: Add localization support for error messages
+    //TODO: add aria-labelledby to the form for accessibility
     private MudForm form;
-    private string Email = "";
-    private string Password = "";
-    private string ConfirmPassword = "";
-    private string Username = "";
-    private string? ErrorMessage;
+    private RegisterModel Model = new();
+    private RegisterModelValidator modelValidator = new();
+    private List<string> ErrorMessages = new();
+    private bool IsLoading = false;
+
+    private InputType PasswordInputType = InputType.Password;
 
     protected override async Task OnInitializedAsync()
     {
+        LoadingService.Show();
         var isAuthenticated = await AuthService.IsAuthenticatedAsync();
         if (isAuthenticated)
         {
             Navigation.NavigateTo("/");  // Redirect to the main page if not authenticated
         }
+
+        LoadingService.Hide();
     }
 
     private async Task RegisterUser()
     {
-        if (Password != ConfirmPassword)
+        ErrorMessages.Clear();
+        LoadingService.Show();
+        await form.Validate();
+
+        if (!form.IsValid)
         {
-            ErrorMessage = "Passwords do not match.";
+            LoadingService.Hide();
             return;
         }
 
-        var result = await AuthService.RegisterAsync(Username, Email, Password);
+        var result = await AuthService.RegisterAsync(Model.Username, Model.Email, Model.Password);
         if (!result.Success)
         {
-            ErrorMessage = "Registration failed. " + result.ErrorMessage;
-            return;
+            ErrorMessages.Add(result.ErrorMessage);
+        }
+        else
+        {
+            Snackbar.Add("Registration successful! Redirecting to login...", Severity.Success);
+            await Task.Delay(500);
+
+            Navigation.NavigateTo("/login");
         }
 
-        Navigation.NavigateTo("/login");
+        LoadingService.Hide();
+    }
+
+    private void TogglePasswordVisibility()
+    {
+        PasswordInputType = PasswordInputType == InputType.Password ? InputType.Text : InputType.Password;
     }
 }

@@ -8,6 +8,7 @@ namespace DevKnowledgeBase.UI.Common
     public class HttpErrorMessage
     {
         public string Message { get; set; } = string.Empty;
+        public List<string> Errors { get; set; } = new();
     }
 
     public static class NavigationManagerExtensions
@@ -29,7 +30,10 @@ namespace DevKnowledgeBase.UI.Common
                 if (response.Content != null) // Ensure Content is not null
                 {
                     var error = await response.Content.ReadFromJsonAsync<HttpErrorMessage>();
-                    return new ResponseMessage(false, error?.Message ?? "An unknown error occurred.");
+                    var message = error is null ? 
+                        "An unknown error occurred." :
+                        error?.Message + ". " + string.Join(", ", error?.Errors) + ".";
+                    return new ResponseMessage(false, message);
                 }
                 else
                 {

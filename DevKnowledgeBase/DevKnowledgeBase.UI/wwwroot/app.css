@@ -1,5 +1,7 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 a, .btn-link {
@@ -72,4 +74,50 @@ h1:focus {
     .mud-nav-link .mud-icon-root {
         font-size: 1.5rem;
     }
+}
+
+.mud-drawer-header {
+    padding: 16px;
+}
+
+.mud-drawer-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--mud-palette-divider);
+}
+
+.page-transition-container {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.mud-main-content {
+    min-height: calc(100vh - 64px);
+}
+
+.mud-drawer-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--mud-palette-divider);
+}
+
+@media (max-width: 600px) {
+    .mud-main-content {
+        min-height: calc(100vh - 56px);
+    }
+}
+
+/* For sticky footer if you add one later */
+.mud-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }

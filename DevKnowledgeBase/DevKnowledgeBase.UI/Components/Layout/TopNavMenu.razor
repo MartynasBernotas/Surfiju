@@ -1,0 +1,58 @@
+﻿@using DevKnowledgeBase.UI.Services
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject NavigationManager Navigation
+@inject IAuthenticationService AuthService
+
+<div class="top-nav-menu">
+    <MudButton Href="/" Variant="Variant.Text" Color="Color.Inherit" Class="@GetActiveClass("/")">
+        Home
+    </MudButton>
+    <MudButton Href="/notes" Variant="Variant.Text" Color="Color.Inherit" Class="@GetActiveClass("/notes")">
+        Notes
+    </MudButton>
+    <MudButton Href="/camps" Variant="Variant.Text" Color="Color.Inherit" Class="@GetActiveClass("/camps")">
+        Surf Camps
+    </MudButton>
+</div>
+
+<style>
+    .top-nav-menu {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-link {
+        position: relative;
+        margin: 0 8px;
+        min-width: 0;
+    }
+
+    .nav-link-active::after {
+        content: '';
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        height: 2px;
+        background-color: currentColor;
+        border-radius: 2px;
+    }
+</style>
+
+@code {
+    private string GetActiveClass(string href)
+    {
+        var currentUri = Navigation.Uri;
+        var relativePath = Navigation.ToBaseRelativePath(currentUri);
+        
+        if (href == "/" && string.IsNullOrEmpty(relativePath))
+            return "nav-link nav-link-active";
+            
+        if (href != "/" && relativePath.StartsWith(href.TrimStart('/')))
+            return "nav-link nav-link-active";
+            
+        return string.Empty;
+    }
+}
+
