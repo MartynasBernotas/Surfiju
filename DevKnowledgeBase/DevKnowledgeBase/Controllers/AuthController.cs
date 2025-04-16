@@ -45,7 +45,7 @@ namespace DevKnowledgeBase.API.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new { message = "Registration failed", errors = result.Errors });
+                return BadRequest(new { message = "Registration failed", errors = result.Errors.Select(x => x.Description) });
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
