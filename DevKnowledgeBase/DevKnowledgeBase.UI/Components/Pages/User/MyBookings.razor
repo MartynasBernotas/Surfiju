@@ -1,0 +1,127 @@
+﻿@page "/my-bookings"
+@using DevKnowledgeBase.UI.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@inject IBookingService BookingService
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+
+<PageTitle>My Bookings</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="pa-4">
+                <MudText Typo="Typo.h4" Class="mb-4">My Bookings</MudText>
+
+                @if (bookings == null)
+                {
+                    <MudProgressCircular Indeterminate="true" />
+                }
+                else if (!bookings.Any())
+                {
+                    <MudAlert Severity="Severity.Info">You don't have any bookings yet.</MudAlert>
+                    <MudButton OnClick="NavigateToCamps" Variant="Variant.Filled" Color="Color.Primary" Class="mt-3">
+                        Browse Surf Camps
+                    </MudButton>
+                }
+                else
+                {
+                    <MudTable Items="@bookings" Hover="true" Breakpoint="Breakpoint.Sm">
+                        <HeaderContent>
+                            <MudTh>Camp</MudTh>
+                            <MudTh>Dates</MudTh>
+                            <MudTh>Participants</MudTh>
+                            <MudTh>Total Price</MudTh>
+                            <MudTh>Booking Date</MudTh>
+                            <MudTh>Actions</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Camp">@context.CampName</MudTd>
+                            <MudTd DataLabel="Dates">
+                                @($"{context.StartDate?.ToString("MMM dd")} - {context.EndDate?.ToString("MMM dd, yyyy")}")
+                            </MudTd>
+                            <MudTd DataLabel="Participants">@context.Participants</MudTd>
+                            <MudTd DataLabel="Total Price">@context.TotalPrice.ToString("C")</MudTd>
+                            <MudTd DataLabel="Booking Date">@context.BookingDate.ToString("MMM dd, yyyy")</MudTd>
+                            <MudTd>
+                                <MudButton Size="Size.Small"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="() => ViewCamp(context.CampId)">
+                                    View Camp
+                                </MudButton>
+                                <MudButton Size="Size.Small"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Error"
+                                           OnClick="() => OpenCancelDialog(context)">
+                                    Cancel
+                                </MudButton>
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private List<BookingModel> bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookings();
+    }
+
+    private async Task LoadBookings()
+    {
+        try
+        {
+            bookings = await BookingService.GetUserBookingsAsync();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error loading bookings: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private void NavigateToCamps()
+    {
+        Navigation.NavigateTo("/camps");
+    }
+
+    private void ViewCamp(Guid campId)
+    {
+        Navigation.NavigateTo($"/camps/{campId}");
+    }
+
+    private async Task OpenCancelDialog(BookingModel booking)
+    {
+        var parameters = new DialogParameters
+            {
+                ["ContentText"] = $"Are you sure you want to cancel your booking for {booking.CampName}?",
+                ["ButtonText"] = "Cancel Booking",
+                ["Color"] = Color.Error
+            };
+
+        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Cancel Booking", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var cancelResult = await BookingService.CancelBookingAsync(booking.Id);
+            if (cancelResult.Success)
+            {
+                Snackbar.Add("Booking canceled successfully.", Severity.Success);
+                await LoadBookings();
+            }
+            else
+            {
+                Snackbar.Add($"Failed to cancel booking: {cancelResult.ErrorMessage}", Severity.Error);
+            }
+        }
+    }
+}

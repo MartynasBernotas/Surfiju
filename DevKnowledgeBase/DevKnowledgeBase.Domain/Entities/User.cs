@@ -12,6 +12,7 @@ namespace DevKnowledgeBase.Domain.Entities
         public string? RefreshToken { get; set; } 
         public DateTime? RefreshTokenExpiryTime { get; set; }
         public ICollection<Camp> OrganizedCamps { get; set; } = new List<Camp>();
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 
 }

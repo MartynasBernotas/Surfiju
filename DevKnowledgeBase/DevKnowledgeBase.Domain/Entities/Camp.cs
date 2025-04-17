@@ -24,6 +24,7 @@ namespace DevKnowledgeBase.Domain.Entities
         public string OrganizerId { get; set; } = string.Empty;
         public User Organizer { get; set; } = null!;
         public ICollection<CampMember> Members { get; set; } = new List<CampMember>();
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
         //public List<CampFeature> Features { get; set; } = new(); // Lessons, Transport, etc.
 

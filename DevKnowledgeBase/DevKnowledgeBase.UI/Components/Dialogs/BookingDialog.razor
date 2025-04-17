@@ -1,0 +1,70 @@
+﻿@using DevKnowledgeBase.UI.Models
+@inject MudBlazor.ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.EventAvailable" Class="mr-2" />
+            Book @CampName
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer>
+            <MudText Typo="Typo.body1" Class="mb-4">
+                You are booking for @Dates
+            </MudText>
+
+            <MudNumericField @bind-Value="participants"
+                             Label="Number of Participants"
+                             Variant="Variant.Outlined"
+                             Min="1"
+                             Max="@MaxParticipants"
+                             FullWidth="true"
+                             Immediate="true" />
+
+            <MudDivider Class="my-4" />
+
+            <MudText Typo="Typo.subtitle1" Class="mt-3">
+                <strong>Price per person:</strong> @Price.ToString("C")
+            </MudText>
+
+            <MudText Typo="Typo.h6" Class="mt-3">
+                <strong>Total:</strong> @((participants * Price).ToString("C"))
+            </MudText>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Text" Color="Color.Default">Cancel</MudButton>
+        <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="participants <= 0 || participants > MaxParticipants">
+            Confirm Booking
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public Guid CampId { get; set; }
+    [Parameter] public string CampName { get; set; }
+    [Parameter] public decimal Price { get; set; }
+    [Parameter] public int MaxParticipants { get; set; }
+    [Parameter] public string Dates { get; set; }
+
+    private int participants = 1;
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void Submit()
+    {
+        if (participants <= 0 || participants > MaxParticipants)
+        {
+            Snackbar.Add("Please select a valid number of participants", Severity.Warning);
+            return;
+        }
+
+        MudDialog.Close(DialogResult.Ok(participants));
+    }
+}

@@ -22,6 +22,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<INoteService, NoteService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICampService, CampService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddScoped<LoadingService>();
 

@@ -1,11 +1,13 @@
 ﻿@page "/camps/{Id:guid}"
-
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject ICampService CampService
+@inject IBookingService BookingService
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Surf Camp Details</PageTitle>
 
@@ -17,18 +19,18 @@ else
 {
     <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
         <MudCard>
-            @* @if (!string.IsNullOrEmpty(trip.ImageUrl))
+            @if (camp.PhotoUrls.Any())
             {
-                <MudCardMedia Image="@trip.ImageUrl" Height="400" />
-            } *@
+                <MudCardMedia Image="@camp.PhotoUrls.First()" Height="400" />
+            }
             <MudCardContent>
                 <MudText Typo="Typo.h3">@camp.Name</MudText>
                 <MudText Typo="Typo.h6">@camp.Location</MudText>
-                
+
                 <MudGrid>
                     <MudItem xs="12" sm="6">
                         <MudPaper Class="pa-3 mud-theme-primary">
-                            <MudText Typo="Typo.subtitle1"><b>Date:</b>@GetDatesString()</MudText>
+                            <MudText Typo="Typo.subtitle1"><b>Date:</b> @GetDatesString()</MudText>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="12" sm="6">
@@ -39,17 +41,21 @@ else
                 </MudGrid>
 
                 <MudText Typo="Typo.body1" Class="mt-4">@camp.Description</MudText>
-                
+
                 <MudDivider Class="mt-4 mb-4" />
 
                 <MudText Typo="Typo.subtitle2">Participants: @camp.CurrentParticipants/@camp.MaxParticipants</MudText>
                 <MudText Typo="Typo.subtitle2">Organized by: @camp.OrganizerName</MudText>
-                
+
                 <MudDivider Class="mt-4 mb-4" />
-                
+
                 <AuthorizeView>
                     <Authorized>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Disabled="@(camp.CurrentParticipants >= camp.MaxParticipants || !camp.IsPublic)">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   FullWidth="true"
+                                   OnClick="OpenBookingDialog"
+                                   Disabled="@(camp.CurrentParticipants >= camp.MaxParticipants || !camp.IsPublic)">
                             Book Now
                         </MudButton>
                     </Authorized>
@@ -61,7 +67,7 @@ else
                 </AuthorizeView>
             </MudCardContent>
         </MudCard>
-        
+
         <MudButton OnClick="GoBack" Class="mt-4" Variant="Variant.Text" Color="Color.Primary">
             Back to List
         </MudButton>
@@ -71,6 +77,8 @@ else
 @code {
     [Parameter] public Guid Id { get; set; }
     private CampModel camp;
+    private int availableSpots => camp?.MaxParticipants - camp?.CurrentParticipants ?? 0;
+
     private string GetDatesString()
     {
         return $"{camp.StartDate.Value.ToString("MMM dd")} - {camp.EndDate.Value.ToString("MMM dd, yyyy")}";
@@ -78,10 +86,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadTrip();
+        await LoadCamp();
     }
 
-    private async Task LoadTrip()
+    private async Task LoadCamp()
     {
         try
         {
@@ -90,17 +98,53 @@ else
         catch (Exception ex)
         {
             Snackbar.Add("Error loading surf camp details:" + ex.Message, Severity.Error);
-            Navigation.NavigateTo("/trips");
+            Navigation.NavigateTo("/camps");
         }
     }
 
     private void GoBack()
     {
-        Navigation.NavigateTo("/trips");
+        Navigation.NavigateTo("/camps");
     }
 
     private void RedirectToLogin()
     {
-        Navigation.NavigateTo($"/login?returnUrl=/trips/{Id}");
+        Navigation.NavigateTo($"/login?returnUrl=/camps/{Id}");
+    }
+
+    private async Task OpenBookingDialog()
+    {
+        var parameters = new DialogParameters
+            {
+                ["CampId"] = camp.Id,
+                ["CampName"] = camp.Name,
+                ["Price"] = camp.Price,
+                ["MaxParticipants"] = availableSpots,
+                ["Dates"] = GetDatesString()
+            };
+
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var dialog = await DialogService.ShowAsync<BookingDialog>("Book Camp", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is int numberOfParticipants)
+        {
+            var booking = new CreateBookingModel
+                {
+                    CampId = camp.Id,
+                    Participants = numberOfParticipants
+                };
+
+            var bookingResult = await BookingService.CreateBookingAsync(booking);
+            if (bookingResult.Success)
+            {
+                Snackbar.Add("Booking created successfully!", Severity.Success);
+                await LoadCamp(); // Refresh to see updated participant count
+            }
+            else
+            {
+                Snackbar.Add($"Failed to create booking: {bookingResult.ErrorMessage}", Severity.Error);
+            }
+        }
     }
 }
