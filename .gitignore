@@ -408,3 +408,5 @@ FodyWeavers.xsd
 /DevKnowledgeBase/.vs/DevKnowledgeBase/CopilotIndices/17.13.439.2385/CodeChunks.db
 *.dll
 *.dll
+*.png
+*.cache

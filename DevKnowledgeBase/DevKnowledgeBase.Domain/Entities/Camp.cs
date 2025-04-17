@@ -2,7 +2,7 @@
 
 namespace DevKnowledgeBase.Domain.Entities
 {
-    public class Trip
+    public class Camp
     {
         public Guid Id { get; set; }
 
@@ -23,11 +23,11 @@ namespace DevKnowledgeBase.Domain.Entities
         public bool IsPublic { get; set; } = true;
         public string OrganizerId { get; set; } = string.Empty;
         public User Organizer { get; set; } = null!;
-        public ICollection<TripMember> Members { get; set; } = new List<TripMember>();
+        public ICollection<CampMember> Members { get; set; } = new List<CampMember>();
 
-        //public List<TripFeature> Features { get; set; } = new(); // Lessons, Transport, etc.
+        //public List<CampFeature> Features { get; set; } = new(); // Lessons, Transport, etc.
 
-        public Trip()
+        public Camp()
         {
             Id = Guid.NewGuid(); 
         }

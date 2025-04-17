@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DevKnowledgeBase.Application.Commands
 {
-    public class UpdateTripCommand : IRequest<bool>
+    public class UpdateCampCommand : IRequest<bool>
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -17,7 +17,7 @@ namespace DevKnowledgeBase.Application.Commands
         public bool IsPublic { get; set; }
         public string OrganizerId { get; set; } = string.Empty;
 
-        public UpdateTripCommand(UpdateTripDto dto, string organizerId)
+        public UpdateCampCommand(UpdateCampDto dto, string organizerId)
         {
             Id = dto.Id;
             Name = dto.Name;

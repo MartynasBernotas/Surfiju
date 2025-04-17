@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 
-@inject ITripService TripService
+@inject ICampService CampService
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -22,13 +22,13 @@
                     Create New Surf Camp
                 </MudButton>
                 
-                @if (trips.Count == 0)
+                @if (camps.Count == 0)
                 {
                     <MudText>You haven't created any surf camps yet.</MudText>
                 }
                 else
                 {
-                    <MudTable Items="@trips" Hover="true" Striped="true" Bordered="true">
+                    <MudTable Items="@camps" Hover="true" Striped="true" Bordered="true">
                         <HeaderContent>
                             <MudTh>Name</MudTh>
                             <MudTh>Location</MudTh>
@@ -61,7 +61,7 @@
 </MudContainer>
 
 @code {
-    private List<TripModel> trips = new();
+    private List<CampModel> camps = new();
     private readonly DialogOptions _dialogOptions = new() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true };
     
     protected override async Task OnInitializedAsync()
@@ -71,7 +71,7 @@
 
     private async Task LoadTrips()
     {
-        trips = await TripService.GetOrganizerTripsAsync();
+        camps = await CampService.GetOrganizerCampsAsync();
     }
 
     private void ViewDetails(Guid tripId)
@@ -85,9 +85,9 @@
         var dialog = await DialogService.ShowAsync<CampDialog>("Create Surf Camp", _dialogOptions);
         var result = await dialog.Result;
         
-        if (!result.Canceled && result.Data is TripModel newTrip)
+        if (!result.Canceled && result.Data is CampModel newTrip)
         {
-            var createResult = await TripService.CreateTripAsync(newTrip);
+            var createResult = await CampService.CreateCampAsync(newTrip);
             if (createResult.Success)
             {
                 Snackbar.Add("Surf camp created successfully.", Severity.Success);
@@ -100,15 +100,15 @@
         }
     }
 
-    private async Task OpenEditDialog(TripModel trip)
+    private async Task OpenEditDialog(CampModel camp)
     {
-        var parameters = new DialogParameters { ["Trip"] = trip };
+        var parameters = new DialogParameters { ["Camp"] = camp };
         var dialog = await DialogService.ShowAsync<CampDialog>("Edit Surf Camp", parameters, _dialogOptions);
         var result = await dialog.Result;
         
-        if (!result.Canceled && result.Data is TripModel updatedTrip)
+        if (!result.Canceled && result.Data is CampModel updatedTrip)
         {
-            var updateResult = await TripService.UpdateTripAsync(updatedTrip);
+            var updateResult = await CampService.UpdateCampAsync(updatedTrip);
             if (updateResult.Success)
             {
                 Snackbar.Add("Surf camp updated successfully.", Severity.Success);
@@ -121,7 +121,7 @@
         }
     }
 
-    private async Task OpenDeleteDialog(TripModel trip)
+    private async Task OpenDeleteDialog(CampModel trip)
     {
         var parameters = new DialogParameters
         {
@@ -135,7 +135,7 @@
         
         if (!result.Canceled)
         {
-            var deleteResult = await TripService.DeleteTripAsync(trip.Id);
+            var deleteResult = await CampService.DeleteCampAsync(trip.Id);
             if (deleteResult.Success)
             {
                 Snackbar.Add("Surf camp deleted successfully.", Severity.Success);

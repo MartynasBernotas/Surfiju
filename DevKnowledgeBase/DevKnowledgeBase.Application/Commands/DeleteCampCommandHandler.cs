@@ -5,30 +5,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevKnowledgeBase.Application.Handlers
 {
-    public class DeleteTripCommandHandler : IRequestHandler<DeleteTripCommand, bool>
+    public class DeleteCampCommandHandler : IRequestHandler<DeleteCampCommand, bool>
     {
         private readonly DevDatabaseContext _context;
 
-        public DeleteTripCommandHandler(DevDatabaseContext context)
+        public DeleteCampCommandHandler(DevDatabaseContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> Handle(DeleteTripCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteCampCommand request, CancellationToken cancellationToken)
         {
-            var trip = await _context.Trips.FindAsync(request.TripId);
-            if (trip == null)
+            var camp = await _context.Camps.FindAsync(request.CampId);
+            if (camp == null)
             {
                 return false;
             }
 
-            // Verify that the organizer is authorized to delete this trip
-            if (trip.OrganizerId != request.OrganizerId)
+            // Verify that the organizer is authorized to delete this camp
+            if (camp.OrganizerId != request.OrganizerId)
             {
                 return false;
             }
 
-            _context.Trips.Remove(trip);
+            _context.Camps.Remove(camp);
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

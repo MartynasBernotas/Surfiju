@@ -44,6 +44,7 @@ namespace DevKnowledgeBase.API.Controllers
             {
                 return BadRequest(new { message = $"Registration failed. Username {model.Username} already exists" });
             }
+
             existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {

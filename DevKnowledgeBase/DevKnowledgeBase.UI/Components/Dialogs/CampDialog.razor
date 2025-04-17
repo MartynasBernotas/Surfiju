@@ -1,34 +1,34 @@
 ﻿@using DevKnowledgeBase.UI.Models
 
-@inject ITripService TripService
+@inject ICampService CampService
 
 <MudDialog FullWidth="true" MaxWidth="MaxWidth.Medium">
     <DialogContent>
-        <MudForm @ref="form" Model="@Trip">
+        <MudForm @ref="form" Model="@Camp">
             <MudGrid>
                 <MudItem xs="12" sm="6">
-                    <MudTextField @bind-Value="Trip.Name" Label="Name" Required="true" />
+                    <MudTextField @bind-Value="Camp.Name" Label="Name" Required="true" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudTextField @bind-Value="Trip.Location" Label="Location" Required="true" />
+                    <MudTextField @bind-Value="Camp.Location" Label="Location" Required="true" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudDatePicker @bind-Date="Trip.StartDate" Label="Start Date" Required="true" />
+                    <MudDatePicker @bind-Date="Camp.StartDate" Label="Start Date" Required="true" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudDatePicker @bind-Date="Trip.EndDate" Label="End Date" Required="true" />
+                    <MudDatePicker @bind-Date="Camp.EndDate" Label="End Date" Required="true" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="Trip.Description" Label="Description" Lines="3" Required="true" />
+                    <MudTextField @bind-Value="Camp.Description" Label="Description" Lines="3" Required="true" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudNumericField @bind-Value="Trip.MaxParticipants" Label="Max Participants" Min="1" Required="true" />
+                    <MudNumericField @bind-Value="Camp.MaxParticipants" Label="Max Participants" Min="1" Required="true" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudNumericField @bind-Value="Trip.Price" Label="Price ($)" Min="0" Required="true" />
+                    <MudNumericField @bind-Value="Camp.Price" Label="Price ($)" Min="0" Required="true" />
                 </MudItem>
                 <MudItem xs="3">
-                    <MudSwitch T="bool" Label="Public Trip" @bind-Checked="Trip.IsPublic"  Color="Color.Primary" UncheckedColor="Color.Dark"/>
+                    <MudSwitch T="bool" Label="Public Camp" @bind-Checked="Camp.IsPublic"  Color="Color.Primary" UncheckedColor="Color.Dark"/>
                 </MudItem>
                 <!-- File upload remains full width -->
                 <MudItem xs="12">
@@ -67,7 +67,7 @@
                 </MudItem>
             </MudGrid>
             <MudGrid>
-                @foreach (var photo in Trip.PhotoUrls)
+                @foreach (var photo in Camp.PhotoUrls)
                 {
                     <MudItem xs="6" sm="4" md="3">
                         <MudCard>
@@ -96,7 +96,7 @@
     private List<IBrowserFile> UploadedPhotos = new();
     private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
 
-    [Parameter] public TripModel Trip { get; set; } = new TripModel
+    [Parameter] public CampModel Camp { get; set; } = new CampModel
     {
         StartDate = DateTime.Today,
         EndDate = DateTime.Today.AddDays(7),
@@ -121,18 +121,18 @@
             UploadedPhotos.Remove(deletablePhoto);
         }
 
-        Trip.PhotoUrls.Remove(photo);
+        Camp.PhotoUrls.Remove(photo);
     }
 
     private async Task Submit()
     {
         foreach (var file in UploadedPhotos)
         {
-            var photoUrl = await TripService.UploadPhotoAsync(file);
-            Trip.PhotoUrls.Add(photoUrl);
+            var photoUrl = await CampService.UploadPhotoAsync(file);
+            Camp.PhotoUrls.Add(photoUrl);
         }
-        await TripService.UpdateTripAsync(Trip);
-        MudDialog.Close(DialogResult.Ok(Trip));
+        await CampService.UpdateCampAsync(Camp);
+        MudDialog.Close(DialogResult.Ok(Camp));
     }
 
     private void Cancel() => MudDialog.Cancel();

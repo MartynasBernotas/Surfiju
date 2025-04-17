@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DevKnowledgeBase.Application.Commands
 {
-    public class CreateTripCommand : IRequest<Guid>
+    public class CreateCampCommand : IRequest<Guid>
     {
         public string Name { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
@@ -16,7 +16,7 @@ namespace DevKnowledgeBase.Application.Commands
         public string OrganizerId { get; set; } = string.Empty;
         public bool IsPublic { get; set; }
 
-        public CreateTripCommand(CreateTripDto dto, string organizerId)
+        public CreateCampCommand(CreateCampDto dto, string organizerId)
         {
             Name = dto.Name;
             StartDate = dto.StartDate;

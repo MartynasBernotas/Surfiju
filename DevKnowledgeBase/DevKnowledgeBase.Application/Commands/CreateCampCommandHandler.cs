@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevKnowledgeBase.Application.Handlers
 {
-    public class CreateTripCommandHandler : IRequestHandler<CreateTripCommand, Guid>
+    public class CreateCampCommandHandler : IRequestHandler<CreateCampCommand, Guid>
     {
         private readonly DevDatabaseContext _context;
 
-        public CreateTripCommandHandler(DevDatabaseContext context)
+        public CreateCampCommandHandler(DevDatabaseContext context)
         {
             _context = context;
         }
 
-        public async Task<Guid> Handle(CreateTripCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateCampCommand request, CancellationToken cancellationToken)
         {
-            var trip = new Trip
+            var camp = new Camp
             {
                 Name = request.Name,
                 StartDate = request.StartDate.ToUniversalTime(),
@@ -31,10 +31,10 @@ namespace DevKnowledgeBase.Application.Handlers
                 IsPublic = true
             };
 
-            _context.Trips.Add(trip);
+            _context.Camps.Add(camp);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return trip.Id;
+            return camp.Id;
         }
     }
 }

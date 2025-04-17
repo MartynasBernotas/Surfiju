@@ -1,7 +1,7 @@
 ﻿@page "/camps"
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Components.Authorization
-@inject ITripService TripService
+@inject ICampService CampService
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -20,39 +20,39 @@
                     </MudButton>
                 </AuthorizeView>
                 
-                @if (trips.Count == 0)
+                @if (camps.Count == 0)
                 {
                     <MudText>No surf camps found.</MudText>
                 }
                 else
                 {
                     <MudGrid>
-                        @foreach (var trip in trips)
+                        @foreach (var camp in camps)
                         {
                             <MudItem xs="12" sm="6" md="4">
                                 <MudCard>
                                     @* <MudCardMedia Image="@trip.PhotosUrls" Height="200" /> *@
                                     <MudCardContent>
-                                        <MudText Typo="Typo.h5">@trip.Name</MudText>
-                                        <MudText Typo="Typo.body2">@trip.Location</MudText>
+                                        <MudText Typo="Typo.h5">@camp.Name</MudText>
+                                        <MudText Typo="Typo.body2">@camp.Location</MudText>
                                         <MudText Typo="Typo.body2">
-                                            @GetDatesString(trip)
+                                            @GetDatesString(camp)
                                         </MudText>
                                         <MudText Typo="Typo.body2">
-                                            Participants: @trip.CurrentParticipants/@trip.MaxParticipants
+                                            Participants: @camp.CurrentParticipants/@camp.MaxParticipants
                                         </MudText>
-                                        <MudText Typo="Typo.h6">@trip.Price.ToString("C")</MudText>
+                                        <MudText Typo="Typo.h6">@camp.Price.ToString("C")</MudText>
                                     </MudCardContent>
                                     <MudCardActions>
-                                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ViewDetails(trip.Id))">
+                                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ViewDetails(camp.Id))">
                                             View Details
                                         </MudButton>
                                         
                                         <AuthorizeView Roles="Admin,Organizer">
-                                            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="@(() => OpenEditDialog(trip))">
+                                            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="@(() => OpenEditDialog(camp))">
                                                 Edit
                                             </MudButton>
-                                            <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(trip))">
+                                            <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(camp))">
                                                 Delete
                                             </MudButton>
                                         </AuthorizeView>
@@ -68,11 +68,11 @@
 </MudContainer>
 
 @code {
-    private List<TripModel> trips = new();
+    private List<CampModel> camps = new();
 
-    private string GetDatesString(TripModel trip)
+    private string GetDatesString(CampModel camp)
     {
-        return $"{trip.StartDate.Value.ToString("MMM dd")} - {trip.EndDate.Value.ToString("MMM dd, yyyy")}";
+        return $"{camp.StartDate.Value.ToString("MMM dd")} - {camp.EndDate.Value.ToString("MMM dd, yyyy")}";
     }
     
     protected override async Task OnInitializedAsync()
@@ -82,7 +82,7 @@
 
     private async Task LoadTrips()
     {
-        trips = await TripService.GetAllTripsAsync();
+        camps = await CampService.GetAllCampsAsync();
     }
 
     private void ViewDetails(Guid campId)
@@ -95,9 +95,9 @@
         var dialog = await DialogService.ShowAsync<CampDialog>("Create Surf Camp");
         var result = await dialog.Result;
         
-        if (!result.Canceled && result.Data is TripModel newTrip)
+        if (!result.Canceled && result.Data is CampModel newTrip)
         {
-            var createResult = await TripService.CreateTripAsync(newTrip);
+            var createResult = await CampService.CreateCampAsync(newTrip);
             if (createResult.Success)
             {
                 Snackbar.Add("Surf camp created successfully.", Severity.Success);
@@ -110,15 +110,15 @@
         }
     }
 
-    private async Task OpenEditDialog(TripModel trip)
+    private async Task OpenEditDialog(CampModel camp)
     {
-        var parameters = new DialogParameters { ["Trip"] = trip };
+        var parameters = new DialogParameters { ["Camp"] = camp };
         var dialog = await DialogService.ShowAsync<CampDialog>("Edit Surf Camp", parameters);
         var result = await dialog.Result;
         
-        if (!result.Canceled && result.Data is TripModel updatedTrip)
+        if (!result.Canceled && result.Data is CampModel updatedTrip)
         {
-            var updateResult = await TripService.UpdateTripAsync(updatedTrip);
+            var updateResult = await CampService.UpdateCampAsync(updatedTrip);
             if (updateResult.Success)
             {
                 Snackbar.Add("Surf camp updated successfully.", Severity.Success);
@@ -131,11 +131,11 @@
         }
     }
 
-    private async Task OpenDeleteDialog(TripModel trip)
+    private async Task OpenDeleteDialog(CampModel camp)
     {
         var parameters = new DialogParameters
         {
-            ["ContentText"] = $"Are you sure you want to delete the surf camp '{trip.Name}'?",
+            ["ContentText"] = $"Are you sure you want to delete the surf camp '{camp.Name}'?",
             ["ButtonText"] = "Delete",
             ["Color"] = Color.Error
         };
@@ -145,7 +145,7 @@
         
         if (!result.Canceled)
         {
-            var deleteResult = await TripService.DeleteTripAsync(trip.Id);
+            var deleteResult = await CampService.DeleteCampAsync(camp.Id);
             if (deleteResult.Success)
             {
                 Snackbar.Add("Surf camp deleted successfully.", Severity.Success);

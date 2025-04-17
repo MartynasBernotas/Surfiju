@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevKnowledgeBase.Application.Handlers
 {
-    public class GetAllTripsQueryHandler : IRequestHandler<GetAllTripsQuery, List<TripDto>>
+    public class GetAllCampsQueryHandler : IRequestHandler<GetAllCampsQuery, List<CampDto>>
     {
         private readonly DevDatabaseContext _context;
 
-        public GetAllTripsQueryHandler(DevDatabaseContext context)
+        public GetAllCampsQueryHandler(DevDatabaseContext context)
         {
             _context = context;
         }
 
-        public async Task<List<TripDto>> Handle(GetAllTripsQuery request, CancellationToken cancellationToken)
+        public async Task<List<CampDto>> Handle(GetAllCampsQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.Trips.Include(t => t.Organizer).Include(t => t.Members).AsQueryable();
+            var query = _context.Camps.Include(t => t.Organizer).Include(t => t.Members).AsQueryable();
 
             if (!request.IncludeInactive)
             {
@@ -29,7 +29,7 @@ namespace DevKnowledgeBase.Application.Handlers
                 query = query.Where(t => t.OrganizerId == request.OrganizerId);
             }
 
-            return await query.Select(t => new TripDto
+            return await query.Select(t => new CampDto
             {
                 Id = t.Id,
                 Name = t.Name,

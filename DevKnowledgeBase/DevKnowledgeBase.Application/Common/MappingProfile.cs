@@ -9,14 +9,14 @@ namespace DevKnowledgeBase.Application.Common
         public MappingProfile()
         {
             CreateMap<Note, NoteDto>();
-            CreateMap<Trip, TripDto>()
+            CreateMap<Camp, CampDto>()
                .ForMember(dest => dest.CurrentParticipants,
                    opt => opt.MapFrom(src => src.Members.Count))
                .ForMember(dest => dest.OrganizerName,
                    opt => opt.MapFrom(src => src.Organizer.FullName));
 
-            CreateMap<CreateTripDto, Trip>();
-            CreateMap<UpdateTripDto, Trip>();
+            CreateMap<CreateCampDto, Camp>();
+            CreateMap<UpdateCampDto, Camp>();
         }
     }
 }

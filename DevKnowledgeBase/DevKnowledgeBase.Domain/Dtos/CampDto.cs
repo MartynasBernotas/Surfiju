@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DevKnowledgeBase.Domain.Dtos
+﻿namespace DevKnowledgeBase.Domain.Dtos
 {
-    public class TripDto
+    public class CampDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -19,7 +17,7 @@ namespace DevKnowledgeBase.Domain.Dtos
         public string OrganizerName { get; set; } = string.Empty;
     }
 
-    public class CreateTripDto
+    public class CreateCampDto
     {
         public string Name { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
@@ -32,7 +30,7 @@ namespace DevKnowledgeBase.Domain.Dtos
         public bool IsPublic { get; set; }
     }
 
-    public class UpdateTripDto
+    public class UpdateCampDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;

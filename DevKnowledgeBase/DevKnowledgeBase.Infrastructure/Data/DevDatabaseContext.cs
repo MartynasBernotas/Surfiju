@@ -10,9 +10,9 @@ namespace DevKnowledgeBase.Infrastructure.Data
         public DevDatabaseContext(DbContextOptions<DevDatabaseContext> options) : base(options) { }
         
         public virtual DbSet<Note> Notes { get; set; }
-        public virtual DbSet<Trip> Trips { get; set; }
+        public virtual DbSet<Camp> Camps { get; set; }
         public virtual DbSet<Expense> Expenses { get; set; }
-        public virtual DbSet<TripMember> TripMembers { get; set; }
+        public virtual DbSet<CampMember> CampMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,9 +23,9 @@ namespace DevKnowledgeBase.Infrastructure.Data
             modelBuilder.Entity<Note>()
                 .HasKey(n => n.Id);
 
-            modelBuilder.Entity<Trip>()
+            modelBuilder.Entity<Camp>()
                 .HasOne(t => t.Organizer)
-                .WithMany(u => u.OrganizedTrips)
+                .WithMany(u => u.OrganizedCamps)
                 .HasForeignKey(t => t.OrganizerId)
                 .IsRequired();
         }

@@ -3,13 +3,13 @@
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Components.Authorization
 
-@inject ITripService TripService
+@inject ICampService CampService
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 
 <PageTitle>Surf Camp Details</PageTitle>
 
-@if (trip == null)
+@if (camp == null)
 {
     <MudProgressCircular Indeterminate="true" />
 }
@@ -22,8 +22,8 @@ else
                 <MudCardMedia Image="@trip.ImageUrl" Height="400" />
             } *@
             <MudCardContent>
-                <MudText Typo="Typo.h3">@trip.Name</MudText>
-                <MudText Typo="Typo.h6">@trip.Location</MudText>
+                <MudText Typo="Typo.h3">@camp.Name</MudText>
+                <MudText Typo="Typo.h6">@camp.Location</MudText>
                 
                 <MudGrid>
                     <MudItem xs="12" sm="6">
@@ -33,23 +33,23 @@ else
                     </MudItem>
                     <MudItem xs="12" sm="6">
                         <MudPaper Class="pa-3 mud-theme-secondary">
-                            <MudText Typo="Typo.subtitle1"><b>Price:</b> @trip.Price.ToString("C")</MudText>
+                            <MudText Typo="Typo.subtitle1"><b>Price:</b> @camp.Price.ToString("C")</MudText>
                         </MudPaper>
                     </MudItem>
                 </MudGrid>
-                
-                <MudText Typo="Typo.body1" Class="mt-4">@trip.Description</MudText>
+
+                <MudText Typo="Typo.body1" Class="mt-4">@camp.Description</MudText>
                 
                 <MudDivider Class="mt-4 mb-4" />
-                
-                <MudText Typo="Typo.subtitle2">Participants: @trip.CurrentParticipants/@trip.MaxParticipants</MudText>
-                <MudText Typo="Typo.subtitle2">Organized by: @trip.OrganizerName</MudText>
+
+                <MudText Typo="Typo.subtitle2">Participants: @camp.CurrentParticipants/@camp.MaxParticipants</MudText>
+                <MudText Typo="Typo.subtitle2">Organized by: @camp.OrganizerName</MudText>
                 
                 <MudDivider Class="mt-4 mb-4" />
                 
                 <AuthorizeView>
                     <Authorized>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Disabled="@(trip.CurrentParticipants >= trip.MaxParticipants || !trip.IsPublic)">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Disabled="@(camp.CurrentParticipants >= camp.MaxParticipants || !camp.IsPublic)">
                             Book Now
                         </MudButton>
                     </Authorized>
@@ -70,10 +70,10 @@ else
 
 @code {
     [Parameter] public Guid Id { get; set; }
-    private TripModel trip;
+    private CampModel camp;
     private string GetDatesString()
     {
-        return $"{trip.StartDate.Value.ToString("MMM dd")} - {trip.EndDate.Value.ToString("MMM dd, yyyy")}";
+        return $"{camp.StartDate.Value.ToString("MMM dd")} - {camp.EndDate.Value.ToString("MMM dd, yyyy")}";
     }
 
     protected override async Task OnInitializedAsync()
@@ -85,7 +85,7 @@ else
     {
         try
         {
-            trip = await TripService.GetTripByIdAsync(Id);
+            camp = await CampService.GetCampByIdAsync(Id);
         }
         catch (Exception ex)
         {

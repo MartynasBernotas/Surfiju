@@ -5,52 +5,52 @@ using System.Net.Http.Json;
 
 namespace DevKnowledgeBase.UI.Services
 {
-    public class TripService : ITripService
+    public class CampService : ICampService
     {
         private readonly HttpClient _httpClient;
 
-        public TripService(IHttpClientFactory httpClientFactory)
+        public CampService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("API");
         }
 
-        public async Task<List<TripModel>> GetAllTripsAsync(bool includeInactive = false)
+        public async Task<List<CampModel>> GetAllCampsAsync(bool includeInactive = false)
         {
-            var response = await _httpClient.GetFromJsonAsync<List<TripModel>>($"api/trips?includeInactive={includeInactive}");
-            return response ?? new List<TripModel>();
+            var response = await _httpClient.GetFromJsonAsync<List<CampModel>>($"api/camps?includeInactive={includeInactive}");
+            return response ?? new List<CampModel>();
 
         }
 
-        public async Task<List<TripModel>> GetOrganizerTripsAsync()
+        public async Task<List<CampModel>> GetOrganizerCampsAsync()
         {
-            var response = await _httpClient.GetFromJsonAsync<List<TripModel>>("api/trips/organizer");
-            return response ?? new List<TripModel>();
+            var response = await _httpClient.GetFromJsonAsync<List<CampModel>>("api/camps/organizer");
+            return response ?? new List<CampModel>();
         }
 
-        public async Task<TripModel> GetTripByIdAsync(Guid id)
+        public async Task<CampModel> GetCampByIdAsync(Guid id)
         {
-            var response = await _httpClient.GetFromJsonAsync<TripModel>($"api/trips/{id}");
+            var response = await _httpClient.GetFromJsonAsync<CampModel>($"api/camps/{id}");
             return response;
 
         }
 
-        public async Task<ResponseMessage> CreateTripAsync(TripModel trip)
+        public async Task<ResponseMessage> CreateCampAsync(CampModel camp)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/trips", trip);
+            var response = await _httpClient.PostAsJsonAsync("api/camps", camp);
             return await response.GetMessageAsync();
 
         }
 
-        public async Task<ResponseMessage> UpdateTripAsync(TripModel trip)
+        public async Task<ResponseMessage> UpdateCampAsync(CampModel camp)
         {
-            var response = await _httpClient.PutAsJsonAsync($"api/trips/{trip.Id}", trip);
+            var response = await _httpClient.PutAsJsonAsync($"api/camps/{camp.Id}", camp);
             return await response.GetMessageAsync();
             
         }
 
-        public async Task<ResponseMessage> DeleteTripAsync(Guid id)
+        public async Task<ResponseMessage> DeleteCampAsync(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"api/trips/{id}");
+            var response = await _httpClient.DeleteAsync($"api/camps/{id}");
             return await response.GetMessageAsync();
 
         }
