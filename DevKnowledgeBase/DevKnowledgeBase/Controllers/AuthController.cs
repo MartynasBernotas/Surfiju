@@ -144,7 +144,8 @@ namespace DevKnowledgeBase.API.Controllers
                 return BadRequest("Invalid token");
             }
 
-            var user = await _userManager.FindByIdAsync(principal.FindFirstValue(JwtRegisteredClaimNames.Sub));
+            var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
                 return BadRequest("Invalid refresh token");

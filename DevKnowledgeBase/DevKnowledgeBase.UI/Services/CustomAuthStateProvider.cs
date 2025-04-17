@@ -23,6 +23,16 @@ namespace DevKnowledgeBase.UI.Services
             var storedToken = await _sessionStorage.GetAsync<string>("authToken");
             if (storedToken.Success && !string.IsNullOrEmpty(storedToken.Value))
             {
+                if (IsTokenExpired(storedToken.Value))
+                {
+                    var refreshed = await RefreshTokenAsync();
+                    if (!refreshed)
+                    {
+                        await Logout();
+                        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                    }
+                }
+
                 if (_currentUser.Identity is not { IsAuthenticated: true })
                 {
                     SetCurrentUserFromToken(storedToken.Value);
@@ -62,13 +72,13 @@ namespace DevKnowledgeBase.UI.Services
         {
             var refreshToken = await _sessionStorage.GetAsync<string>("refreshToken");
             var authToken = await _sessionStorage.GetAsync<string>("authToken");
-            if (!refreshToken.Success || string.IsNullOrEmpty(refreshToken.Value))
+            if (!refreshToken.Success || string.IsNullOrEmpty(refreshToken.Value) || !IsTokenExpired(authToken.Value))
             {
                 return false;
             }
 
             await _sessionStorage.DeleteAsync("authToken");
-            var response = await _httpClient.PostAsJsonAsync("api/auth/refresh-token", new { Token = authToken, RefreshToken = refreshToken });
+            var response = await _httpClient.PostAsJsonAsync("api/auth/refresh-token", new { Token = authToken.Value, RefreshToken = refreshToken.Value });
 
             if (response.IsSuccessStatusCode)
             {
@@ -81,6 +91,15 @@ namespace DevKnowledgeBase.UI.Services
             }
 
             return false;
+        }
+
+        private bool IsTokenExpired(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var expiration = jwtToken.ValidTo;
+            return expiration < DateTime.UtcNow;
         }
 
         private void SetCurrentUserFromToken(string token)
