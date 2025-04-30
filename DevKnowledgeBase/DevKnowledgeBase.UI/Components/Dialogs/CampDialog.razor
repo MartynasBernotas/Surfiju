@@ -28,56 +28,14 @@
                     <MudNumericField @bind-Value="Camp.Price" Label="Price ($)" Min="0" Required="true" />
                 </MudItem>
                 <MudItem xs="3">
-                    <MudSwitch T="bool" Label="Public Camp" @bind-Checked="Camp.IsPublic"  Color="Color.Primary" UncheckedColor="Color.Dark"/>
+                    <MudSwitch T="bool" Label="Public Camp" @bind-Checked="Camp.IsPublic" Color="Color.Primary" UncheckedColor="Color.Dark" />
                 </MudItem>
-                <!-- File upload remains full width -->
                 <MudItem xs="12">
-                    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
-                                   @ref="@_fileUpload"
-                                   OnFilesChanged="OnInputFileChanged"
-                                   AppendMultipleFiles
-                                   Hidden="@false"
-                                   InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
-                                   InputStyle="opacity:0"
-                                   tabindex="-1"
-                                   @ondrop="@ClearDragClass"
-                                   @ondragenter="@SetDragClass"
-                                   @ondragleave="@ClearDragClass"
-                                   @ondragend="@ClearDragClass">
-                        <ActivatorContent>
-                            <MudPaper Height="10%"
-                                      Outlined="true"
-                                      Class="@_dragClass">
-                                <MudText Typo="Typo.h6">
-                                    Drag and drop files here or click
-                                </MudText>
-                                @foreach (var file in UploadedPhotos)
-                                {
-                                    <MudChip T="string"
-                                             Color="Color.Dark"
-                                             Text="@file.Name"
-                                             tabindex="-1" />
-                                }
-                            </MudPaper>
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
-                                Upload Photos
-                            </MudButton>
-                        </ActivatorContent>
-                    </MudFileUpload>
+                    <PhotoUploader ExistingPhotos="@Camp.PhotoUrls"
+                                   OnExistingPhotoRemoved="@RemovePhoto"
+                                   OnPendingFilesChanged="@UpdatePendingFiles"
+                                   @ref="photoUploader" />
                 </MudItem>
-            </MudGrid>
-            <MudGrid>
-                @foreach (var photo in Camp.PhotoUrls)
-                {
-                    <MudItem xs="6" sm="4" md="3">
-                        <MudCard>
-                            <MudCardMedia Image="@("https://localhost:7046/api/files/photos/" + photo)" Height="100" />
-                            <MudCardActions>
-                                <MudButton Color="Color.Error" OnClick="@(() => RemovePhoto(photo))">Remove</MudButton>
-                            </MudCardActions>
-                        </MudCard>
-                    </MudItem>
-                }
             </MudGrid>
         </MudForm>
     </DialogContent>
@@ -90,43 +48,30 @@
 @code {
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = null!;
     private MudForm form = null!;
+    private PhotoUploader photoUploader = null!;
+    private List<IBrowserFile> pendingFiles = new();
 
-    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
-    private string _dragClass = DefaultDragClass;
-    private List<IBrowserFile> UploadedPhotos = new();
-    private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
-
-    [Parameter] public CampModel Camp { get; set; } = new CampModel
-    {
-        StartDate = DateTime.Today,
-        EndDate = DateTime.Today.AddDays(7),
-        IsPublic = true
-    };
-
-    private void OnInputFileChanged(InputFileChangeEventArgs e)
-    {
-        ClearDragClass();
-        var files = e.GetMultipleFiles();
-        foreach (var file in files)
+    [Parameter]
+    public CampModel Camp { get; set; } = new CampModel
         {
-            UploadedPhotos.Add(file);
-        }
+            StartDate = DateTime.Today,
+            EndDate = DateTime.Today.AddDays(7),
+            IsPublic = true
+        };
+
+    private void UpdatePendingFiles(List<IBrowserFile> files)
+    {
+        pendingFiles = files;
     }
 
     private void RemovePhoto(string photo)
-    { // Save uploaded photo URLs
-        var deletablePhoto = UploadedPhotos.FirstOrDefault(x => x.Name == photo);
-        if(deletablePhoto is not null)
-        {
-            UploadedPhotos.Remove(deletablePhoto);
-        }
-
+    {
         Camp.PhotoUrls.Remove(photo);
     }
 
     private async Task Submit()
     {
-        foreach (var file in UploadedPhotos)
+        foreach (var file in pendingFiles)
         {
             var photoUrl = await CampService.UploadPhotoAsync(file);
             Camp.PhotoUrls.Add(photoUrl);
@@ -136,8 +81,4 @@
     }
 
     private void Cancel() => MudDialog.Cancel();
-
-    private void SetDragClass() => _dragClass = $"{DefaultDragClass} mud-border-primary";
-
-    private void ClearDragClass() => _dragClass = DefaultDragClass;
 }

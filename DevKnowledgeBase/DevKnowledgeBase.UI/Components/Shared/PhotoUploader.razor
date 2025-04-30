@@ -1,0 +1,230 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<MudGrid>
+    <!-- Upload area -->
+    <MudItem xs="12">
+
+        <MudStack Style="width: 100%" Class="_dragClass">
+            <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+            @ref="@_fileUpload"
+            OnFilesChanged="OnInputFileChanged"
+            AppendMultipleFiles
+            Hidden="@false"
+            InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
+            InputStyle="opacity:0"
+            Accept=".jpg,.jpeg"
+            @ondrop="@ClearDragClass"
+            @ondragenter="@SetDragClass"
+            @ondragleave="@ClearDragClass"
+            @ondragend="@ClearDragClass">
+                <ActivatorContent>
+                    <MudPaper Class="@_dragClass">
+                        <MudGrid>
+                            <MudItem xs="12" Class="d-flex justify-center">
+                                <MudIcon Icon="@Icons.Material.Filled.CloudUpload" Color="Color.Primary" Size="Size.Large" />
+                            </MudItem>
+                            <MudItem xs="12" Class="d-flex justify-center">
+                                <MudText Typo="Typo.h6" Align="Align.Center">
+                                    Drag and drop images or click to browse
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="12" Class="d-flex justify-center">
+                                <MudText Typo="Typo.body2" Color="Color.Secondary" Align="Align.Center">
+                                    Supported formats: JPG, WEBP
+                                </MudText>
+                            </MudItem>
+
+                            <MudItem xs="12" Class="d-flex justify-center mt-3">
+
+                                <MudButton HtmlTag="label"
+                                Variant="Variant.Filled"
+                                Color="Color.Primary"
+                                StartIcon="@Icons.Material.Filled.AddPhotoAlternate">
+                                    Select Files
+                                </MudButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+
+                </ActivatorContent>
+            </MudFileUpload>
+        </MudStack>
+
+        <!-- Files pending upload -->
+        @if (PendingFiles.Any())
+        {
+            <MudPaper Elevation="0" Class="pa-3 mb-3 rounded mud-background-gray">
+                <MudText Typo="Typo.subtitle2" Class="mb-2">Files to Upload:</MudText>
+                <MudGrid>
+                    @foreach (var file in PendingFiles)
+                    {
+                        <MudItem xs="6" sm="3">
+                            <MudCard Elevation="2" Class="ma-1">
+                                <div style="position: relative; height: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #f5f5f5;">
+                                    @if (file.ContentType.StartsWith("image/"))
+                                    {
+                                        <MudImage ObjectFit="ObjectFit.Cover" 
+                                        Height="120" 
+                                        Src="@GetFilePreviewUrl(file)" 
+                                        Alt="@file.Name"
+                                        Style="width: 100%"/>
+                                    }
+                                    else
+                                    {
+                                        <MudIcon Icon="@Icons.Material.Filled.InsertDriveFile" Size="Size.Large" />
+                                    }
+                                    <div style="position: absolute; top: 0; right: 0;">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" 
+                                        Color="Color.Error" 
+                                        Size="Size.Small" 
+                                        OnClick="@(() => RemovePendingFile(file))" />
+                                    </div>
+                                </div>
+                                <MudCardContent Class="py-1 px-2">
+                                    <MudText Typo="Typo.caption" Style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        @file.Name
+                                    </MudText>
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                        @FormatFileSize(file.Size)
+                                    </MudText>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </MudPaper>
+        }
+    </MudItem>
+
+    <!-- Existing photos display -->
+    @if (ExistingPhotos != null && ExistingPhotos.Any())
+    {
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1" Class="mt-4">Current Photos</MudText>
+            <MudGrid>
+                @foreach (var photo in ExistingPhotos)
+                {
+                    <MudItem xs="6" sm="4" md="3">
+                        <MudCard Elevation="2" Class="ma-1">
+                            <MudCardMedia Image="@(PhotoBaseUrl + photo)" Height="120" />
+                            <MudCardActions Style="justify-content: center">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" 
+                                Color="Color.Error" 
+                                Size="Size.Small"
+                                OnClick="@(() => RemoveExistingPhoto(photo))"
+                                Title="Remove photo" />
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    [Parameter] public List<string> ExistingPhotos { get; set; } = new();
+    [Parameter] public string PhotoBaseUrl { get; set; } = "https://localhost:7046/api/files/photos/";
+    [Parameter] public EventCallback<string> OnExistingPhotoRemoved { get; set; }
+    [Parameter] public EventCallback<List<IBrowserFile>> OnPendingFilesChanged { get; set; }
+
+    private List<IBrowserFile> PendingFiles = new();
+    private Dictionary<IBrowserFile, string> _filePreviewUrls = new();
+    private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
+
+    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
+    private string _dragClass = DefaultDragClass;
+
+    private async Task OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        var files = e.GetMultipleFiles();
+        foreach (var file in files)
+        {
+              // Validate file type
+            if (!file.ContentType.Equals("image/jpeg", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine($"Unsupported file type: {file.ContentType}");
+                continue;
+            }
+
+            if (!PendingFiles.Any(f => f.Name == file.Name))
+            {
+                await CreatePreviewUrl(file);
+                PendingFiles.Add(file);
+
+            }
+        }
+
+        await OnPendingFilesChanged.InvokeAsync(PendingFiles);
+    }
+
+    private async Task CreatePreviewUrl(IBrowserFile file)
+    {
+        if (file.ContentType.StartsWith("image/"))
+        {
+            try
+            {
+                var imageFile = await file.RequestImageFileAsync(file.ContentType, 300, 300);
+                var buffer = new byte[imageFile.Size];
+                await imageFile.OpenReadStream(maxAllowedSize: 5242880).ReadAsync(buffer);
+                var base64String = Convert.ToBase64String(buffer);
+
+                var url = $"data:{file.ContentType};base64,{base64String}";
+                _filePreviewUrls[file] = url;
+            }
+            catch
+            {
+                _filePreviewUrls[file] = "_content/DevKnowledgeBase.UI/images/image-placeholder.png";
+            }
+        }
+    }
+
+    private async Task RemoveExistingPhoto(string photo)
+    {
+        await OnExistingPhotoRemoved.InvokeAsync(photo);
+    }
+
+    private async Task RemovePendingFile(IBrowserFile file)
+    {
+        PendingFiles.Remove(file);
+        _filePreviewUrls.Remove(file);
+        await OnPendingFilesChanged.InvokeAsync(PendingFiles);
+    }
+
+    private string GetFilePreviewUrl(IBrowserFile file)
+    {
+        if (!_filePreviewUrls.TryGetValue(file, out var url))
+        {
+            return "_content/DevKnowledgeBase.UI/images/image-placeholder.png";
+        }
+        return url;
+    }
+
+    private string FormatFileSize(long bytes)
+    {
+        string[] suffixes = { "B", "KB", "MB", "GB" };
+        int counter = 0;
+        decimal number = bytes;
+        
+        while (Math.Round(number / 1024) >= 1)
+        {
+            number /= 1024;
+            counter++;
+        }
+        
+        return $"{number:n1} {suffixes[counter]}";
+    }
+
+    private void SetDragClass()
+        => _dragClass = $"{DefaultDragClass} mud-border-primary";
+
+    private void ClearDragClass() => _dragClass = DefaultDragClass;
+
+    public void Reset()
+    {
+        PendingFiles.Clear();
+        _filePreviewUrls.Clear();
+    }
+    
+    public List<IBrowserFile> GetPendingFiles() => PendingFiles;
+}

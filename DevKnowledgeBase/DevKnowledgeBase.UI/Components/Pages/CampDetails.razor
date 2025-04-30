@@ -21,7 +21,23 @@ else
         <MudCard>
             @if (camp.PhotoUrls.Any())
             {
-                <MudCardMedia Image="@camp.PhotoUrls.First()" Height="400" />
+                <MudCarousel @bind-SelectedIndex="selectedPhotoIndex"
+                             Style="height:400px;"
+                             ShowArrows="true"
+                             ShowDelimiters="true"
+                             AutoCycle="true"
+                             TData="object">
+                    @foreach (var photo in camp.PhotoUrls)
+                    {
+                        <MudCarouselItem>
+                            <div class="d-flex justify-center align-center" style="height:100%">
+                                <img src="@($"https://localhost:7046/api/files/photos/{photo}")"
+                                     alt="Camp Photo"
+                                     style="max-height:100%; max-width:100%; object-fit:cover;" />
+                            </div>
+                        </MudCarouselItem>
+                    }
+                </MudCarousel>
             }
             <MudCardContent>
                 <MudText Typo="Typo.h3">@camp.Name</MudText>
@@ -78,6 +94,7 @@ else
     [Parameter] public Guid Id { get; set; }
     private CampModel camp;
     private int availableSpots => camp?.MaxParticipants - camp?.CurrentParticipants ?? 0;
+    private int selectedPhotoIndex = 0;
 
     private string GetDatesString()
     {
