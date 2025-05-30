@@ -410,3 +410,6 @@ FodyWeavers.xsd
 *.dll
 *.png
 *.cache
+/DevKnowledgeBase/DevKnowledgeBase/uploads/*
+/DevKnowledgeBase/DevKnowledgeBase/uploads/7b149cb0-c66d-4546-80c1-6fab09f20dce.jpg
+/DevKnowledgeBase/DevKnowledgeBase/uploads/c460f7a1-9917-4796-ab85-9623be61513a.jpeg

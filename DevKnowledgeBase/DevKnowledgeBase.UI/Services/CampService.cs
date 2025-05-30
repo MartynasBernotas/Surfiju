@@ -1,7 +1,6 @@
 using DevKnowledgeBase.UI.Common;
 using DevKnowledgeBase.UI.Models;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Net.Http.Json;
 
 namespace DevKnowledgeBase.UI.Services
 {
@@ -14,10 +13,13 @@ namespace DevKnowledgeBase.UI.Services
             _httpClient = httpClientFactory.CreateClient("API");
         }
 
-        public async Task<List<CampModel>> GetAllCampsAsync(bool includeInactive = false)
+        public async Task<PaginatedResult<CampModel>> GetAllCampsAsync(string location, int page, int pageSize,bool includeInactive = false)
         {
-            var response = await _httpClient.GetFromJsonAsync<List<CampModel>>($"api/camps?includeInactive={includeInactive}");
-            return response ?? new List<CampModel>();
+            var response = await _httpClient.GetFromJsonAsync<PaginatedResult<CampModel>>($"api/camps?page={page}&pageSize={pageSize}&location={Uri.EscapeDataString(location)}" +
+                $"&includeInactive={includeInactive}");
+
+
+            return response ?? new PaginatedResult<CampModel>();
 
         }
 

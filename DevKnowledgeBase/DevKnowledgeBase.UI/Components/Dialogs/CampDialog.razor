@@ -10,7 +10,7 @@
                     <MudTextField @bind-Value="Camp.Name" Label="Name" Required="true" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudTextField @bind-Value="Camp.Location" Label="Location" Required="true" />
+                    <LocationInput @bind-Value="Camp.Location" Class="location-input-dialog" />
                 </MudItem>
                 <MudItem xs="12" sm="6">
                     <MudDatePicker @bind-Date="Camp.StartDate" Label="Start Date" Required="true" />

@@ -2,6 +2,7 @@ using DevKnowledgeBase.UI.Components;
 using DevKnowledgeBase.UI.Models;
 using DevKnowledgeBase.UI.Services;
 using FluentValidation;
+using GoogleMapsComponents;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -50,10 +51,13 @@ builder.Services.AddHttpClient("API", httpClient =>
 .AddHttpMessageHandler<AuthenticationDelegatingHandler>()
 .AddHttpMessageHandler<RequestLoadingDelegatingHandler>();
 
+builder.Services.AddHttpClient<GoogleLocationService>();
+
 builder.Services.AddCircuitServicesAccessor();
 
 builder.Services.AddMudServices();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterModelValidator>();
+builder.Services.AddBlazorGoogleMaps("AIzaSyAAVP_llxal1IGKKGkVX76V-IIx8Vur2F8");
 
 var app = builder.Build();
 

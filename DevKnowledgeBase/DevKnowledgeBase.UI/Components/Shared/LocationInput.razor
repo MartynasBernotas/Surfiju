@@ -1,0 +1,38 @@
+﻿@using System.Linq.Expressions
+@inject GoogleLocationService LocationService
+
+<div>
+    <MudAutocomplete T="string" Label="Location" Value="Value" SearchFunc="OnSearchChanged"
+    ResetValueOnEmptyText="@true" CoerceValue="true" SelectValueOnTab="true"
+    ValueChanged="OnValueChanged"
+    AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" Class="@Class"/>
+</div>
+
+@code {
+    [Parameter]
+    public string Value { get; set; }
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+    [Parameter]
+    public string Class { get; set; }
+
+    private List<string> Suggestions { get; set; } = new();
+
+    private async Task<IEnumerable<string>> OnSearchChanged(string value, CancellationToken token)
+    {
+        var searchResults = new List<string>();
+        if (string.IsNullOrEmpty(value)) return searchResults;
+
+        var response = await LocationService.GetPlaceSuggestionsAsync(value);
+        if(response is not null)
+            searchResults = response.Select(x => $"{x.City}, {x.Country}").ToList();
+
+        return searchResults;
+    }
+
+    private async Task OnValueChanged(string value)
+    {
+        Value = value;
+        await this.ValueChanged.InvokeAsync(value);
+    }
+}

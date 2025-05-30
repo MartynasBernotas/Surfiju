@@ -24,15 +24,15 @@ namespace DevKnowledgeBase.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllCamps([FromQuery] bool includeInactive = false)
+        public async Task<IActionResult> GetAllCamps([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? location = null, [FromQuery] bool includeInactive = false)
         {
-            var query = new GetAllCampsQuery(includeInactive);
+            var query = new GetAllCampsQuery(page, pageSize, location, includeInactive);
             var camps = await _mediator.Send(query);
             return Ok(camps);
         }
 
         [HttpGet("organizer")]
-        public async Task<IActionResult> GetOrganizerCamps()
+        public async Task<IActionResult> GetOrganizerCamps([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? location = null)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId) )
@@ -40,7 +40,7 @@ namespace DevKnowledgeBase.API.Controllers
                 return Unauthorized();
             }
 
-            var query = new GetAllCampsQuery(true, userId);
+            var query = new GetAllCampsQuery(page, pageSize, location, true, userId);
             var camps = await _mediator.Send(query);
             return Ok(camps);
         }

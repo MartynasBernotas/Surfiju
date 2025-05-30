@@ -12,14 +12,28 @@
     <MudGrid>
         <MudItem xs="12">
             <MudPaper Class="pa-4">
-                <MudText Typo="Typo.h4" Class="mb-4">Surf Camps</MudText>
-                
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h4" Class="mb-4">Surf Camps</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="8">
+                        <LocationInput @bind-Value="SearchQuery" Class="location-input" />
+                    </MudItem>
+                    <MudItem xs="12" sm="4" Class="d-flex align-center">
+                        <MudButton OnClick="SearchCamps" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">
+                            Search
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+
+
+
                 <AuthorizeView Roles="Admin,Organizer">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenCreateDialog" Class="mb-4">
                         Create New Surf Camp
                     </MudButton>
                 </AuthorizeView>
-                
+
                 @if (camps.Count == 0)
                 {
                     <MudText>No surf camps found.</MudText>
@@ -35,8 +49,8 @@
                                         @if (camp.PhotoUrls.Any())
                                         {
                                             <img src="@($"https://localhost:7046/api/files/photos/{camp.PhotoUrls.First()}")"
-                                                 style="width: 100%; height: 100%; object-fit: cover;"
-                                                 alt="@camp.Name" />
+                                            style="width: 100%; height: 100%; object-fit: cover;"
+                                            alt="@camp.Name" />
 
                                             @if (camp.PhotoUrls.Count > 1)
                                             {
@@ -71,7 +85,7 @@
                                         <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ViewDetails(camp.Id))">
                                             View Details
                                         </MudButton>
-                                        
+
                                         <AuthorizeView Roles="Admin,Organizer">
                                             <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="@(() => OpenEditDialog(camp))">
                                                 Edit
@@ -86,6 +100,7 @@
                         }
                     </MudGrid>
                 }
+                <MudPagination Variant="Variant.Outlined" SelectedChanged="OnPageChanged" Class="pa-4" />
             </MudPaper>
         </MudItem>
     </MudGrid>
@@ -93,20 +108,39 @@
 
 @code {
     private List<CampModel> camps = new();
+    private string SearchQuery { get; set; } = string.Empty;
+
+    private int PageNumber { get; set; } = 1;
+    private int PageSize { get; set; } = 10;
+    private int TotalCount { get; set; } = 0;
 
     private string GetDatesString(CampModel camp)
     {
         return $"{camp.StartDate.Value.ToString("MMM dd")} - {camp.EndDate.Value.ToString("MMM dd, yyyy")}";
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
-        await LoadTrips();
+        await LoadCamps();
     }
 
-    private async Task LoadTrips()
+    private async Task LoadCamps()
     {
-        camps = await CampService.GetAllCampsAsync();
+        var paginatedResult = await CampService.GetAllCampsAsync(SearchQuery, PageNumber, PageSize);
+        camps = paginatedResult.Items;
+        TotalCount = paginatedResult.TotalCount;
+    }
+
+    private async Task SearchCamps()
+    {
+        PageNumber = 1; // Reset to the first page
+        await LoadCamps();
+    }
+
+    private async Task OnPageChanged(int i)
+    {
+        PageNumber = i;
+        await LoadCamps();
     }
 
     private void ViewDetails(Guid campId)
@@ -125,7 +159,7 @@
             if (createResult.Success)
             {
                 Snackbar.Add("Surf camp created successfully.", Severity.Success);
-                await LoadTrips();
+                await LoadCamps();
             }
             else
             {
@@ -146,7 +180,7 @@
             if (updateResult.Success)
             {
                 Snackbar.Add("Surf camp updated successfully.", Severity.Success);
-                await LoadTrips();
+                await LoadCamps();
             }
             else
             {
@@ -173,7 +207,7 @@
             if (deleteResult.Success)
             {
                 Snackbar.Add("Surf camp deleted successfully.", Severity.Success);
-                await LoadTrips();
+                await LoadCamps();
             }
             else
             {

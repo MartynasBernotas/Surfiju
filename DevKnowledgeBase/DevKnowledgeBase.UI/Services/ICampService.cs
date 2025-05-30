@@ -5,7 +5,7 @@ namespace DevKnowledgeBase.UI.Services
 {
     public interface ICampService
     {
-        Task<List<CampModel>> GetAllCampsAsync(bool includeInactive = false);
+        Task<PaginatedResult<CampModel>> GetAllCampsAsync(string location, int page, int pageSize, bool includeInactive = false);
         Task<List<CampModel>> GetOrganizerCampsAsync();
         Task<CampModel> GetCampByIdAsync(Guid id);
         Task<ResponseMessage> CreateCampAsync(CampModel Camps);
