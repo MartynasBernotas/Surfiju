@@ -7,6 +7,7 @@ using DevKnowledgeBase.Domain.Entities;
 using DevKnowledgeBase.Infrastructure.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
 namespace DevKnowledgeBase.Tests
@@ -19,7 +20,7 @@ namespace DevKnowledgeBase.Tests
 
         public GetAllNotesHandlerTests()
         {
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>(), NullLoggerFactory.Instance);
             _mapper = config.CreateMapper();
 
             var dbContextOptions = new DbContextOptionsBuilder<DevDatabaseContext>()

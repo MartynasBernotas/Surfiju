@@ -67,7 +67,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateNoteCommand).Assembly));
 
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateNoteCommandValidator>();
 builder.Services.AddFluentValidationAutoValidation();
