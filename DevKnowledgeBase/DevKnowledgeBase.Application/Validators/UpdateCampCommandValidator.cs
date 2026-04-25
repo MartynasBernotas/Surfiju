@@ -1,0 +1,35 @@
+using DevKnowledgeBase.Application.Commands;
+using FluentValidation;
+
+namespace DevKnowledgeBase.Application.Validators
+{
+    public class UpdateCampCommandValidator : AbstractValidator<UpdateCampCommand>
+    {
+        public UpdateCampCommandValidator()
+        {
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage("Camp ID is required.");
+
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Camp name is required.")
+                .MaximumLength(200).WithMessage("Camp name cannot exceed 200 characters.");
+
+            RuleFor(x => x.EndDate)
+                .NotEmpty().WithMessage("End date is required.")
+                .GreaterThan(x => x.StartDate).WithMessage("End date must be after start date.");
+
+            RuleFor(x => x.MaxParticipants)
+                .GreaterThan(0).WithMessage("Max participants must be greater than 0.");
+
+            RuleFor(x => x.Price)
+                .GreaterThanOrEqualTo(0).WithMessage("Price cannot be negative.");
+
+            RuleFor(x => x.Location)
+                .NotEmpty().WithMessage("Location is required.")
+                .MaximumLength(500).WithMessage("Location cannot exceed 500 characters.");
+
+            RuleFor(x => x.Description)
+                .NotEmpty().WithMessage("Description is required.");
+        }
+    }
+}

@@ -44,6 +44,18 @@ namespace DevKnowledgeBase.Infrastructure.Data
 
             modelBuilder.Entity<Booking>()
                 .HasKey(b => b.Id);
+
+            modelBuilder.Entity<CampMember>()
+                .HasOne(cm => cm.Camp)
+                .WithMany(c => c.Members)
+                .HasForeignKey(cm => cm.CampId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CampMember>()
+                .HasOne(cm => cm.User)
+                .WithMany()
+                .HasForeignKey(cm => cm.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

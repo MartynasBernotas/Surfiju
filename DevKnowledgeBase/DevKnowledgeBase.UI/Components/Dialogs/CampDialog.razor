@@ -76,7 +76,11 @@
             var photoUrl = await CampService.UploadPhotoAsync(file);
             Camp.PhotoUrls.Add(photoUrl);
         }
-        await CampService.UpdateCampAsync(Camp);
+        // Only sync photos back to the server if this is an existing camp being edited
+        if (Camp.Id != Guid.Empty)
+        {
+            await CampService.UpdateCampAsync(Camp);
+        }
         MudDialog.Close(DialogResult.Ok(Camp));
     }
 

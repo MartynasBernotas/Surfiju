@@ -44,9 +44,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddTransient<AuthenticationDelegatingHandler>(); //"https://localhost:7046/"
 builder.Services.AddTransient<RequestLoadingDelegatingHandler>();
 
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7046/";
+var googleMapsApiKey = builder.Configuration["GoogleMaps:ApiKey"] ?? string.Empty;
+
 builder.Services.AddHttpClient("API", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://localhost:7046/");
+    httpClient.BaseAddress = new Uri(apiBaseUrl);
 })
 .AddHttpMessageHandler<AuthenticationDelegatingHandler>()
 .AddHttpMessageHandler<RequestLoadingDelegatingHandler>();
@@ -57,7 +60,7 @@ builder.Services.AddCircuitServicesAccessor();
 
 builder.Services.AddMudServices();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterModelValidator>();
-builder.Services.AddBlazorGoogleMaps("AIzaSyAAVP_llxal1IGKKGkVX76V-IIx8Vur2F8");
+builder.Services.AddBlazorGoogleMaps(googleMapsApiKey);
 
 var app = builder.Build();
 

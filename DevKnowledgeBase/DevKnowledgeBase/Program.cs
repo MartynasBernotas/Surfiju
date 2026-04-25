@@ -99,12 +99,16 @@ builder.Services.AddSwaggerGen(c => {
         }
     });
 });
+var allowedOrigins = builder.Configuration["CorsSettings:AllowedOrigins"]
+    ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    ?? new[] { "https://localhost:7063", "http://localhost:5013" };
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "SurferOrigin",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7063;http://localhost:5013") // Adjust to your Blazor URL
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -121,7 +125,8 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
 
     await SeedData.InitializeRolesAsync(scope.ServiceProvider);
-    await SeedData.AssignAdminRoleAsync(scope.ServiceProvider, "yatiga8383@deenur.com");
+    var adminEmail = app.Configuration["AdminSettings:Email"] ?? "admin@surfiju.com";
+    await SeedData.AssignAdminRoleAsync(scope.ServiceProvider, adminEmail);
 }
 
 // Configure the HTTP request pipeline.
