@@ -9,11 +9,11 @@ namespace DevKnowledgeBase.Application.Validators
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Camp name is required.")
-                .MaximumLength(200).WithMessage("Camp name cannot exceed 200 characters.");
+                .MaximumLength(100).WithMessage("Camp name cannot exceed 100 characters.");
 
             RuleFor(x => x.StartDate)
                 .NotEmpty().WithMessage("Start date is required.")
-                .GreaterThan(DateTime.UtcNow).WithMessage("Start date must be in the future.");
+                .GreaterThan(DateTime.UtcNow.Date).WithMessage("Start date must be in the future.");
 
             RuleFor(x => x.EndDate)
                 .NotEmpty().WithMessage("End date is required.")
