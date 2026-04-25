@@ -1,12 +1,14 @@
 ﻿using DevKnowledgeBase.Application.Commands;
 using DevKnowledgeBase.Application.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevKnowledgeBase.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Organizer")]
     public class NotesController : ControllerBase
     {
         private readonly IMediator _mediator;

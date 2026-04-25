@@ -30,15 +30,15 @@ public class GetCampsQueryHandler : IRequestHandler<GetCampsQuery, List<CampDto>
 
     public async Task<List<CampDto>> Handle(GetCampsQuery request, CancellationToken cancellationToken)
     {
-        var campsQuery = _dbContext.Notes.AsQueryable();
+        var campsQuery = _dbContext.Camps.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            campsQuery = campsQuery.Where(x => x.Title.Contains(request.Search));
+            campsQuery = campsQuery.Where(x => x.Name.Contains(request.Search));
         }
 
         var allCamps = await campsQuery
-            .OrderBy(x => x.Title)
+            .OrderBy(x => x.Name)
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);

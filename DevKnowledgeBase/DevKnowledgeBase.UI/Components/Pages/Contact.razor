@@ -1,0 +1,29 @@
+@page "/contact"
+
+<PageTitle>Contact Us</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-5">
+    <MudPaper Class="pa-6">
+        <MudText Typo="Typo.h4" Class="mb-4">Contact Us</MudText>
+
+        <MudText Typo="Typo.body1" Class="mb-4">
+            Have a question or need help? Reach out to the Surfiju team and we'll get back to you
+            as soon as possible.
+        </MudText>
+
+        <MudDivider Class="my-4" />
+
+        <MudStack Spacing="3">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Primary" />
+                <MudText Typo="Typo.body1">support@surfiju.com</MudText>
+            </MudStack>
+        </MudStack>
+
+        <MudDivider Class="my-4" />
+
+        <MudButton Href="/" Variant="Variant.Text" Color="Color.Primary">
+            Back to Home
+        </MudButton>
+    </MudPaper>
+</MudContainer>

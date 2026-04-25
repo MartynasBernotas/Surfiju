@@ -111,9 +111,6 @@ namespace DevKnowledgeBase.Infrastructure.Migrations
                     b.Property<Guid>("CampId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TripId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -149,9 +146,6 @@ namespace DevKnowledgeBase.Infrastructure.Migrations
                     b.Property<string>("PaidByUserId")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid>("TripId")
-                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

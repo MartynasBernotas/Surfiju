@@ -18,7 +18,7 @@
                              Label="Number of Participants"
                              Variant="Variant.Outlined"
                              Min="1"
-                             Max="@MaxParticipants"
+                             Max="@AvailableSpots"
                              FullWidth="true"
                              Immediate="true" />
 
@@ -35,7 +35,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel" Variant="Variant.Text" Color="Color.Default">Cancel</MudButton>
-        <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="participants <= 0 || participants > MaxParticipants">
+        <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="participants <= 0 || participants > AvailableSpots">
             Confirm Booking
         </MudButton>
     </DialogActions>
@@ -47,7 +47,7 @@
     [Parameter] public Guid CampId { get; set; }
     [Parameter] public string CampName { get; set; }
     [Parameter] public decimal Price { get; set; }
-    [Parameter] public int MaxParticipants { get; set; }
+    [Parameter] public int AvailableSpots { get; set; }
     [Parameter] public string Dates { get; set; }
 
     private int participants = 1;
@@ -59,7 +59,7 @@
 
     private void Submit()
     {
-        if (participants <= 0 || participants > MaxParticipants)
+        if (participants <= 0 || participants > AvailableSpots)
         {
             Snackbar.Add("Please select a valid number of participants", Severity.Warning);
             return;

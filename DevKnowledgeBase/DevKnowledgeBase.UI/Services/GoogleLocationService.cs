@@ -1,20 +1,22 @@
-﻿using System.Globalization;
+﻿using Microsoft.Extensions.Configuration;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 public class GoogleLocationService
 {
     private readonly HttpClient _httpClient;
-    private const string ApiKey = "AIzaSyAAVP_llxal1IGKKGkVX76V-IIx8Vur2F8";
+    private readonly string _apiKey;
 
-    public GoogleLocationService(HttpClient httpClient)
+    public GoogleLocationService(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
+        _apiKey = configuration["GoogleMaps:ApiKey"] ?? string.Empty;
     }
 
     public async Task<List<LocationSearchResponse>> GetPlaceSuggestionsAsync(string input)
     {
-        var url = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={input}&key={ApiKey}";
+        var url = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={input}&key={_apiKey}";
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
@@ -29,7 +31,7 @@ public class GoogleLocationService
 
     public async Task<string> GetCoordinatesAsync(string address)
     {
-        var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={ApiKey}";
+        var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={_apiKey}";
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 

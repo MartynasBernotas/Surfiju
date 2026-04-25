@@ -1,6 +1,7 @@
 ﻿using DevKnowledgeBase.UI.Common;
 using DevKnowledgeBase.UI.Models;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace DevKnowledgeBase.UI.Services
 {
@@ -18,7 +19,8 @@ namespace DevKnowledgeBase.UI.Services
         public async Task<UserProfileModel> GetUserProfileAsync()
         {
             var user = await ((CustomAuthStateProvider)_stateProvider).GetAuthenticationStateAsync();
-            var userIdClaim = user.User.Claims.FirstOrDefault();
+            var userIdClaim = user.User.Claims.FirstOrDefault(c =>
+                c.Type == ClaimTypes.NameIdentifier || c.Type == "sub");
             if (userIdClaim == null)
             {
                 throw new Exception("User not found");
