@@ -1,4 +1,4 @@
-﻿@page "/organizers"
+@page "/organizers"
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
@@ -9,46 +9,146 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-<PageTitle>Admin Dashboard</PageTitle>
+<PageTitle>Admin Panel — Surfiju</PageTitle>
 
 <AuthorizeView Roles="Admin" Context="authContext">
     <Authorized>
-        <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
-            <MudPaper Class="pa-4">
-                <MudText Typo="Typo.h5" Class="mb-4">Admin Dashboard</MudText>
+        <!-- Page Header -->
+        <div style="background: linear-gradient(135deg, #03045E 0%, #0077B6 100%); padding:48px 24px 60px; color:white; position:relative; overflow:hidden;">
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" Size="Size.Large" Style="color:rgba(255,255,255,0.9);" />
+                    <div>
+                        <MudText Typo="Typo.h4" Style="font-weight:800;">Admin Panel</MudText>
+                        <MudText Typo="Typo.body2" Style="opacity:0.8;">Manage organizer accounts and platform access</MudText>
+                    </div>
+                </MudStack>
+            </MudContainer>
+            <div style="position:absolute; bottom:-2px; left:0; width:100%; overflow:hidden; line-height:0;">
+                <svg viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:50px;">
+                    <path d="M0,25 C480,50 960,0 1440,25 L1440,50 L0,50 Z" fill="var(--mud-palette-background)" />
+                </svg>
+            </div>
+        </div>
 
-                <MudText Typo="Typo.h6" Class="mb-2">Add Organizer User</MudText>
-                <MudForm @ref="form">
-                    <MudTextField @bind-Value="newUser.Email" Label="Email" Required="true" />
-                    <MudTextField @bind-Value="newUser.FullName" Label="Full Name" Required="true" />
-                    <MudButton Variant="Variant.Filled" OnClick="@(async()=> await HandleAddUser())" Color="Color.Primary" Class="mt-4">Add Organizer</MudButton>
-                </MudForm>
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <MudAlert Severity="Severity.Error" Class="mt-2" Variant="Variant.Filled" Dense="true">@errorMessage</MudAlert>
-                }
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-10">
+            <MudGrid Spacing="4">
 
-                <MudText Typo="Typo.h6" Class="mt-4 mb-2">Organizer List</MudText>
-                <MudTable Items="@organizers" Hover="true" Dense="true">
-                    <HeaderContent>
-                        <MudTh>Name</MudTh>
-                        <MudTh>Email</MudTh>
-                        <MudTh>Actions</MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd DataLabel="Name">@context.FullName</MudTd>
-                        <MudTd DataLabel="Email">@context.Email</MudTd>
-                        <MudTd>
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="@(() => OpenEditDialog(context))" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(context))" />
-                        </MudTd>
-                    </RowTemplate>
-                </MudTable>
-            </MudPaper>
+                <!-- Add Organizer Form -->
+                <MudItem xs="12" md="4">
+                    <MudPaper Class="pa-5" Elevation="3" Style="border-radius:20px; position:sticky; top:80px;">
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-4">
+                            <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#0077B6,#00B4D8); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Style="color:white; font-size:1.1rem;" />
+                            </div>
+                            <MudText Typo="Typo.h6" Style="font-weight:700;">Add Organizer</MudText>
+                        </MudStack>
+
+                        <MudForm @ref="form">
+                            <MudTextField @bind-Value="newUser.FullName"
+                                          Label="Full Name"
+                                          Variant="Variant.Outlined"
+                                          Required="true"
+                                          Class="mb-3"
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.Person" />
+
+                            <MudTextField @bind-Value="newUser.Email"
+                                          Label="Email Address"
+                                          Variant="Variant.Outlined"
+                                          Required="true"
+                                          Class="mb-4"
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.Email" />
+
+                            @if (!string.IsNullOrEmpty(errorMessage))
+                            {
+                                <MudAlert Severity="Severity.Error" Dense="true" Class="mb-3">@errorMessage</MudAlert>
+                            }
+
+                            <MudButton Variant="Variant.Filled"
+                                       OnClick="@(async () => await HandleAddUser())"
+                                       Color="Color.Primary"
+                                       FullWidth="true"
+                                       Style="border-radius:24px;">
+                                Add Organizer
+                            </MudButton>
+                        </MudForm>
+                    </MudPaper>
+                </MudItem>
+
+                <!-- Organizer List -->
+                <MudItem xs="12" md="8">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-3">
+                        <MudText Typo="Typo.h6" Style="font-weight:700;">
+                            Organizers
+                            <MudChip T="string" Size="Size.Small" Color="Color.Primary" Class="ml-2">@organizers.Count</MudChip>
+                        </MudText>
+                    </MudStack>
+
+                    @if (!organizers.Any())
+                    {
+                        <MudPaper Class="pa-8" Elevation="1" Style="border-radius:16px; text-align:center;">
+                            <MudIcon Icon="@Icons.Material.Filled.Group"
+                                     Style="font-size:4rem; color:var(--mud-palette-text-secondary); opacity:0.4; margin-bottom:12px;" />
+                            <MudText Typo="Typo.body1" Style="color:var(--mud-palette-text-secondary);">No organizers added yet.</MudText>
+                        </MudPaper>
+                    }
+                    else
+                    {
+                        <MudPaper Elevation="3" Style="border-radius:16px; overflow:hidden;">
+                            <MudTable Items="@organizers" Hover="true" Dense="true" Elevation="0" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh Style="font-weight:700;">Name</MudTh>
+                                    <MudTh Style="font-weight:700;">Email</MudTh>
+                                    <MudTh Style="font-weight:700;">Actions</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Name">
+                                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                                            <MudAvatar Size="Size.Small" Color="Color.Primary">
+                                                @(string.IsNullOrEmpty(context.FullName) ? "?" : context.FullName[0].ToString().ToUpper())
+                                            </MudAvatar>
+                                            <MudText Style="font-weight:600;">@context.FullName</MudText>
+                                        </MudStack>
+                                    </MudTd>
+                                    <MudTd DataLabel="Email">
+                                        <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">@context.Email</MudText>
+                                    </MudTd>
+                                    <MudTd>
+                                        <MudStack Row="true" Spacing="0">
+                                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                                           Color="Color.Primary"
+                                                           Size="Size.Small"
+                                                           OnClick="@(() => OpenEditDialog(context))" />
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                           Color="Color.Error"
+                                                           Size="Size.Small"
+                                                           OnClick="@(() => OpenDeleteDialog(context))" />
+                                        </MudStack>
+                                    </MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </MudPaper>
+                    }
+                </MudItem>
+            </MudGrid>
         </MudContainer>
     </Authorized>
     <NotAuthorized>
-        <p>You are not authorized to view this page.</p>
+        <MudContainer MaxWidth="MaxWidth.Small" Class="mt-10">
+            <MudPaper Class="pa-8" Elevation="3" Style="border-radius:20px; text-align:center;">
+                <MudIcon Icon="@Icons.Material.Filled.Lock"
+                         Style="font-size:4rem; color:#EF476F; margin-bottom:16px;" />
+                <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:8px;">Access Denied</MudText>
+                <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); margin-bottom:24px;">
+                    You don't have permission to view this page.
+                </MudText>
+                <MudButton Href="/" Variant="Variant.Filled" Color="Color.Primary" Style="border-radius:24px;">
+                    Go Home
+                </MudButton>
+            </MudPaper>
+        </MudContainer>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -71,15 +171,15 @@
 
     private async Task HandleAddUser()
     {
-        // Create the user and assign the 'Organizer' role
+        errorMessage = string.Empty;
         var user = new UserProfileModel { FullName = newUser.FullName, Email = newUser.Email };
         var result = await UserService.CreateOrganizerUser(user);
 
         if (result.Success)
         {
-            await LoadOrganizers(); // Reload the list of organizers
-            newUser = new(); // Reset the form
-            Snackbar.Add("Organizer added successfully", Severity.Success);
+            await LoadOrganizers();
+            newUser = new();
+            Snackbar.Add("Organizer added successfully.", Severity.Success);
         }
         else
         {
@@ -89,20 +189,15 @@
 
     private async Task OpenEditDialog(UserProfileModel user)
     {
-        // Create a deep copy of the user to edit
         editingUser = new UserProfileModel
-            {
-                Id = user.Id,
-                FullName = user.FullName,
-                Email = user.Email,
-                ProfilePicture = user.ProfilePicture
-            };
-
-        var parameters = new DialogParameters
         {
-            { "User", editingUser }
+            Id = user.Id,
+            FullName = user.FullName,
+            Email = user.Email,
+            ProfilePicture = user.ProfilePicture
         };
 
+        var parameters = new DialogParameters { { "User", editingUser } };
         var dialog = await DialogService.ShowAsync<EditOrganizerDialog>("Edit Organizer", parameters);
         var result = await dialog.Result;
 
@@ -112,11 +207,11 @@
             if (updateResult.Success)
             {
                 await LoadOrganizers();
-                Snackbar.Add("Organizer updated successfully", Severity.Success);
+                Snackbar.Add("Organizer updated.", Severity.Success);
             }
             else
             {
-                Snackbar.Add($"Failed to update organizer: {updateResult.ErrorMessage}", Severity.Error);
+                Snackbar.Add($"Failed: {updateResult.ErrorMessage}", Severity.Error);
             }
         }
     }
@@ -125,12 +220,12 @@
     {
         var parameters = new DialogParameters
         {
-            { "ContentText", $"Are you sure you want to delete the organizer '{user.FullName}'?" },
-            { "ButtonText", "Delete" },
+            { "ContentText", $"Remove organizer \"{user.FullName}\"? This cannot be undone." },
+            { "ButtonText", "Remove" },
             { "Color", Color.Error }
         };
 
-        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Confirm Delete", parameters);
+        var dialog = await DialogService.ShowAsync<ConfirmDialog>("Remove Organizer", parameters);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -139,11 +234,11 @@
             if (deleteResult.Success)
             {
                 await LoadOrganizers();
-                Snackbar.Add("Organizer deleted successfully", Severity.Success);
+                Snackbar.Add("Organizer removed.", Severity.Success);
             }
             else
             {
-                Snackbar.Add($"Failed to delete organizer: {deleteResult.ErrorMessage}", Severity.Error);
+                Snackbar.Add($"Failed: {deleteResult.ErrorMessage}", Severity.Error);
             }
         }
     }

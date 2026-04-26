@@ -1,4 +1,4 @@
-﻿@page "/camps/{Id:guid}"
+@page "/camps/{Id:guid}"
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -9,96 +9,226 @@
 @inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthStateProvider
 
-<PageTitle>Surf Camp Details</PageTitle>
+<PageTitle>@(camp?.Name ?? "Surf Camp") — Surfiju</PageTitle>
 
 @if (camp == null)
 {
-    <MudProgressCircular Indeterminate="true" />
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-10">
+        <MudStack AlignItems="AlignItems.Center" Spacing="3">
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+            <MudText Typo="Typo.body1" Style="color:var(--mud-palette-text-secondary);">Loading camp details...</MudText>
+        </MudStack>
+    </MudContainer>
 }
 else
 {
-    <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
-        <MudCard>
-            @if (camp.PhotoUrls.Any())
-            {
-                <MudCarousel @bind-SelectedIndex="selectedPhotoIndex"
-                             Style="height:400px;"
-                             ShowArrows="true"
-                             ShowDelimiters="true"
-                             AutoCycle="true"
-                             TData="object">
-                    @foreach (var photo in camp.PhotoUrls)
-                    {
-                        <MudCarouselItem>
-                            <div class="d-flex justify-center align-center" style="height:100%">
-                                <img src="@($"https://localhost:7046/api/files/photos/{photo}")"
-                                     alt="Camp Photo"
-                                     style="max-height:100%; max-width:100%; object-fit:cover;" />
-                            </div>
-                        </MudCarouselItem>
-                    }
-                </MudCarousel>
-            }
-            <MudCardContent>
-                <MudText Typo="Typo.h3">@camp.Name</MudText>
-                <MudText Typo="Typo.h6">@camp.Location</MudText>
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-10">
 
-                <MudGrid>
-                    <MudItem xs="12" sm="6">
-                        <MudPaper Class="pa-3 mud-theme-primary">
-                            <MudText Typo="Typo.subtitle1"><b>Date:</b> @GetDatesString()</MudText>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudPaper Class="pa-3 mud-theme-secondary">
-                            <MudText Typo="Typo.subtitle1"><b>Price:</b> @camp.Price.ToString("C")</MudText>
-                        </MudPaper>
-                    </MudItem>
-                </MudGrid>
-
-                <MudText Typo="Typo.body1" Class="mt-4">@camp.Description</MudText>
-
-                <MudDivider Class="mt-4 mb-4" />
-
-                <MudText Typo="Typo.subtitle2">Participants: @camp.CurrentParticipants/@camp.MaxParticipants</MudText>
-                <MudText Typo="Typo.subtitle2">Organized by: @camp.OrganizerName</MudText>
-
-                <MudDivider Class="mt-4 mb-4" />
-
-                <AuthorizeView>
-                    <Authorized>
-                        <MudButton Variant="Variant.Filled"
-                                   Color="Color.Primary"
-                                   FullWidth="true"
-                                   OnClick="OpenBookingDialog"
-                                   Disabled="@(camp.CurrentParticipants >= camp.MaxParticipants || !camp.IsPublic)">
-                            Book Now
-                        </MudButton>
-                    </Authorized>
-                    <NotAuthorized>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="RedirectToLogin">
-                            Login to Book
-                        </MudButton>
-                    </NotAuthorized>
-                </AuthorizeView>
-            </MudCardContent>
-        </MudCard>
-
-        <MudButton OnClick="GoBack" Class="mt-4" Variant="Variant.Text" Color="Color.Primary">
-            Back to List
+        <!-- Back button -->
+        <MudButton OnClick="GoBack"
+                   StartIcon="@Icons.Material.Filled.ArrowBack"
+                   Variant="Variant.Text"
+                   Color="Color.Primary"
+                   Class="mb-4">
+            Back to Camps
         </MudButton>
+
+        <MudGrid Spacing="4">
+
+            <!-- LEFT: Main Content -->
+            <MudItem xs="12" md="8">
+
+                <!-- Photo Carousel -->
+                @if (camp.PhotoUrls.Any())
+                {
+                    <MudPaper Elevation="3" Class="camp-detail-hero mb-4">
+                        <MudCarousel @bind-SelectedIndex="selectedPhotoIndex"
+                                     Style="height:420px;"
+                                     ShowArrows="true"
+                                     ShowDelimiters="true"
+                                     AutoCycle="true"
+                                     TData="object">
+                            @foreach (var photo in camp.PhotoUrls)
+                            {
+                                <MudCarouselItem>
+                                    <div style="height:100%; display:flex; align-items:center; justify-content:center; background:#000;">
+                                        <img src="@($"https://localhost:7046/api/files/photos/{photo}")"
+                                             alt="@camp.Name"
+                                             style="width:100%; height:100%; object-fit:cover;" />
+                                    </div>
+                                </MudCarouselItem>
+                            }
+                        </MudCarousel>
+                    </MudPaper>
+                }
+                else
+                {
+                    <MudPaper Elevation="2" Class="camp-detail-hero mb-4"
+                              Style="height:300px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#E0F4FF,#B8E4F5);">
+                        <MudIcon Icon="@Icons.Material.Filled.Surfing"
+                                 Style="font-size:5rem; color:#0077B6; opacity:0.4;" />
+                    </MudPaper>
+                }
+
+                <!-- Camp Name & Location -->
+                <MudPaper Class="pa-5 mb-4" Elevation="2" Style="border-radius:16px;">
+                    <MudText Typo="Typo.h4" Style="font-weight:800; margin-bottom:8px;">@camp.Name</MudText>
+
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Class="mb-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Place" Color="Color.Primary" />
+                        <MudText Typo="Typo.h6" Style="color:var(--mud-palette-text-secondary); font-weight:500;">
+                            @camp.Location
+                        </MudText>
+                    </MudStack>
+
+                    <!-- Info chips row -->
+                    <MudStack Row="true" Spacing="2" Class="flex-wrap mb-4">
+                        <MudChip T="string"
+                                 Icon="@Icons.Material.Filled.CalendarMonth"
+                                 Color="Color.Primary"
+                                 Variant="Variant.Outlined"
+                                 Size="Size.Small">
+                            @GetDatesString()
+                        </MudChip>
+                        <MudChip T="string"
+                                 Icon="@Icons.Material.Filled.People"
+                                 Color="Color.Secondary"
+                                 Variant="Variant.Outlined"
+                                 Size="Size.Small">
+                            @camp.CurrentParticipants / @camp.MaxParticipants participants
+                        </MudChip>
+                        <MudChip T="string"
+                                 Icon="@Icons.Material.Filled.Person"
+                                 Variant="Variant.Outlined"
+                                 Size="Size.Small">
+                            by @camp.OrganizerName
+                        </MudChip>
+                        @if (!camp.IsPublic)
+                        {
+                            <MudChip T="string"
+                                     Icon="@Icons.Material.Filled.Lock"
+                                     Color="Color.Warning"
+                                     Variant="Variant.Outlined"
+                                     Size="Size.Small">
+                                Private Camp
+                            </MudChip>
+                        }
+                    </MudStack>
+
+                    <MudDivider Class="mb-4" />
+
+                    <!-- Description -->
+                    <MudText Typo="Typo.subtitle1" Style="font-weight:700; margin-bottom:8px;">About This Camp</MudText>
+                    <MudText Typo="Typo.body1" Style="line-height:1.8; color:var(--mud-palette-text-secondary);">
+                        @camp.Description
+                    </MudText>
+                </MudPaper>
+
+            </MudItem>
+
+            <!-- RIGHT: Booking Sidebar -->
+            <MudItem xs="12" md="4">
+                <div class="booking-sidebar">
+                    <MudPaper Class="pa-5" Elevation="4" Style="border-radius:20px; border-top:4px solid #0077B6;">
+
+                        <!-- Price -->
+                        <MudText Typo="Typo.h4" Style="font-weight:800; color:#0077B6; margin-bottom:4px;">
+                            @camp.Price.ToString("C")
+                        </MudText>
+                        <MudText Typo="Typo.caption" Style="color:var(--mud-palette-text-secondary);">per person</MudText>
+
+                        <MudDivider Class="my-4" />
+
+                        <!-- Details summary -->
+                        <MudStack Spacing="3" Class="mb-4">
+                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                                    <MudIcon Icon="@Icons.Material.Filled.CalendarToday"
+                                             Style="font-size:1rem; color:#0077B6;" />
+                                    <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">Dates</MudText>
+                                </MudStack>
+                                <MudText Typo="Typo.body2" Style="font-weight:600;">@GetDatesString()</MudText>
+                            </MudStack>
+
+                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                                    <MudIcon Icon="@Icons.Material.Filled.EventSeat"
+                                             Style="font-size:1rem; color:#0077B6;" />
+                                    <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">Available</MudText>
+                                </MudStack>
+                                <MudText Typo="Typo.body2" Style="font-weight:600; color:@(availableSpots == 0 ? "#EF476F" : "#52B788");">
+                                    @availableSpots spot@(availableSpots != 1 ? "s" : "") left
+                                </MudText>
+                            </MudStack>
+
+                            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                                    <MudIcon Icon="@Icons.Material.Filled.Place"
+                                             Style="font-size:1rem; color:#0077B6;" />
+                                    <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">Location</MudText>
+                                </MudStack>
+                                <MudText Typo="Typo.body2" Style="font-weight:600; text-align:right; max-width:160px;">
+                                    @camp.Location
+                                </MudText>
+                            </MudStack>
+                        </MudStack>
+
+                        <MudDivider Class="mb-4" />
+
+                        <!-- Book Button -->
+                        <AuthorizeView>
+                            <Authorized>
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           FullWidth="true"
+                                           Size="Size.Large"
+                                           OnClick="OpenBookingDialog"
+                                           Disabled="@(availableSpots == 0 || !camp.IsPublic)"
+                                           StartIcon="@Icons.Material.Filled.BookOnline"
+                                           Style="border-radius:24px; font-size:1rem; padding:12px;">
+                                    @(availableSpots == 0 ? "Fully Booked" : "Book Now")
+                                </MudButton>
+                                @if (!camp.IsPublic)
+                                {
+                                    <MudText Typo="Typo.caption"
+                                             Style="color:var(--mud-palette-text-secondary); text-align:center; display:block; margin-top:8px;">
+                                        This camp is currently not accepting bookings.
+                                    </MudText>
+                                }
+                            </Authorized>
+                            <NotAuthorized>
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           FullWidth="true"
+                                           Size="Size.Large"
+                                           OnClick="RedirectToLogin"
+                                           StartIcon="@Icons.Material.Filled.Login"
+                                           Style="border-radius:24px; font-size:1rem; padding:12px;">
+                                    Login to Book
+                                </MudButton>
+                                <MudText Typo="Typo.caption"
+                                         Style="color:var(--mud-palette-text-secondary); text-align:center; display:block; margin-top:8px;">
+                                    Don't have an account?
+                                    <a href="/register" style="color:#0077B6; font-weight:600;">Register free</a>
+                                </MudText>
+                            </NotAuthorized>
+                        </AuthorizeView>
+                    </MudPaper>
+                </div>
+            </MudItem>
+        </MudGrid>
     </MudContainer>
 }
 
 @code {
     [Parameter] public Guid Id { get; set; }
     private CampModel camp;
-    private int availableSpots => camp?.MaxParticipants - camp?.CurrentParticipants ?? 0;
+    private int availableSpots => (camp?.MaxParticipants ?? 0) - (camp?.CurrentParticipants ?? 0);
     private int selectedPhotoIndex = 0;
 
     private string GetDatesString()
     {
-        return $"{camp.StartDate.Value.ToString("MMM dd")} - {camp.EndDate.Value.ToString("MMM dd, yyyy")}";
+        return $"{camp.StartDate.Value:MMM dd} – {camp.EndDate.Value:MMM dd, yyyy}";
     }
 
     protected override async Task OnInitializedAsync()
@@ -114,53 +244,42 @@ else
         }
         catch (Exception ex)
         {
-            Snackbar.Add("Error loading surf camp details:" + ex.Message, Severity.Error);
+            Snackbar.Add("Error loading camp details: " + ex.Message, Severity.Error);
             Navigation.NavigateTo("/camps");
         }
     }
 
-    private void GoBack()
-    {
-        Navigation.NavigateTo("/camps");
-    }
+    private void GoBack() => Navigation.NavigateTo("/camps");
 
-    private void RedirectToLogin()
-    {
-        Navigation.NavigateTo($"/login?returnUrl=/camps/{Id}");
-    }
+    private void RedirectToLogin() => Navigation.NavigateTo($"/login?returnUrl=/camps/{Id}");
 
     private async Task OpenBookingDialog()
     {
         var parameters = new DialogParameters
-            {
-                ["CampId"] = camp.Id,
-                ["CampName"] = camp.Name,
-                ["Price"] = camp.Price,
-                ["AvailableSpots"] = availableSpots,
-                ["Dates"] = GetDatesString()
-            };
+        {
+            ["CampId"] = camp.Id,
+            ["CampName"] = camp.Name,
+            ["Price"] = camp.Price,
+            ["AvailableSpots"] = availableSpots,
+            ["Dates"] = GetDatesString()
+        };
 
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Small, FullWidth = true };
         var dialog = await DialogService.ShowAsync<BookingDialog>("Book Camp", parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled && result.Data is int numberOfParticipants)
         {
-            var booking = new CreateBookingModel
-                {
-                    CampId = camp.Id,
-                    Participants = numberOfParticipants
-                };
-
+            var booking = new CreateBookingModel { CampId = camp.Id, Participants = numberOfParticipants };
             var bookingResult = await BookingService.CreateBookingAsync(booking);
             if (bookingResult.Success)
             {
-                Snackbar.Add("Booking created successfully!", Severity.Success);
-                await LoadCamp(); // Refresh to see updated participant count
+                Snackbar.Add("Booking confirmed! Check My Bookings for details.", Severity.Success);
+                await LoadCamp();
             }
             else
             {
-                Snackbar.Add($"Failed to create booking: {bookingResult.ErrorMessage}", Severity.Error);
+                Snackbar.Add($"Failed to book: {bookingResult.ErrorMessage}", Severity.Error);
             }
         }
     }

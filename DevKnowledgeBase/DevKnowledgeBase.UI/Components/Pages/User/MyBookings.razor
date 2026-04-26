@@ -1,4 +1,4 @@
-﻿@page "/my-bookings"
+@page "/my-bookings"
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
@@ -8,64 +8,134 @@
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
 
-<PageTitle>My Bookings</PageTitle>
+<PageTitle>My Bookings — Surfiju</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
-    <MudGrid>
-        <MudItem xs="12">
-            <MudPaper Class="pa-4">
-                <MudText Typo="Typo.h4" Class="mb-4">My Bookings</MudText>
+<!-- Page Header -->
+<div style="background: linear-gradient(135deg, #03045E 0%, #0077B6 100%); padding:48px 24px 60px; color:white; position:relative; overflow:hidden;">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudIcon Icon="@Icons.Material.Filled.BookOnline" Size="Size.Large" Style="color:rgba(255,255,255,0.9);" />
+            <div>
+                <MudText Typo="Typo.h4" Style="font-weight:800;">My Bookings</MudText>
+                <MudText Typo="Typo.body2" Style="opacity:0.8;">Track and manage your surf camp reservations</MudText>
+            </div>
+        </MudStack>
+    </MudContainer>
+    <div style="position:absolute; bottom:-2px; left:0; width:100%; overflow:hidden; line-height:0;">
+        <svg viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:50px;">
+            <path d="M0,25 C480,50 960,0 1440,25 L1440,50 L0,50 Z" fill="var(--mud-palette-background)" />
+        </svg>
+    </div>
+</div>
 
-                @if (bookings == null)
-                {
-                    <MudProgressCircular Indeterminate="true" />
-                }
-                else if (!bookings.Any())
-                {
-                    <MudAlert Severity="Severity.Info">You don't have any bookings yet.</MudAlert>
-                    <MudButton OnClick="NavigateToCamps" Variant="Variant.Filled" Color="Color.Primary" Class="mt-3">
-                        Browse Surf Camps
-                    </MudButton>
-                }
-                else
-                {
-                    <MudTable Items="@bookings" Hover="true" Breakpoint="Breakpoint.Sm">
-                        <HeaderContent>
-                            <MudTh>Camp</MudTh>
-                            <MudTh>Dates</MudTh>
-                            <MudTh>Participants</MudTh>
-                            <MudTh>Total Price</MudTh>
-                            <MudTh>Booking Date</MudTh>
-                            <MudTh>Actions</MudTh>
-                        </HeaderContent>
-                        <RowTemplate>
-                            <MudTd DataLabel="Camp">@context.CampName</MudTd>
-                            <MudTd DataLabel="Dates">
-                                @($"{context.StartDate?.ToString("MMM dd")} - {context.EndDate?.ToString("MMM dd, yyyy")}")
-                            </MudTd>
-                            <MudTd DataLabel="Participants">@context.Participants</MudTd>
-                            <MudTd DataLabel="Total Price">@context.TotalPrice.ToString("C")</MudTd>
-                            <MudTd DataLabel="Booking Date">@context.BookingDate.ToString("MMM dd, yyyy")</MudTd>
-                            <MudTd>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-10">
+    @if (bookings == null)
+    {
+        <MudStack AlignItems="AlignItems.Center" Class="mt-10">
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+        </MudStack>
+    }
+    else if (!bookings.Any())
+    {
+        <MudPaper Class="pa-10" Elevation="2" Style="border-radius:20px; text-align:center;">
+            <MudIcon Icon="@Icons.Material.Filled.Surfing"
+                     Style="font-size:5rem; color:var(--mud-palette-text-secondary); opacity:0.4; margin-bottom:16px;" />
+            <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:8px;">No bookings yet</MudText>
+            <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); margin-bottom:24px;">
+                You haven't booked any surf camps yet. Start exploring!
+            </MudText>
+            <MudButton OnClick="NavigateToCamps"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Surfing"
+                       Style="border-radius:24px;">
+                Browse Surf Camps
+            </MudButton>
+        </MudPaper>
+    }
+    else
+    {
+        <!-- Booking Cards (mobile-friendly) -->
+        <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
+            <!-- Table for larger screens -->
+            <MudPaper Elevation="3" Style="border-radius:16px; overflow:hidden;">
+                <MudTable Items="@bookings" Hover="true" Breakpoint="Breakpoint.Sm" Elevation="0">
+                    <HeaderContent>
+                        <MudTh Style="font-weight:700;">Camp</MudTh>
+                        <MudTh Style="font-weight:700;">Dates</MudTh>
+                        <MudTh Style="font-weight:700;">Participants</MudTh>
+                        <MudTh Style="font-weight:700;">Total Price</MudTh>
+                        <MudTh Style="font-weight:700;">Booked On</MudTh>
+                        <MudTh Style="font-weight:700;">Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Camp">
+                            <MudText Style="font-weight:600;">@context.CampName</MudText>
+                        </MudTd>
+                        <MudTd DataLabel="Dates">
+                            @($"{context.StartDate?.ToString("MMM dd")} – {context.EndDate?.ToString("MMM dd, yyyy")}")
+                        </MudTd>
+                        <MudTd DataLabel="Participants">
+                            <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">
+                                @context.Participants
+                            </MudChip>
+                        </MudTd>
+                        <MudTd DataLabel="Total Price">
+                            <MudText Style="font-weight:700; color:#0077B6;">@context.TotalPrice.ToString("C")</MudText>
+                        </MudTd>
+                        <MudTd DataLabel="Booked On">
+                            <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">
+                                @context.BookingDate.ToString("MMM dd, yyyy")
+                            </MudText>
+                        </MudTd>
+                        <MudTd>
+                            <MudStack Row="true" Spacing="1">
                                 <MudButton Size="Size.Small"
-                                           Variant="Variant.Filled"
+                                           Variant="Variant.Outlined"
                                            Color="Color.Primary"
-                                           OnClick="() => ViewCamp(context.CampId)">
-                                    View Camp
+                                           OnClick="() => ViewCamp(context.CampId)"
+                                           Style="border-radius:16px;">
+                                    View
                                 </MudButton>
                                 <MudButton Size="Size.Small"
-                                           Variant="Variant.Filled"
+                                           Variant="Variant.Outlined"
                                            Color="Color.Error"
-                                           OnClick="() => OpenCancelDialog(context)">
+                                           OnClick="() => OpenCancelDialog(context)"
+                                           Style="border-radius:16px;">
                                     Cancel
                                 </MudButton>
-                            </MudTd>
-                        </RowTemplate>
-                    </MudTable>
-                }
+                            </MudStack>
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
             </MudPaper>
-        </MudItem>
-    </MudGrid>
+        </MudHidden>
+
+        <MudHidden Breakpoint="Breakpoint.SmAndUp">
+            <!-- Card view for small screens -->
+            <MudStack Spacing="3">
+                @foreach (var booking in bookings)
+                {
+                    <MudPaper Class="pa-4" Elevation="2" Style="border-radius:16px; border-left:4px solid #0077B6;">
+                        <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:4px;">@booking.CampName</MudText>
+                        <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); margin-bottom:8px;">
+                            @($"{booking.StartDate?.ToString("MMM dd")} – {booking.EndDate?.ToString("MMM dd, yyyy")}")
+                        </MudText>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                            <MudStack Spacing="0">
+                                <MudText Typo="Typo.caption" Style="color:var(--mud-palette-text-secondary);">Total</MudText>
+                                <MudText Style="font-weight:700; color:#0077B6; font-size:1.1rem;">@booking.TotalPrice.ToString("C")</MudText>
+                            </MudStack>
+                            <MudStack Row="true" Spacing="1">
+                                <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => ViewCamp(booking.CampId)" Style="border-radius:16px;">View</MudButton>
+                                <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error" OnClick="() => OpenCancelDialog(booking)" Style="border-radius:16px;">Cancel</MudButton>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+                }
+            </MudStack>
+        </MudHidden>
+    }
 </MudContainer>
 
 @code {
@@ -88,24 +158,18 @@
         }
     }
 
-    private void NavigateToCamps()
-    {
-        Navigation.NavigateTo("/camps");
-    }
+    private void NavigateToCamps() => Navigation.NavigateTo("/camps");
 
-    private void ViewCamp(Guid campId)
-    {
-        Navigation.NavigateTo($"/camps/{campId}");
-    }
+    private void ViewCamp(Guid campId) => Navigation.NavigateTo($"/camps/{campId}");
 
     private async Task OpenCancelDialog(BookingModel booking)
     {
         var parameters = new DialogParameters
-            {
-                ["ContentText"] = $"Are you sure you want to cancel your booking for {booking.CampName}?",
-                ["ButtonText"] = "Cancel Booking",
-                ["Color"] = Color.Error
-            };
+        {
+            ["ContentText"] = $"Cancel your booking for \"{booking.CampName}\"? This action cannot be undone.",
+            ["ButtonText"] = "Yes, Cancel",
+            ["Color"] = Color.Error
+        };
 
         var dialog = await DialogService.ShowAsync<ConfirmDialog>("Cancel Booking", parameters);
         var result = await dialog.Result;
@@ -115,12 +179,12 @@
             var cancelResult = await BookingService.CancelBookingAsync(booking.Id);
             if (cancelResult.Success)
             {
-                Snackbar.Add("Booking canceled successfully.", Severity.Success);
+                Snackbar.Add("Booking cancelled successfully.", Severity.Success);
                 await LoadBookings();
             }
             else
             {
-                Snackbar.Add($"Failed to cancel booking: {cancelResult.ErrorMessage}", Severity.Error);
+                Snackbar.Add($"Failed to cancel: {cancelResult.ErrorMessage}", Severity.Error);
             }
         }
     }

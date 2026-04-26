@@ -1,40 +1,116 @@
-﻿@page "/profile"
+@page "/profile"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 
 @inject IUserService UserService
 @inject NavigationManager Navigation
+@inject ISnackbar Snackbar
 
-<PageTitle>Profile</PageTitle>
+<PageTitle>My Profile — Surfiju</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
-    <MudPaper Class="pa-4">
-        <MudGrid>
-            <MudItem xs="12" sm="4" Class="d-flex justify-center align-items-center">
-                <MudAvatar Style="height:80%; width:80%;">
-                    <MudImage Src="@userModel.ProfilePicture" Alt="Profile Picture" />
-                </MudAvatar>
-            </MudItem>
-            <MudItem xs="12" sm="8">
-                <MudText Typo="Typo.h5" Class="mb-4">Edit Your Profile</MudText>
-                <MudForm @ref="form">
-                    <MudTextField @bind-Value="userModel.FullName" Label="Full Name" Required="true" />
-                    <MudTextField @bind-Value="userModel.Email" Label="Email" Required="true" />
-                    <MudTextField @bind-Value="userModel.ProfilePicture" Label="Profile Picture (URL)" />
-                    <MudButton OnClick="@(async () => await HandleSubmit())" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">Update Profile</MudButton>
-                </MudForm>
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <MudAlert Dense="true" Severity="@(success ? Severity.Success : Severity.Error)" Class="mt-2">@errorMessage</MudAlert>
-                }
-            </MudItem>
-        </MudGrid>
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-6 mb-10">
+
+    <!-- Header -->
+    <MudStack AlignItems="AlignItems.Center" Class="mb-6">
+        <div class="profile-avatar-wrapper">
+            @if (!string.IsNullOrEmpty(userModel.ProfilePicture))
+            {
+                <img src="@userModel.ProfilePicture"
+                     alt="Profile"
+                     style="width:100%; height:100%; object-fit:cover;" />
+            }
+            else
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Person"
+                         Style="color:white; font-size:3.5rem;" />
+            }
+        </div>
+        <MudText Typo="Typo.h5" Style="font-weight:700; margin-top:8px;">
+            @(string.IsNullOrEmpty(userModel.FullName) ? "My Profile" : userModel.FullName)
+        </MudText>
+        <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">
+            @userModel.Email
+        </MudText>
+    </MudStack>
+
+    <!-- Profile Form -->
+    <MudPaper Class="pa-5" Elevation="3" Style="border-radius:20px;">
+        <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:20px;">Edit Profile</MudText>
+
+        <MudForm @ref="form">
+            <MudTextField @bind-Value="userModel.FullName"
+                          Label="Full Name"
+                          Variant="Variant.Outlined"
+                          Required="true"
+                          Class="mb-3"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Person" />
+
+            <MudTextField @bind-Value="userModel.Email"
+                          Label="Email Address"
+                          Variant="Variant.Outlined"
+                          Required="true"
+                          Class="mb-3"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Email" />
+
+            <MudTextField @bind-Value="userModel.ProfilePicture"
+                          Label="Profile Picture URL"
+                          Variant="Variant.Outlined"
+                          Class="mb-4"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Image"
+                          HelperText="Enter a public image URL for your avatar" />
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudAlert Severity="@(success ? Severity.Success : Severity.Error)"
+                          Dense="true"
+                          Class="mb-3">
+                    @errorMessage
+                </MudAlert>
+            }
+
+            <MudButton OnClick="@(async () => await HandleSubmit())"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       FullWidth="true"
+                       Size="Size.Large"
+                       Style="border-radius:24px; font-size:1rem;">
+                Update Profile
+            </MudButton>
+        </MudForm>
+    </MudPaper>
+
+    <!-- Quick Actions -->
+    <MudPaper Class="pa-4 mt-4" Elevation="1" Style="border-radius:16px;">
+        <MudText Typo="Typo.subtitle2" Style="font-weight:700; margin-bottom:12px; color:var(--mud-palette-text-secondary);">
+            QUICK ACTIONS
+        </MudText>
+        <MudStack Spacing="1">
+            <MudButton Href="/my-bookings"
+                       Variant="Variant.Text"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.BookOnline"
+                       FullWidth="true"
+                       Style="justify-content:flex-start;">
+                View My Bookings
+            </MudButton>
+            <MudButton Href="/camps"
+                       Variant="Variant.Text"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Surfing"
+                       FullWidth="true"
+                       Style="justify-content:flex-start;">
+                Browse Surf Camps
+            </MudButton>
+        </MudStack>
     </MudPaper>
 </MudContainer>
+
 @code {
     private MudForm form;
     private UserProfileModel userModel = new UserProfileModel();
-    private PasswordChangeModel passwordModel = new PasswordChangeModel();
     private string errorMessage = string.Empty;
     private bool success = false;
 
@@ -49,9 +125,12 @@
 
     private async Task HandleSubmit()
     {
-        // Update user profile
         var updateResult = await UserService.UpdateUserProfileAsync(userModel);
         success = updateResult.Success;
         errorMessage = success ? "Profile updated successfully." : updateResult.ErrorMessage;
+        if (success)
+        {
+            Snackbar.Add("Profile updated!", Severity.Success);
+        }
     }
 }
