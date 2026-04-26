@@ -1,35 +1,144 @@
 @page "/about"
 
-<PageTitle>About Surfiju</PageTitle>
+<PageTitle>About — Surfiju</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
-    <MudPaper Class="pa-6">
-        <MudText Typo="Typo.h4" Class="mb-4">About Surfiju</MudText>
-
-        <MudText Typo="Typo.body1" Class="mb-4">
-            Surfiju is a platform that connects surf camp organizers with participants.
-            Whether you're looking to discover your next surf adventure or manage your own camp,
-            Surfiju makes it easy.
+<!-- Hero -->
+<div style="background: linear-gradient(135deg, #03045E 0%, #0077B6 100%); padding: 64px 24px 80px; color: white; text-align:center; position:relative; overflow:hidden;">
+    <div style="position:relative; z-index:1; max-width:620px; margin:0 auto;">
+        <MudText Typo="Typo.h3" Style="font-weight:800; margin-bottom:12px;">About Surfiju</MudText>
+        <MudText Typo="Typo.body1" Style="opacity:0.85; line-height:1.8;">
+            We connect passionate surfers with the world's best surf camps — making the experience
+            seamless for both participants and organizers.
         </MudText>
+    </div>
+    <div style="position:absolute; bottom:-2px; left:0; width:100%; overflow:hidden; line-height:0;">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:60px;">
+            <path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="var(--mud-palette-background)" />
+        </svg>
+    </div>
+</div>
 
-        <MudDivider Class="my-4" />
+<!-- Mission -->
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-8 mb-6">
+    <MudGrid Spacing="4">
+        <MudItem xs="12" sm="4">
+            <MudPaper Class="pa-5 feature-card" Elevation="3" Style="text-align:center;">
+                <div class="feature-icon-circle" style="margin:0 auto 1rem;">
+                    <MudIcon Icon="@Icons.Material.Filled.Search" Style="color:white;" Size="Size.Large" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:8px;">Discover</MudText>
+                <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); line-height:1.7;">
+                    Browse hundreds of verified surf camps worldwide, from tropical beaches to cold-water barrels.
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudPaper Class="pa-5 feature-card" Elevation="3" Style="text-align:center;">
+                <div class="feature-icon-circle" style="margin:0 auto 1rem;">
+                    <MudIcon Icon="@Icons.Material.Filled.Handshake" Style="color:white;" Size="Size.Large" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:8px;">Connect</MudText>
+                <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); line-height:1.7;">
+                    We bridge the gap between eager surfers and experienced camp organizers around the globe.
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudPaper Class="pa-5 feature-card" Elevation="3" Style="text-align:center;">
+                <div class="feature-icon-circle" style="margin:0 auto 1rem;">
+                    <MudIcon Icon="@Icons.Material.Filled.Surfing" Style="color:white;" Size="Size.Large" />
+                </div>
+                <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:8px;">Surf</MudText>
+                <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); line-height:1.7;">
+                    Everything's handled — just show up, paddle out, and enjoy the waves.
+                </MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
-        <MudText Typo="Typo.h5" Class="mb-3">For Participants</MudText>
-        <MudText Typo="Typo.body1" Class="mb-4">
-            Browse surf camps from around the world, view details, check availability, and book your spot
-            in just a few clicks.
-        </MudText>
+<!-- For Participants -->
+<div style="background:var(--mud-palette-background-grey, #F0F7FF); padding:4rem 0;">
+    <MudContainer MaxWidth="MaxWidth.Medium">
+        <MudGrid Spacing="4" AlignItems="AlignItems.Center">
+            <MudItem xs="12" sm="6">
+                <div class="section-chip">For Surfers</div>
+                <MudText Typo="Typo.h4" Style="font-weight:700; margin-top:8px; margin-bottom:16px;">
+                    Find your perfect wave
+                </MudText>
+                <MudText Typo="Typo.body1" Style="color:var(--mud-palette-text-secondary); line-height:1.8; margin-bottom:24px;">
+                    Whether you're a complete beginner or a seasoned shredder, Surfiju has a camp tailored
+                    to your level. Browse by location, date, or price — and book in seconds.
+                </MudText>
+                <MudButton Href="/camps"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.Surfing"
+                           Style="border-radius:24px;">
+                    Browse Camps
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudList T="string" Dense="false">
+                    <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success">
+                        Verified camps with real photos
+                    </MudListItem>
+                    <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success">
+                        Instant booking confirmation
+                    </MudListItem>
+                    <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success">
+                        Easy cancellation management
+                    </MudListItem>
+                    <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success">
+                        All skill levels welcome
+                    </MudListItem>
+                    <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Success">
+                        Global locations across 30+ countries
+                    </MudListItem>
+                </MudList>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</div>
 
-        <MudText Typo="Typo.h5" Class="mb-3">For Organizers</MudText>
-        <MudText Typo="Typo.body1" Class="mb-4">
-            Create and manage your surf camps, upload photos, set pricing, and track bookings —
-            all from one simple dashboard.
-        </MudText>
-
-        <MudDivider Class="my-4" />
-
-        <MudButton Href="/camps" Variant="Variant.Filled" Color="Color.Primary">
-            Browse Surf Camps
-        </MudButton>
-    </MudPaper>
+<!-- For Organizers -->
+<MudContainer MaxWidth="MaxWidth.Medium" Class="my-10">
+    <MudGrid Spacing="4" AlignItems="AlignItems.Center">
+        <MudItem xs="12" sm="6" Class="mud-hidden-xs-only">
+            <MudList T="string" Dense="false">
+                <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Secondary">
+                    Simple camp creation with photo galleries
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Secondary">
+                    Real-time booking management
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Secondary">
+                    Participant capacity control
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Secondary">
+                    Public/private visibility toggle
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconColor="Color.Secondary">
+                    Global reach to thousands of surfers
+                </MudListItem>
+            </MudList>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <div class="section-chip" style="background:linear-gradient(135deg,#E0F9FF,#CAF0F8); color:#00838F;">For Organizers</div>
+            <MudText Typo="Typo.h4" Style="font-weight:700; margin-top:8px; margin-bottom:16px;">
+                Grow your surf camp business
+            </MudText>
+            <MudText Typo="Typo.body1" Style="color:var(--mud-palette-text-secondary); line-height:1.8; margin-bottom:24px;">
+                List your camp for free and tap into a global audience of passionate surfers.
+                Our dashboard makes it easy to manage bookings, photos, and capacity.
+            </MudText>
+            <MudButton Href="/register"
+                       Variant="Variant.Filled"
+                       Color="Color.Secondary"
+                       StartIcon="@Icons.Material.Filled.AddBusiness"
+                       Style="border-radius:24px;">
+                Start for Free
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 </MudContainer>

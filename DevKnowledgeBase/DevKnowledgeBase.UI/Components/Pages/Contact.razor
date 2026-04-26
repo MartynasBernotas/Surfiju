@@ -1,29 +1,101 @@
 @page "/contact"
 
-<PageTitle>Contact Us</PageTitle>
+<PageTitle>Contact Us — Surfiju</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="mt-5">
-    <MudPaper Class="pa-6">
-        <MudText Typo="Typo.h4" Class="mb-4">Contact Us</MudText>
-
-        <MudText Typo="Typo.body1" Class="mb-4">
-            Have a question or need help? Reach out to the Surfiju team and we'll get back to you
-            as soon as possible.
+<!-- Hero -->
+<div style="background: linear-gradient(135deg, #03045E 0%, #0077B6 100%); padding:56px 24px 72px; color:white; text-align:center; position:relative; overflow:hidden;">
+    <div style="position:relative; z-index:1;">
+        <MudText Typo="Typo.h3" Style="font-weight:800; margin-bottom:10px;">Get in Touch</MudText>
+        <MudText Typo="Typo.body1" Style="opacity:0.85; max-width:480px; margin:0 auto; line-height:1.7;">
+            Have a question or need support? We're here to help and will get back to you as soon as possible.
         </MudText>
+    </div>
+    <div style="position:absolute; bottom:-2px; left:0; width:100%; overflow:hidden; line-height:0;">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:60px;">
+            <path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="var(--mud-palette-background)" />
+        </svg>
+    </div>
+</div>
 
-        <MudDivider Class="my-4" />
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-8 mb-10">
+    <MudGrid Spacing="4">
 
-        <MudStack Spacing="3">
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Primary" />
-                <MudText Typo="Typo.body1">support@surfiju.com</MudText>
-            </MudStack>
-        </MudStack>
+        <!-- Contact Info Card -->
+        <MudItem xs="12">
+            <MudPaper Class="pa-6" Elevation="3" Style="border-radius:20px;">
+                <MudText Typo="Typo.h5" Style="font-weight:700; margin-bottom:24px;">Contact Information</MudText>
 
-        <MudDivider Class="my-4" />
+                <MudStack Spacing="4">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
+                        <div style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#0077B6,#00B4D8); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <MudIcon Icon="@Icons.Material.Filled.Email" Style="color:white;" />
+                        </div>
+                        <div>
+                            <MudText Typo="Typo.caption" Style="color:var(--mud-palette-text-secondary); text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">Email</MudText>
+                            <MudText Typo="Typo.body1" Style="font-weight:600;">support@surfiju.com</MudText>
+                        </div>
+                    </MudStack>
 
-        <MudButton Href="/" Variant="Variant.Text" Color="Color.Primary">
-            Back to Home
-        </MudButton>
-    </MudPaper>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
+                        <div style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#0077B6,#00B4D8); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <MudIcon Icon="@Icons.Material.Filled.AccessTime" Style="color:white;" />
+                        </div>
+                        <div>
+                            <MudText Typo="Typo.caption" Style="color:var(--mud-palette-text-secondary); text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">Response Time</MudText>
+                            <MudText Typo="Typo.body1" Style="font-weight:600;">Within 24 hours</MudText>
+                        </div>
+                    </MudStack>
+
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="3">
+                        <div style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#0077B6,#00B4D8); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <MudIcon Icon="@Icons.Material.Filled.Language" Style="color:white;" />
+                        </div>
+                        <div>
+                            <MudText Typo="Typo.caption" Style="color:var(--mud-palette-text-secondary); text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">Available</MudText>
+                            <MudText Typo="Typo.body1" Style="font-weight:600;">Mon – Fri, 9am – 6pm CET</MudText>
+                        </div>
+                    </MudStack>
+                </MudStack>
+
+                <MudDivider Class="my-5" />
+
+                <MudAlert Severity="Severity.Info" Dense="true" Style="border-radius:12px;">
+                    For urgent matters regarding active bookings, please include your booking reference in your email.
+                </MudAlert>
+            </MudPaper>
+        </MudItem>
+
+        <!-- Quick Links -->
+        <MudItem xs="12">
+            <MudPaper Class="pa-5" Elevation="2" Style="border-radius:16px;">
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700; margin-bottom:16px;">Helpful Links</MudText>
+                <MudStack Spacing="2">
+                    <MudButton Href="/camps"
+                               Variant="Variant.Text"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Surfing"
+                               FullWidth="true"
+                               Style="justify-content:flex-start;">
+                        Browse Surf Camps
+                    </MudButton>
+                    <MudButton Href="/my-bookings"
+                               Variant="Variant.Text"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.BookOnline"
+                               FullWidth="true"
+                               Style="justify-content:flex-start;">
+                        My Bookings
+                    </MudButton>
+                    <MudButton Href="/about"
+                               Variant="Variant.Text"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Info"
+                               FullWidth="true"
+                               Style="justify-content:flex-start;">
+                        About Surfiju
+                    </MudButton>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 </MudContainer>

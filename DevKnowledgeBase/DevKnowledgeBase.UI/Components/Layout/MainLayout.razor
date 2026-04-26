@@ -1,43 +1,66 @@
-﻿@using DevKnowledgeBase.UI.Services
+@using DevKnowledgeBase.UI.Services
 @using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
 
 <MudLayout>
-    <MudAppBar Color="Color.Primary" Elevation="4" Fixed="true">
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudText Typo="Typo.h6" Class="mr-4">Surfiju</MudText>
-        </MudHidden>
+    <MudAppBar Color="Color.Primary" Elevation="2" Fixed="true">
+        <!-- Mobile: Hamburger + Brand -->
         <MudHidden Breakpoint="Breakpoint.MdAndUp">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleMobileMenu" />
-            <MudText Typo="Typo.h6" Class="ml-2">Surfiju</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                           Color="Color.Inherit"
+                           Edge="Edge.Start"
+                           OnClick="ToggleMobileMenu" />
+            <MudText Typo="Typo.h6" Class="ml-1" Style="font-weight:800; letter-spacing:-0.01em;">
+                Surfiju
+            </MudText>
         </MudHidden>
-        
+
+        <!-- Desktop: Brand -->
+        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                <MudIcon Icon="@Icons.Material.Filled.Waves" Size="Size.Large" />
+                <MudText Typo="Typo.h6"
+                         Style="font-weight:800; letter-spacing:-0.01em; cursor:pointer;"
+                         @onclick='() => Navigation.NavigateTo("/")'>
+                    Surfiju
+                </MudText>
+            </MudStack>
+        </MudHidden>
+
         <MudSpacer />
-        
+
         <!-- Desktop Navigation -->
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
                 <AuthorizeView Context="authContext">
                     <Authorized>
                         <TopNavMenu />
-                        
+
+                        <!-- Dark mode toggle -->
+                        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                                       Color="Color.Inherit"
+                                       OnClick="ToggleDarkMode"
+                                       Title="@(_isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")" />
+
                         <!-- User Profile Menu -->
                         <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                             <ActivatorContent>
-                                <MudAvatar Color="Color.Secondary" Class="ml-2">
+                                <MudAvatar Color="Color.Secondary"
+                                           Class="ml-1"
+                                           Style="cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.25);">
                                     <MudIcon Icon="@Icons.Material.Filled.Person" />
                                 </MudAvatar>
                             </ActivatorContent>
                             <ChildContent>
                                 <MudMenuItem Href="/profile" Icon="@Icons.Material.Filled.Person">Profile</MudMenuItem>
-                                <MudMenuItem Href="/my-bookings" Icon="@Icons.Material.Filled.Bookmark">My Bookings</MudMenuItem>
+                                <MudMenuItem Href="/my-bookings" Icon="@Icons.Material.Filled.BookOnline">My Bookings</MudMenuItem>
                                 <AuthorizeView Roles="Admin,Organizer">
                                     <MudMenuItem Href="/organizer/camps" Icon="@Icons.Material.Filled.Dashboard">My Camps</MudMenuItem>
                                 </AuthorizeView>
                                 <AuthorizeView Roles="Admin">
-                                    <MudMenuItem Href="/organizers" Icon="@Icons.Material.Filled.VerifiedUser">Organizers</MudMenuItem>
+                                    <MudMenuItem Href="/organizers" Icon="@Icons.Material.Filled.AdminPanelSettings">Admin Panel</MudMenuItem>
                                 </AuthorizeView>
                                 <MudDivider />
                                 <MudMenuItem Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudMenuItem>
@@ -48,65 +71,150 @@
                         <MudButton Href="/camps" Variant="Variant.Text" Color="Color.Inherit">Browse Camps</MudButton>
                         <MudButton Href="/about" Variant="Variant.Text" Color="Color.Inherit">About</MudButton>
                         <MudButton Href="/contact" Variant="Variant.Text" Color="Color.Inherit">Contact</MudButton>
+
+                        <!-- Dark mode toggle -->
+                        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                                       Color="Color.Inherit"
+                                       OnClick="ToggleDarkMode" />
+
                         <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="/login">Login</MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Inherit" Href="/register" Class="ml-2">Register</MudButton>
+                        <MudButton Variant="Variant.Outlined"
+                                   Color="Color.Inherit"
+                                   Href="/register"
+                                   Class="ml-1"
+                                   Style="border-radius:24px;">
+                            Register
+                        </MudButton>
                     </NotAuthorized>
                 </AuthorizeView>
             </MudStack>
         </MudHidden>
+
+        <!-- Mobile: dark mode + avatar -->
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                           Color="Color.Inherit"
+                           OnClick="ToggleDarkMode" />
+        </MudHidden>
     </MudAppBar>
-    
+
     <!-- Mobile Navigation Drawer -->
-    <MudDrawer @bind-Open="_mobileDrawerOpen" Elevation="1" Variant="DrawerVariant.Temporary" Anchor="Anchor.Left">
-        <MudDrawerHeader>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudIcon Icon="@Icons.Material.Filled.WaterDamage" Size="Size.Large" />
-                <MudText Typo="Typo.h6">Surfiju</MudText>
+    <MudDrawer @bind-Open="_mobileDrawerOpen" Elevation="0" Variant="DrawerVariant.Temporary" Anchor="Anchor.Left" ClipMode="DrawerClipMode.Never">
+        <!-- Gradient drawer header -->
+        <div style="background: linear-gradient(135deg, #03045E 0%, #0077B6 100%); padding: 24px 20px; color: white;">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                <MudIcon Icon="@Icons.Material.Filled.Waves" Size="Size.Large" Style="color:white;" />
+                <MudText Typo="Typo.h6" Style="font-weight:800; color:white; letter-spacing:-0.01em;">Surfiju</MudText>
             </MudStack>
-        </MudDrawerHeader>
+            <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.7); margin-top:4px;">Surf Camp Marketplace</MudText>
+        </div>
+
         <AuthorizeView Context="authContext">
             <Authorized>
-                <MudNavMenu>
+                <MudNavMenu Class="mt-2">
                     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
                     <MudNavLink Href="/camps" Icon="@Icons.Material.Filled.Surfing">Surf Camps</MudNavLink>
+                    <MudNavLink Href="/my-bookings" Icon="@Icons.Material.Filled.BookOnline">My Bookings</MudNavLink>
                     <AuthorizeView Roles="Admin,Organizer">
                         <MudNavLink Href="/organizer/camps" Icon="@Icons.Material.Filled.Dashboard">My Camps</MudNavLink>
                     </AuthorizeView>
                     <AuthorizeView Roles="Admin">
-                        <MudNavLink Href="/organizers" Icon="@Icons.Material.Filled.VerifiedUser">Organizers</MudNavLink>
+                        <MudNavLink Href="/organizers" Icon="@Icons.Material.Filled.AdminPanelSettings">Admin Panel</MudNavLink>
                     </AuthorizeView>
                     <MudNavLink Href="/profile" Icon="@Icons.Material.Filled.Person">Profile</MudNavLink>
                 </MudNavMenu>
                 <div class="mud-drawer-footer">
-                     <MudStack Spacing="2" Class="mx-4 mb-4">
-                        <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary" OnClick="Logout">Logout</MudButton>
-                     </MudStack>
-                    
+                    <MudStack Spacing="2" Class="mx-3 mb-4">
+                        <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Error" OnClick="Logout"
+                                   StartIcon="@Icons.Material.Filled.Logout">
+                            Logout
+                        </MudButton>
+                    </MudStack>
                 </div>
             </Authorized>
             <NotAuthorized>
-                <MudNavMenu>
+                <MudNavMenu Class="mt-2">
                     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
                     <MudNavLink Href="/camps" Icon="@Icons.Material.Filled.Surfing">Surf Camps</MudNavLink>
                     <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About Us</MudNavLink>
                     <MudNavLink Href="/contact" Icon="@Icons.Material.Filled.Email">Contact</MudNavLink>
                 </MudNavMenu>
                 <div class="mud-drawer-footer">
-                    <MudStack Spacing="2" Class="mx-4 mb-4">
-                        <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Href="/login">Login</MudButton>
-                        <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Secondary" Href="/register">Register</MudButton>
+                    <MudStack Spacing="2" Class="mx-3 mb-4">
+                        <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Href="/login"
+                                   Style="border-radius:24px;">
+                            Login
+                        </MudButton>
+                        <MudButton FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary" Href="/register"
+                                   Style="border-radius:24px;">
+                            Register
+                        </MudButton>
                     </MudStack>
                 </div>
             </NotAuthorized>
         </AuthorizeView>
     </MudDrawer>
-    
-    <MudMainContent Class="pt-16 pb-6">
-        @Body
+
+    <MudMainContent Class="pt-16">
+        <div class="page-transition-container">
+            @Body
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <MudGrid>
+                    <MudItem xs="12" sm="4">
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Class="mb-3">
+                            <MudIcon Icon="@Icons.Material.Filled.Waves" Style="color:#00B4D8;" />
+                            <MudText Typo="Typo.h6" Style="color:white; font-weight:800;">Surfiju</MudText>
+                        </MudStack>
+                        <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.6); line-height:1.7;">
+                            The world's surf camp marketplace. Discover, book, and ride.
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="6" sm="2">
+                        <MudText Typo="Typo.subtitle2" Style="color:white; font-weight:700; margin-bottom:12px;">Explore</MudText>
+                        <MudStack Spacing="1">
+                            <a href="/camps">Surf Camps</a>
+                            <a href="/about">About Us</a>
+                            <a href="/contact">Contact</a>
+                        </MudStack>
+                    </MudItem>
+                    <MudItem xs="6" sm="2">
+                        <MudText Typo="Typo.subtitle2" Style="color:white; font-weight:700; margin-bottom:12px;">Account</MudText>
+                        <MudStack Spacing="1">
+                            <a href="/login">Login</a>
+                            <a href="/register">Register</a>
+                            <a href="/profile">Profile</a>
+                        </MudStack>
+                    </MudItem>
+                    <MudItem xs="12" sm="4">
+                        <MudText Typo="Typo.subtitle2" Style="color:white; font-weight:700; margin-bottom:12px;">Organizers</MudText>
+                        <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.6); line-height:1.7;">
+                            List your surf camp and connect with thousands of surf enthusiasts worldwide.
+                        </MudText>
+                        <MudButton Variant="Variant.Outlined"
+                                   Href="/register"
+                                   Class="mt-2"
+                                   Style="border-color:rgba(255,255,255,0.4); color:white; border-radius:24px;">
+                            Get Started
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+                <div class="footer-bottom">
+                    <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.45);">
+                        &copy; @DateTime.Now.Year Surfiju. All rights reserved.
+                    </MudText>
+                </div>
+            </MudContainer>
+        </footer>
     </MudMainContent>
-    
+
     <MudScrollToTop TopOffset="400">
-        <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.KeyboardArrowUp" />
+        <MudFab Color="Color.Primary"
+                Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                Size="Size.Small" />
     </MudScrollToTop>
 </MudLayout>
 
@@ -114,14 +222,13 @@
 
 <MudThemeProvider Theme="@_currentTheme" />
 <MudPopoverProvider />
-<MudDialogProvider CloseButton="true" />
+<MudDialogProvider CloseButton="true" MaxWidth="MaxWidth.Medium" FullWidth="false" />
 <MudSnackbarProvider />
 
 @code {
     private bool _mobileDrawerOpen;
     private bool _isDarkMode = false;
-    private bool _isDesktop = true;
-    
+
     private static Typography _typography = new Typography
     {
         Default = new DefaultTypography
@@ -129,25 +236,26 @@
             FontFamily = new[] { "Inter", "Roboto", "Arial", "sans-serif" },
             FontSize = "0.875rem",
             FontWeight = "400",
-            LineHeight = "1.5"
+            LineHeight = "1.6"
         },
-        H1 = new H1Typography { FontWeight = "600" },
-        H2 = new H2Typography { FontWeight = "600" },
-        H3 = new H3Typography { FontWeight = "600" },
-        H4 = new H4Typography { FontWeight = "600" },
+        H1 = new H1Typography { FontWeight = "800" },
+        H2 = new H2Typography { FontWeight = "700" },
+        H3 = new H3Typography { FontWeight = "700" },
+        H4 = new H4Typography { FontWeight = "700" },
         H5 = new H5Typography { FontWeight = "600" },
         H6 = new H6Typography { FontWeight = "600" },
         Button = new ButtonTypography
         {
             FontSize = "0.875rem",
-            FontWeight = "600"
+            FontWeight = "600",
+            TextTransform = "none"
         }
     };
 
     private static LayoutProperties _layoutProperties = new LayoutProperties
     {
-        DefaultBorderRadius = "8px",
-        DrawerWidthLeft = "260px"
+        DefaultBorderRadius = "10px",
+        DrawerWidthLeft = "270px"
     };
 
     private MudTheme _lightTheme = new MudTheme
@@ -158,8 +266,8 @@
             PrimaryDarken = "#023E8A",
             PrimaryLighten = "#90E0EF",
             Secondary = "#00B4D8",
-            Tertiary = "#90E0EF",
-            Background = "#F9FDFE",
+            Tertiary = "#F4A261",
+            Background = "#F4F9FD",
             AppbarBackground = "#0077B6",
             DrawerBackground = "#FFFFFF",
             DrawerText = "#023E8A",
@@ -168,13 +276,14 @@
             TextPrimary = "#03045E",
             TextSecondary = "#0077B6",
             Success = "#52B788",
-            Error = "#FF6F61",
+            Error = "#EF476F",
             Warning = "#FFD166",
-            Info = "#00B4D8"
+            Info = "#00B4D8",
+            ActionDefault = "#0077B6",
+            Divider = "rgba(0,119,182,0.12)"
         },
         Typography = _typography,
-        LayoutProperties = _layoutProperties,
-        Shadows = new Shadow()
+        LayoutProperties = _layoutProperties
     };
 
     private MudTheme _darkTheme = new MudTheme
@@ -185,57 +294,35 @@
             PrimaryDarken = "#CAF0F8",
             PrimaryLighten = "#0077B6",
             Secondary = "#00B4D8",
-            Tertiary = "#0077B6",
-            Background = "#121212",
-            AppbarBackground = "#1E1E1E",
-            DrawerBackground = "#1E1E1E",
+            Tertiary = "#F4A261",
+            Background = "#0D1117",
+            AppbarBackground = "#161B22",
+            DrawerBackground = "#161B22",
             DrawerText = "#CAF0F8",
             DrawerIcon = "#90E0EF",
-            Surface = "#242424",
-            TextPrimary = "#CAF0F8",
+            Surface = "#1C2128",
+            TextPrimary = "#E6EDF3",
             TextSecondary = "#90E0EF",
             Success = "#52B788",
-            Error = "#FF6F61",
+            Error = "#EF476F",
             Warning = "#FFD166",
-            Info = "#00B4D8"
+            Info = "#00B4D8",
+            Divider = "rgba(144,224,239,0.12)"
         },
         Typography = _typography,
-        LayoutProperties = _layoutProperties,
-        Shadows = new Shadow()
+        LayoutProperties = _layoutProperties
     };
 
     private MudTheme _currentTheme => _isDarkMode ? _darkTheme : _lightTheme;
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            AdjustForScreenSize();
-        }
-    }
+    private void ToggleMobileMenu() => _mobileDrawerOpen = !_mobileDrawerOpen;
 
-    private void AdjustForScreenSize()
-    {
-        // In a real implementation, you would use JS interop to check window size
-        _isDesktop = true;
-    }
-
-    private void ToggleMobileMenu()
-    {
-        _mobileDrawerOpen = !_mobileDrawerOpen;
-    }
-
-    private void ToggleDarkMode()
-    {
-        _isDarkMode = !_isDarkMode;
-    }
+    private void ToggleDarkMode() => _isDarkMode = !_isDarkMode;
 
     private async Task Logout()
     {
-        // This would call your authentication service
         var authService = (CustomAuthStateProvider)AuthStateProvider;
         await authService.Logout();
         Navigation.NavigateTo("/login");
     }
 }
-

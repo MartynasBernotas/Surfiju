@@ -1,4 +1,4 @@
-﻿@page "/camps"
+@page "/camps"
 @using DevKnowledgeBase.UI.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @inject ICampService CampService
@@ -6,104 +6,172 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-<PageTitle>Surf Camps</PageTitle>
+<PageTitle>Surf Camps — Surfiju</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5">
-    <MudGrid>
-        <MudItem xs="12">
-            <MudPaper Class="pa-4">
-                <MudGrid>
-                    <MudItem xs="12">
-                        <MudText Typo="Typo.h4" Class="mb-4">Surf Camps</MudText>
-                    </MudItem>
-                    <MudItem xs="12" sm="8">
-                        <LocationInput @bind-Value="SearchQuery" Class="location-input" />
-                    </MudItem>
-                    <MudItem xs="12" sm="4" Class="d-flex align-center">
-                        <MudButton OnClick="SearchCamps" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">
-                            Search
-                        </MudButton>
-                    </MudItem>
-                </MudGrid>
+<!-- Page Header -->
+<div style="background: linear-gradient(135deg, #03045E 0%, #0077B6 100%); padding: 56px 24px 40px; color: white;">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudText Typo="Typo.h4" Style="font-weight:800; margin-bottom:8px;">Find Your Surf Camp</MudText>
+        <MudText Typo="Typo.body1" Style="opacity:0.85; margin-bottom:28px;">
+            Search through hundreds of verified camps worldwide
+        </MudText>
 
-
-
-                <AuthorizeView Roles="Admin,Organizer">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenCreateDialog" Class="mb-4">
-                        Create New Surf Camp
+        <!-- Search bar -->
+        <MudPaper Elevation="4" Style="border-radius:16px; overflow:hidden;">
+            <MudGrid Spacing="0">
+                <MudItem xs="12" sm="8" Class="pa-2">
+                    <LocationInput @bind-Value="SearchQuery" Class="location-input" />
+                </MudItem>
+                <MudItem xs="12" sm="4" Class="pa-2">
+                    <MudButton OnClick="SearchCamps"
+                               Color="Color.Primary"
+                               Variant="Variant.Filled"
+                               FullWidth="true"
+                               Size="Size.Large"
+                               StartIcon="@Icons.Material.Filled.Search"
+                               Style="border-radius:10px; height:56px; font-size:1rem;">
+                        Search
                     </MudButton>
-                </AuthorizeView>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudContainer>
+</div>
 
-                @if (camps.Count == 0)
-                {
-                    <MudText>No surf camps found.</MudText>
-                }
-                else
-                {
-                    <MudGrid>
-                        @foreach (var camp in camps)
-                        {
-                            <MudItem xs="12" sm="6" md="4">
-                                <MudCard Style="height: 100%; display: flex; flex-direction: column;">
-                                    <div style="height: 200px; position: relative; overflow: hidden;">
-                                        @if (camp.PhotoUrls.Any())
-                                        {
-                                            <img src="@($"https://localhost:7046/api/files/photos/{camp.PhotoUrls.First()}")"
-                                            style="width: 100%; height: 100%; object-fit: cover;"
-                                            alt="@camp.Name" />
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-6 mb-6">
 
-                                            @if (camp.PhotoUrls.Count > 1)
-                                            {
-                                                <div style="position: absolute; bottom: 8px; right: 8px;
-                                                           background: rgba(0,0,0,0.6); color: white;
-                                                           padding: 2px 8px; border-radius: 12px;">
-                                                    <small>+@(camp.PhotoUrls.Count - 1) photos</small>
-                                                </div>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <div style="width: 100%; height: 100%; display: flex;
-                                                       justify-content: center; align-items: center;
-                                                       background-color: #f5f5f5;">
-                                                <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported" Size="Size.Large" />
-                                            </div>
-                                        }
-                                    </div>
-                                    <MudCardContent style="flex-grow: 1;">
-                                        <MudText Typo="Typo.h5">@camp.Name</MudText>
-                                        <MudText Typo="Typo.body2">@camp.Location</MudText>
-                                        <MudText Typo="Typo.body2">
-                                            @GetDatesString(camp)
-                                        </MudText>
-                                        <MudText Typo="Typo.body2">
-                                            Participants: @camp.CurrentParticipants/@camp.MaxParticipants
-                                        </MudText>
-                                        <MudText Typo="Typo.h6">@camp.Price.ToString("C")</MudText>
-                                    </MudCardContent>
-                                    <MudCardActions>
-                                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ViewDetails(camp.Id))">
-                                            View Details
-                                        </MudButton>
+    <!-- Action bar -->
+    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-4 flex-wrap" Spacing="2">
+        <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">
+            @(TotalCount > 0 ? $"{TotalCount} camp{(TotalCount != 1 ? "s" : "")} found" : "")
+        </MudText>
+        <AuthorizeView Roles="Admin,Organizer">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       OnClick="OpenCreateDialog"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       Style="border-radius:24px;">
+                New Surf Camp
+            </MudButton>
+        </AuthorizeView>
+    </MudStack>
 
-                                        <AuthorizeView Roles="Admin,Organizer">
-                                            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="@(() => OpenEditDialog(camp))">
-                                                Edit
-                                            </MudButton>
-                                            <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(camp))">
-                                                Delete
-                                            </MudButton>
-                                        </AuthorizeView>
-                                    </MudCardActions>
-                                </MudCard>
-                            </MudItem>
-                        }
-                    </MudGrid>
-                }
-                <MudPagination Variant="Variant.Outlined" SelectedChanged="OnPageChanged" Class="pa-4" />
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+    <!-- Camp Grid -->
+    @if (camps.Count == 0)
+    {
+        <MudPaper Class="pa-10 text-center" Elevation="1" Style="border-radius:16px;">
+            <MudIcon Icon="@Icons.Material.Filled.Surfing"
+                     Style="font-size:4rem; color:var(--mud-palette-text-secondary); margin-bottom:16px;" />
+            <MudText Typo="Typo.h6" Style="font-weight:600;">No camps found</MudText>
+            <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); margin-top:8px;">
+                Try a different location or clear the search filter.
+            </MudText>
+        </MudPaper>
+    }
+    else
+    {
+        <MudGrid>
+            @foreach (var camp in camps)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard Class="camp-card" Elevation="3">
+                        <div class="camp-card-image">
+                            @if (camp.PhotoUrls.Any())
+                            {
+                                <img src="@($"https://localhost:7046/api/files/photos/{camp.PhotoUrls.First()}")"
+                                     alt="@camp.Name" />
+                                <span class="camp-price-badge">@camp.Price.ToString("C")</span>
+                                @if (camp.PhotoUrls.Count > 1)
+                                {
+                                    <span class="camp-photo-count">
+                                        <MudIcon Icon="@Icons.Material.Filled.PhotoLibrary"
+                                                 Style="font-size:0.75rem; vertical-align:middle; margin-right:3px;" />
+                                        @camp.PhotoUrls.Count
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <div class="camp-no-image">
+                                    <MudIcon Icon="@Icons.Material.Filled.Surfing"
+                                             Style="font-size:3rem; color:#0077B6; opacity:0.4;" />
+                                </div>
+                                <span class="camp-price-badge">@camp.Price.ToString("C")</span>
+                            }
+                        </div>
+
+                        <MudCardContent Style="flex-grow:1; padding-bottom:4px;">
+                            <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:4px; line-height:1.3;">
+                                @camp.Name
+                            </MudText>
+
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Class="mb-1">
+                                <MudIcon Icon="@Icons.Material.Filled.Place"
+                                         Style="font-size:0.9rem; color:var(--mud-palette-text-secondary);" />
+                                <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">
+                                    @camp.Location
+                                </MudText>
+                            </MudStack>
+
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Class="mb-2">
+                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth"
+                                         Style="font-size:0.9rem; color:var(--mud-palette-text-secondary);" />
+                                <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">
+                                    @GetDatesString(camp)
+                                </MudText>
+                            </MudStack>
+
+                            <!-- Availability chip -->
+                            @{
+                                int spots = camp.MaxParticipants - camp.CurrentParticipants;
+                                Color chipColor = spots == 0 ? Color.Error : spots <= 3 ? Color.Warning : Color.Success;
+                                string spotsText = spots == 0 ? "Fully Booked" : $"{spots} spot{(spots != 1 ? "s" : "")} left";
+                            }
+                            <MudChip T="string" Color="@chipColor" Size="Size.Small" Style="height:24px; font-size:0.72rem;">
+                                @spotsText
+                            </MudChip>
+                        </MudCardContent>
+
+                        <MudCardActions Style="padding-top:0; justify-content:space-between;">
+                            <MudButton Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ViewDetails(camp.Id))"
+                                       Style="border-radius:20px; margin-left:4px;">
+                                View Details
+                            </MudButton>
+                            <AuthorizeView Roles="Admin,Organizer">
+                                <MudStack Row="true" Spacing="0">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                                   Color="Color.Primary"
+                                                   Size="Size.Small"
+                                                   OnClick="@(() => OpenEditDialog(camp))" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                   Color="Color.Error"
+                                                   Size="Size.Small"
+                                                   OnClick="@(() => OpenDeleteDialog(camp))" />
+                                </MudStack>
+                            </AuthorizeView>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+
+        <!-- Pagination -->
+        @if (GetPageCount() > 1)
+        {
+            <MudStack AlignItems="AlignItems.Center" Class="mt-6">
+                <MudPagination Count="@GetPageCount()"
+                               Selected="@PageNumber"
+                               SelectedChanged="OnPageChanged"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               BoundaryCount="1"
+                               MiddleCount="3" />
+            </MudStack>
+        }
+    }
 </MudContainer>
 
 @code {
@@ -111,12 +179,14 @@
     private string SearchQuery { get; set; } = string.Empty;
 
     private int PageNumber { get; set; } = 1;
-    private int PageSize { get; set; } = 10;
+    private int PageSize { get; set; } = 9;
     private int TotalCount { get; set; } = 0;
+
+    private int GetPageCount() => (int)Math.Ceiling((double)TotalCount / PageSize);
 
     private string GetDatesString(CampModel camp)
     {
-        return $"{camp.StartDate.Value.ToString("MMM dd")} - {camp.EndDate.Value.ToString("MMM dd, yyyy")}";
+        return $"{camp.StartDate.Value:MMM dd} – {camp.EndDate.Value:MMM dd, yyyy}";
     }
 
     protected override async Task OnInitializedAsync()
@@ -133,7 +203,7 @@
 
     private async Task SearchCamps()
     {
-        PageNumber = 1; // Reset to the first page
+        PageNumber = 1;
         await LoadCamps();
     }
 
@@ -150,9 +220,10 @@
 
     private async Task OpenCreateDialog()
     {
-        var dialog = await DialogService.ShowAsync<CampDialog>("Create Surf Camp");
+        var options = new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<CampDialog>("Create Surf Camp", options);
         var result = await dialog.Result;
-        
+
         if (!result.Canceled && result.Data is CampModel newTrip)
         {
             var createResult = await CampService.CreateCampAsync(newTrip);
@@ -171,9 +242,10 @@
     private async Task OpenEditDialog(CampModel camp)
     {
         var parameters = new DialogParameters { ["Camp"] = camp };
-        var dialog = await DialogService.ShowAsync<CampDialog>("Edit Surf Camp", parameters);
+        var options = new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<CampDialog>("Edit Surf Camp", parameters, options);
         var result = await dialog.Result;
-        
+
         if (!result.Canceled && result.Data is CampModel updatedTrip)
         {
             var updateResult = await CampService.UpdateCampAsync(updatedTrip);
@@ -193,25 +265,25 @@
     {
         var parameters = new DialogParameters
         {
-            ["ContentText"] = $"Are you sure you want to delete the surf camp '{camp.Name}'?",
+            ["ContentText"] = $"Are you sure you want to delete '{camp.Name}'? This cannot be undone.",
             ["ButtonText"] = "Delete",
             ["Color"] = Color.Error
         };
 
         var dialog = await DialogService.ShowAsync<ConfirmDialog>("Delete Surf Camp", parameters);
         var result = await dialog.Result;
-        
+
         if (!result.Canceled)
         {
             var deleteResult = await CampService.DeleteCampAsync(camp.Id);
             if (deleteResult.Success)
             {
-                Snackbar.Add("Surf camp deleted successfully.", Severity.Success);
+                Snackbar.Add("Surf camp deleted.", Severity.Success);
                 await LoadCamps();
             }
             else
             {
-                Snackbar.Add($"Failed to delete surf camp: {deleteResult.ErrorMessage}", Severity.Error);
+                Snackbar.Add($"Failed to delete: {deleteResult.ErrorMessage}", Severity.Error);
             }
         }
     }
