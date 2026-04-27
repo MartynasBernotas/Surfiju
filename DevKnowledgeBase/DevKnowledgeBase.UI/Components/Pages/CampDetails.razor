@@ -156,7 +156,7 @@ else
                                              Style="font-size:1rem; color:#0077B6;" />
                                     <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">Available</MudText>
                                 </MudStack>
-                                <MudText Typo="Typo.body2" Style="font-weight:600; color:@(availableSpots == 0 ? "#EF476F" : "#52B788");">
+                                <MudText Typo="Typo.body2" Style="@($"font-weight:600; color:{(availableSpots == 0 ? "#EF476F" : "#52B788")};")">
                                     @availableSpots spot@(availableSpots != 1 ? "s" : "") left
                                 </MudText>
                             </MudStack>
