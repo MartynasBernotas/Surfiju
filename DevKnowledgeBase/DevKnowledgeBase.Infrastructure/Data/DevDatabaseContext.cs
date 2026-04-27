@@ -1,4 +1,5 @@
 ﻿using DevKnowledgeBase.Domain.Entities;
+using DevKnowledgeBase.Domain.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +45,25 @@ namespace DevKnowledgeBase.Infrastructure.Data
 
             modelBuilder.Entity<Booking>()
                 .HasKey(b => b.Id);
+
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.Status)
+                .HasDefaultValue(BookingStatus.Pending)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.PaymentIntentId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.CancellationReason)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.CancelledAt)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Camp>().UseXminAsConcurrencyToken();
 
             modelBuilder.Entity<CampMember>()
                 .HasOne(cm => cm.Camp)

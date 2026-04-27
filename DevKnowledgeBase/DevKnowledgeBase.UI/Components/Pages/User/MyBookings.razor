@@ -29,6 +29,19 @@
 </div>
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-10">
+
+    <!-- Status Filter Chips -->
+    <MudStack Row="true" Class="mb-4" Spacing="1" Style="flex-wrap:wrap;">
+        <MudChipSet T="BookingStatus?" SelectedValue="@selectedStatus" SelectedValueChanged="OnStatusChanged" SelectionMode="SelectionMode.SingleSelection">
+            <MudChip T="BookingStatus?" Value="@((BookingStatus?)null)" Color="Color.Default" Variant="Variant.Outlined">All</MudChip>
+            <MudChip T="BookingStatus?" Value="@((BookingStatus?)BookingStatus.Pending)" Color="Color.Warning" Variant="Variant.Outlined">Pending</MudChip>
+            <MudChip T="BookingStatus?" Value="@((BookingStatus?)BookingStatus.Confirmed)" Color="Color.Success" Variant="Variant.Outlined">Confirmed</MudChip>
+            <MudChip T="BookingStatus?" Value="@((BookingStatus?)BookingStatus.Cancelled)" Color="Color.Error" Variant="Variant.Outlined">Cancelled</MudChip>
+            <MudChip T="BookingStatus?" Value="@((BookingStatus?)BookingStatus.Completed)" Color="Color.Info" Variant="Variant.Outlined">Completed</MudChip>
+            <MudChip T="BookingStatus?" Value="@((BookingStatus?)BookingStatus.Refunded)" Color="Color.Secondary" Variant="Variant.Outlined">Refunded</MudChip>
+        </MudChipSet>
+    </MudStack>
+
     @if (bookings == null)
     {
         <MudStack AlignItems="AlignItems.Center" Class="mt-10">
@@ -65,6 +78,7 @@
                         <MudTh Style="font-weight:700;">Dates</MudTh>
                         <MudTh Style="font-weight:700;">Participants</MudTh>
                         <MudTh Style="font-weight:700;">Total Price</MudTh>
+                        <MudTh Style="font-weight:700;">Status</MudTh>
                         <MudTh Style="font-weight:700;">Booked On</MudTh>
                         <MudTh Style="font-weight:700;">Actions</MudTh>
                     </HeaderContent>
@@ -83,6 +97,14 @@
                         <MudTd DataLabel="Total Price">
                             <MudText Style="font-weight:700; color:#0077B6;">@context.TotalPrice.ToString("C")</MudText>
                         </MudTd>
+                        <MudTd DataLabel="Status">
+                            <MudChip T="string"
+                                     Color="@GetStatusColor(context.Status)"
+                                     Size="Size.Small"
+                                     Variant="Variant.Filled">
+                                @context.Status
+                            </MudChip>
+                        </MudTd>
                         <MudTd DataLabel="Booked On">
                             <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary);">
                                 @context.BookingDate.ToString("MMM dd, yyyy")
@@ -97,13 +119,16 @@
                                            Style="border-radius:16px;">
                                     View
                                 </MudButton>
-                                <MudButton Size="Size.Small"
-                                           Variant="Variant.Outlined"
-                                           Color="Color.Error"
-                                           OnClick="() => OpenCancelDialog(context)"
-                                           Style="border-radius:16px;">
-                                    Cancel
-                                </MudButton>
+                                @if (context.CanCancel)
+                                {
+                                    <MudButton Size="Size.Small"
+                                               Variant="Variant.Outlined"
+                                               Color="Color.Error"
+                                               OnClick="() => OpenCancelDialog(context)"
+                                               Style="border-radius:16px;">
+                                        Cancel
+                                    </MudButton>
+                                }
                             </MudStack>
                         </MudTd>
                     </RowTemplate>
@@ -117,7 +142,15 @@
                 @foreach (var booking in bookings)
                 {
                     <MudPaper Class="pa-4" Elevation="2" Style="border-radius:16px; border-left:4px solid #0077B6;">
-                        <MudText Typo="Typo.h6" Style="font-weight:700; margin-bottom:4px;">@booking.CampName</MudText>
+                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-2">
+                            <MudText Typo="Typo.h6" Style="font-weight:700;">@booking.CampName</MudText>
+                            <MudChip T="string"
+                                     Color="@GetStatusColor(booking.Status)"
+                                     Size="Size.Small"
+                                     Variant="Variant.Filled">
+                                @booking.Status
+                            </MudChip>
+                        </MudStack>
                         <MudText Typo="Typo.body2" Style="color:var(--mud-palette-text-secondary); margin-bottom:8px;">
                             @($"{booking.StartDate?.ToString("MMM dd")} – {booking.EndDate?.ToString("MMM dd, yyyy")}")
                         </MudText>
@@ -128,7 +161,10 @@
                             </MudStack>
                             <MudStack Row="true" Spacing="1">
                                 <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => ViewCamp(booking.CampId)" Style="border-radius:16px;">View</MudButton>
-                                <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error" OnClick="() => OpenCancelDialog(booking)" Style="border-radius:16px;">Cancel</MudButton>
+                                @if (booking.CanCancel)
+                                {
+                                    <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Error" OnClick="() => OpenCancelDialog(booking)" Style="border-radius:16px;">Cancel</MudButton>
+                                }
                             </MudStack>
                         </MudStack>
                     </MudPaper>
@@ -139,7 +175,8 @@
 </MudContainer>
 
 @code {
-    private List<BookingModel> bookings;
+    private List<BookingModel>? bookings;
+    private BookingStatus? selectedStatus;
 
     protected override async Task OnInitializedAsync()
     {
@@ -150,7 +187,7 @@
     {
         try
         {
-            bookings = await BookingService.GetUserBookingsAsync();
+            bookings = await BookingService.GetUserBookingsAsync(selectedStatus);
         }
         catch (Exception ex)
         {
@@ -158,9 +195,26 @@
         }
     }
 
+    private async Task OnStatusChanged(BookingStatus? status)
+    {
+        selectedStatus = status;
+        bookings = null;
+        await LoadBookings();
+    }
+
     private void NavigateToCamps() => Navigation.NavigateTo("/camps");
 
     private void ViewCamp(Guid campId) => Navigation.NavigateTo($"/camps/{campId}");
+
+    private Color GetStatusColor(BookingStatus status) => status switch
+    {
+        BookingStatus.Pending => Color.Warning,
+        BookingStatus.Confirmed => Color.Success,
+        BookingStatus.Cancelled => Color.Error,
+        BookingStatus.Completed => Color.Info,
+        BookingStatus.Refunded => Color.Secondary,
+        _ => Color.Default
+    };
 
     private async Task OpenCancelDialog(BookingModel booking)
     {

@@ -1,4 +1,3 @@
-using System;
 using MediatR;
 
 namespace DevKnowledgeBase.Application.Commands
@@ -7,11 +6,13 @@ namespace DevKnowledgeBase.Application.Commands
     {
         public Guid BookingId { get; }
         public string UserId { get; }
+        public string? Reason { get; }
 
-        public CancelBookingCommand(Guid bookingId, string userId)
+        public CancelBookingCommand(Guid bookingId, string userId, string? reason = null)
         {
             BookingId = bookingId;
             UserId = userId;
+            Reason = reason;
         }
     }
 }

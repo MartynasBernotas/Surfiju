@@ -22,9 +22,14 @@ namespace DevKnowledgeBase.Application.Queries
 
         public async Task<List<BookingDto>> Handle(GetUserBookingsQuery request, CancellationToken cancellationToken)
         {
-            var bookings = await _context.Bookings
+            var query = _context.Bookings
                 .Include(b => b.Camp)
-                .Where(b => b.UserId == request.UserId)
+                .Where(b => b.UserId == request.UserId);
+
+            if (request.Status.HasValue)
+                query = query.Where(b => b.Status == request.Status.Value);
+
+            var bookings = await query
                 .OrderByDescending(b => b.BookingDate)
                 .ToListAsync(cancellationToken);
 

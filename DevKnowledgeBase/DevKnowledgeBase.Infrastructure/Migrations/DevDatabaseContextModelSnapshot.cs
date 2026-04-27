@@ -32,11 +32,25 @@ namespace DevKnowledgeBase.Infrastructure.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CancellationReason")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("CampId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Participants")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasDefaultValue("Pending")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
@@ -100,6 +114,8 @@ namespace DevKnowledgeBase.Infrastructure.Migrations
                     b.HasIndex("OrganizerId");
 
                     b.ToTable("Camps");
+
+                    NpgsqlEntityTypeBuilderExtensions.UseXminAsConcurrencyToken(b);
                 });
 
             modelBuilder.Entity("DevKnowledgeBase.Domain.Entities.CampMember", b =>

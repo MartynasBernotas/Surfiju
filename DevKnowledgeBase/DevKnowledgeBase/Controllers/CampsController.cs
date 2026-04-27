@@ -1,5 +1,6 @@
 using DevKnowledgeBase.Application.Commands;
 using DevKnowledgeBase.Application.Queries;
+using DevKnowledgeBase.Application.Services;
 using DevKnowledgeBase.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -58,6 +59,15 @@ namespace DevKnowledgeBase.API.Controllers
             }
 
             return Ok(camp);
+        }
+
+        [HttpGet("{id}/availability")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCampAvailability(Guid id)
+        {
+            var query = new GetCampAvailabilityQuery(id);
+            var availability = await _mediator.Send(query);
+            return Ok(availability);
         }
 
         [HttpPost]
