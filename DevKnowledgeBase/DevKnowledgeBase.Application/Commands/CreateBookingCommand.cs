@@ -3,7 +3,7 @@ using System;
 
 namespace DevKnowledgeBase.Application.Commands
 {
-    public class CreateBookingCommand : IRequest<Guid>
+    public class CreateBookingCommand : IRequest<CreateBookingResult>
     {
         public Guid CampId { get; }
         public string UserId { get; }
@@ -16,4 +16,6 @@ namespace DevKnowledgeBase.Application.Commands
             Participants = participants;
         }
     }
+
+    public record CreateBookingResult(Guid BookingId, string ClientSecret);
 }

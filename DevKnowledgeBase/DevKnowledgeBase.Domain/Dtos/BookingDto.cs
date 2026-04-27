@@ -1,5 +1,4 @@
-// DevKnowledgeBase.Domain/Dtos/BookingDto.cs
-using System;
+using DevKnowledgeBase.Domain.Enums;
 
 namespace DevKnowledgeBase.Domain.Dtos
 {
@@ -11,7 +10,10 @@ namespace DevKnowledgeBase.Domain.Dtos
         public int Participants { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime BookingDate { get; set; }
-        
+        public BookingStatus Status { get; set; }
+        public string? PaymentIntentId { get; set; }
+        public bool CanCancel { get; set; }
+
         // Additional properties to simplify UI display
         public string CampName { get; set; }
         public DateTime? StartDate { get; set; }

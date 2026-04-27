@@ -19,6 +19,15 @@
                Style="border-radius:20px; min-width:0;">
         Surf Camps
     </MudButton>
+    <AuthorizeView Roles="Admin, Organizer">
+        <MudButton Href="/organizer/bookings"
+                   Variant="Variant.Text"
+                   Color="Color.Inherit"
+                   Class="@GetActiveClass("/organizer/bookings")"
+                   Style="border-radius:20px; min-width:0;">
+            Dashboard
+        </MudButton>
+    </AuthorizeView>
 </div>
 
 @code {

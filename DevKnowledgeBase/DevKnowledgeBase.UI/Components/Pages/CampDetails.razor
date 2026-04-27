@@ -272,14 +272,14 @@ else
         {
             var booking = new CreateBookingModel { CampId = camp.Id, Participants = numberOfParticipants };
             var bookingResult = await BookingService.CreateBookingAsync(booking);
-            if (bookingResult.Success)
+            if (bookingResult != null)
             {
-                Snackbar.Add("Booking confirmed! Check My Bookings for details.", Severity.Success);
-                await LoadCamp();
+                var uri = $"/checkout/{bookingResult.Id}?clientSecret={Uri.EscapeDataString(bookingResult.ClientSecret)}";
+                Navigation.NavigateTo(uri);
             }
             else
             {
-                Snackbar.Add($"Failed to book: {bookingResult.ErrorMessage}", Severity.Error);
+                Snackbar.Add("Failed to create booking. Please try again.", Severity.Error);
             }
         }
     }
