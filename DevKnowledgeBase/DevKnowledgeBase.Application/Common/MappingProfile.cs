@@ -11,7 +11,7 @@ namespace DevKnowledgeBase.Application.Common
             CreateMap<Note, NoteDto>();
             CreateMap<Camp, CampDto>()
                .ForMember(dest => dest.CurrentParticipants,
-                   opt => opt.MapFrom(src => src.Members.Count))
+                   opt => opt.MapFrom(src => src.Bookings.Sum(b => b.Participants)))
                .ForMember(dest => dest.OrganizerName,
                    opt => opt.MapFrom(src => src.Organizer.FullName));
 

@@ -1,18 +1,24 @@
+using DevKnowledgeBase.API.Middleware;
 using DevKnowledgeBase.API.Models;
+using DevKnowledgeBase.Application.Behaviours;
 using DevKnowledgeBase.Application.Commands;
 using DevKnowledgeBase.Application.Common;
+using DevKnowledgeBase.Application.Interfaces;
 using DevKnowledgeBase.Application.Services;
 using DevKnowledgeBase.Application.Validators;
 using DevKnowledgeBase.Domain.Entities;
 using DevKnowledgeBase.Infrastructure.Data;
+using DevKnowledgeBase.Infrastructure.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,11 +72,16 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateNoteCommand).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateNoteCommandValidator>();
 builder.Services.AddFluentValidationAutoValidation();
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+builder.Services.AddScoped<IPaymentService, StripePaymentService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -118,6 +129,8 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
