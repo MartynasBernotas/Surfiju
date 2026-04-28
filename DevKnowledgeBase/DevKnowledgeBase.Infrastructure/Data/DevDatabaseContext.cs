@@ -15,6 +15,7 @@ namespace DevKnowledgeBase.Infrastructure.Data
         public virtual DbSet<Expense> Expenses { get; set; }
         public virtual DbSet<CampMember> CampMembers { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<SurfSpot> SurfSpots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -64,6 +65,25 @@ namespace DevKnowledgeBase.Infrastructure.Data
                 .IsRequired(false);
 
             modelBuilder.Entity<Camp>().UseXminAsConcurrencyToken();
+
+            modelBuilder.Entity<SurfSpot>()
+                .ToTable("SurfSpots");
+
+            modelBuilder.Entity<SurfSpot>()
+                .Property(s => s.BreakType)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<SurfSpot>()
+                .Property(s => s.SkillLevel)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<SurfSpot>()
+                .Property(s => s.CrowdLevel)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<SurfSpot>()
+                .Property(s => s.Photos)
+                .HasColumnType("text[]");
 
             modelBuilder.Entity<CampMember>()
                 .HasOne(cm => cm.Camp)

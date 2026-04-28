@@ -9,6 +9,10 @@ namespace DevKnowledgeBase.Application.Common
         public MappingProfile()
         {
             CreateMap<Note, NoteDto>();
+            CreateMap<SurfSpot, SurfSpotDto>();
+            CreateMap<SurfSpot, SurfSpotSummaryDto>();
+            CreateMap<CreateSurfSpotDto, SurfSpot>();
+            CreateMap<UpdateSurfSpotDto, SurfSpot>();
             CreateMap<Camp, CampDto>()
                .ForMember(dest => dest.CurrentParticipants,
                    opt => opt.MapFrom(src => src.Bookings.Sum(b => b.Participants)))
